@@ -81,7 +81,7 @@ class Registry implements \ArrayAccess, \Iterator
 
 		$methodName = 'set' . $offset;
 		if (method_exists($this, $methodName))
-			return $this->{$methodName}($offset, $value);
+			return $this->{$methodName}($value);
 
 		$this->data[$offset] = $value;
 

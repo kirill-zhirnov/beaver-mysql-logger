@@ -47,7 +47,7 @@ class RegistryTest extends PHPUnit_Framework_TestCase
 		//setters
 		$stub->expects($this->once())
 			->method('setA')
-			->with($this->identicalTo('a'), $this->identicalTo('b'))
+			->with($this->identicalTo('b'))
 		;
 		$stub->a = 'b';
 

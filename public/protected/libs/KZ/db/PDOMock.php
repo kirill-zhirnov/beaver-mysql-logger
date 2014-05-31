@@ -4,6 +4,15 @@ namespace KZ\db;
 
 class PDOMock extends \PDO
 {
-	public function __construct()
-	{}
+	/**
+	 * To be able compare objects
+	 *
+	 * @var string
+	 */
+	protected $dsn;
+
+	public function __construct($dsn = null)
+	{
+		$this->dsn = $dsn;
+	}
 } 
