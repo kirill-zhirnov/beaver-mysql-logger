@@ -23,7 +23,58 @@ class RegistryTest extends PHPUnit_Framework_TestCase
 	{
 		$registry = new \KZ\Registry();
 
-		//проверить исключения + интегрировать задачи с PhpStorm!
+		$this->setExpectedException('OutOfBoundsException', 'Key should be right PHP variable name ("0a")');
+		$registry['0a'] = 'a';
+
+		$this->setExpectedException('OutOfBoundsException', 'Key should be right PHP variable name ("0")');
+		$registry[0] = 'a';
+	}
+
+	public function testPropSetGet()
+	{
+		$registry = new \KZ\Registry();
+		$registry->a = 'b';
+		$registry->c = 'd';
+
+		$this->assertEquals('b', $registry->a);
+		$this->assertEquals('d', $registry->c);
+	}
+
+	public function testSetGetMethods()
+	{
+		$stub = $this->getMock('\KZ\Registry', ['getA', 'setA']);
+
+		//setters
+		$stub->expects($this->once())
+			->method('setA')
+			->with($this->identicalTo('a'), $this->identicalTo('b'))
+		;
+		$stub->a = 'b';
+
+		//getters
+		$stub->expects($this->once())
+			->method('getA')
+			->will($this->returnValue('new value'))
+		;
+
+		$this->assertEquals($stub->a, 'new value');
+	}
+
+	public function testIterator()
+	{
+		$data = [
+			'a' => 'b',
+			'c' => 'd'
+		];
+		$registry = new \KZ\Registry($data);
+
+		$i = 0;
+		foreach ($registry as $key => $val) {
+			$this->assertTrue(isset($data[$key]));
+			$this->assertEquals($val, $data[$key]);
+			$i++;
+		}
+
+		$this->assertEquals(sizeof($data), $i);
 	}
 }
- 

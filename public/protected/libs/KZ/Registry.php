@@ -16,6 +16,16 @@ class Registry implements \ArrayAccess, \Iterator
 			$this->offsetSet($key, $val);
 	}
 
+	public function __set($name, $value)
+	{
+		return $this->offsetSet($name, $value);
+	}
+
+	public function __get($name)
+	{
+		return $this->offsetGet($name);
+	}
+
 	public function rewind()
 	{
 		$this->position = 0;
@@ -51,6 +61,10 @@ class Registry implements \ArrayAccess, \Iterator
 
 	public function offsetGet($offset)
 	{
+		$methodName = 'get' . $offset;
+		if (method_exists($this, $methodName))
+			return $this->{$methodName}();
+
 		return isset($this->data[$offset]) ? $this->data[$offset] : null;
 	}
 
@@ -63,7 +77,11 @@ class Registry implements \ArrayAccess, \Iterator
 	public function offsetSet($offset, $value)
 	{
 		if (!preg_match('/^(_|[a-z])\w*/i', $offset))
-			throw new \OutOfBoundsException('Key should be right PHP variable name.');
+			throw new \OutOfBoundsException('Key should be right PHP variable name ("' . $offset . '")');
+
+		$methodName = 'set' . $offset;
+		if (method_exists($this, $methodName))
+			return $this->{$methodName}($offset, $value);
 
 		$this->data[$offset] = $value;
 
