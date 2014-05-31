@@ -2,6 +2,13 @@
 
 namespace KZ\db\interfaces;
 
+/**
+ * This component is needed to store PDO connections. We can label connection with
+ * special label or type. Also we can mark connection as default connection.
+ *
+ * Interface ConnectionStorage
+ * @package KZ\db\interfaces
+ */
 interface ConnectionStorage
 {
 	const MYSQL = 'mysql';

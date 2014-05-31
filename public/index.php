@@ -2,8 +2,6 @@
 
 require_once 'protected/bootstrap.php';
 
-$obj = new \KZ\Registry([
-	'a' => 'b',
-	'c' => 'd',
-	'e' => 'g'
-]);
+$kit = new \KZ\app\Kit($config);
+
+$connectionStorage = $kit->makeConnectionStorage();

@@ -7,3 +7,5 @@ set_include_path(get_include_path() . PATH_SEPARATOR . implode(PATH_SEPARATOR, [
 	PROTECTED_PATH . '/libs'
 ]));
 spl_autoload_register();
+
+$config = require 'config/main.php';
