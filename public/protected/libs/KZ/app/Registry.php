@@ -26,19 +26,6 @@ class Registry extends \KZ\Registry implements interfaces\Registry
 	}
 
 	/**
-	 * @return \PDO
-	 */
-	public function getMysql()
-	{
-		$mysql = $this->getConnectionStorage()->getByType(db\interfaces\ConnectionStorage::MYSQL);
-
-		if (!$mysql)
-			return null;
-
-		return $mysql[array_keys($mysql)[0]];
-	}
-
-	/**
 	 * @throws \UnderflowException
 	 * @return \KZ\db\interfaces\ConnectionStorage
 	 */

@@ -1,6 +1,8 @@
 <?php
 
-class RegistryTest extends PHPUnit_Framework_TestCase
+namespace KZ;
+
+class RegistryTest extends \PHPUnit_Framework_TestCase
 {
 	public function testArrayAccess()
 	{

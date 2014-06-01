@@ -13,7 +13,14 @@ interface Kit
 	/**
 	 * Create connectionStorage and fill it with PDO objects.
 	 *
-	 * @return \KZ\db\ConnectionStorage
+	 * @return \KZ\db\interfaces\ConnectionStorage
 	 */
 	public function makeConnectionStorage();
+
+	/**
+	 * Create registry for application.
+	 *
+	 * @return \KZ\app\interfaces\Registry
+	 */
+	public function makeRegistry();
 } 

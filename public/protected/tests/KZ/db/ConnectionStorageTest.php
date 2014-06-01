@@ -1,8 +1,9 @@
 <?php
 
+namespace KZ\db;
 use KZ\db;
 
-class ConnectionStorageTest extends PHPUnit_Framework_TestCase
+class ConnectionStorageTest extends \PHPUnit_Framework_TestCase
 {
 	public function testInterface()
 	{

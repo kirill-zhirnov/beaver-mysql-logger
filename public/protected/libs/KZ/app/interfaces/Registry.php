@@ -16,11 +16,6 @@ interface Registry extends \ArrayAccess, \Iterator
 	public function getDb();
 
 	/**
-	 * @return \PDO
-	 */
-	public function getMysql();
-
-	/**
 	 * @return \KZ\db\interfaces\ConnectionStorage
 	 */
 	public function getConnectionStorage();
