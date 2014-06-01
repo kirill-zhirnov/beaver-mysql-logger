@@ -70,4 +70,27 @@ class Registry extends \KZ\Registry implements interfaces\Registry
 
 		return $this;
 	}
+
+	/**
+	 * @return array
+	 * @throws \UnderflowException
+	 */
+	public function getConfig()
+	{
+		if (!isset($this->data['config']))
+			throw new \UnderflowException('You must setup config before calling this method!');
+
+		return $this->data['config'];
+	}
+
+	/**
+	 * @param array $config
+	 * @return $this
+	 */
+	public function setConfig(array $config)
+	{
+		$this->data['config'] = $config;
+
+		return $this;
+	}
 } 

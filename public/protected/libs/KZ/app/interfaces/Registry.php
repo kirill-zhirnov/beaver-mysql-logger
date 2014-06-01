@@ -36,4 +36,15 @@ interface Registry extends \ArrayAccess, \Iterator
 	 * @return $this
 	 */
 	public function setKit(Kit $kit);
+
+	/**
+	 * @return array
+	 */
+	public function getConfig();
+
+	/**
+	 * @param array $config
+	 * @return $this
+	 */
+	public function setConfig(array $config);
 } 
