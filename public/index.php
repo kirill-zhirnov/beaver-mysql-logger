@@ -2,5 +2,4 @@
 
 require_once 'protected/bootstrap.php';
 
-//todo: добавить в app\Registry конфиг!
-
+var_dump($_SERVER);

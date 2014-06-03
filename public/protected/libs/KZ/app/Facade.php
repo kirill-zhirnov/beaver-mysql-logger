@@ -33,6 +33,9 @@ abstract class Facade
 	 */
 	protected $kit;
 
+	/**
+	 * @param array $config
+	 */
 	public function __construct(array $config)
 	{
 		$this->config = $config;
@@ -43,6 +46,7 @@ abstract class Facade
 		if (!$this->initialized)
 			$this->initialize();
 
+		//fixme: это тоже надо вынести в initialize и класть в регистр - тогда будет меньше зависимостей
 		$frontController = $this->makeFrontController();
 	}
 
