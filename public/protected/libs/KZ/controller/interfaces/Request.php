@@ -2,6 +2,7 @@
 
 namespace KZ\controller\interfaces;
 //todo: написать комментарии
+//todo: исправить интерфейс!
 interface Request
 {
 	public function getController();
@@ -12,7 +13,7 @@ interface Request
 
 	public function getParams();
 
-	public function getScriptName();
+//	public function getScriptName();
 
 	public function setParams(array $params);
 } 
