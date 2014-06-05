@@ -53,7 +53,6 @@ class Registry implements \ArrayAccess, \Iterator
 		return isset($this->keys[$this->position]);
 	}
 
-
 	public function offsetExists($offset)
 	{
 		return isset($this->data[$offset]);

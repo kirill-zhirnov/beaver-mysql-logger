@@ -3,7 +3,7 @@
 namespace KZ\app\interfaces;
 
 /**
- * This is a Abstract Factory for Application. It makes basic components.
+ * This is an Abstract Factory for Application. It makes basic components.
  *
  * Interface Kit
  * @package KZ\app\interfaces

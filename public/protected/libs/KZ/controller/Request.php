@@ -3,11 +3,7 @@
 namespace KZ\controller;
 use KZ\controller;
 
-//todo: write comments!
-//stop! слишком много задач у Requesta.
-//Создание и проверку на наличие класса надо вынести в отдельную фабрику.
-//получается
-class Request implements controller\interfaces\Request
+abstract class Request implements controller\interfaces\Request
 {
 	/**
 	 * @var string
@@ -35,6 +31,11 @@ class Request implements controller\interfaces\Request
 	 */
 	protected $action;
 
+	/**
+	 * Custom params.
+	 *
+	 * @var array
+	 */
 	protected $params = [];
 
 	/**
@@ -78,7 +79,7 @@ class Request implements controller\interfaces\Request
 		if ($this->route == '')
 			$this->route = $this->defaultRoute;
 
-		if (!preg_match('#^(.*)(?:^|\/)([a-z\d_]+)\/([\w]+)$#i', $this->route, $matches))
+		if (!preg_match('#^([\w\/]*)(?:^|\/)([\w]+)\/([\w]+)$#i', $this->route, $matches))
 			throw new \UnexpectedValueException('Route must have at least 2 parts separated by "/".');
 
 		$this->controllerPath = $matches[1];

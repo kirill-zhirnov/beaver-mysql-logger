@@ -15,6 +15,7 @@ class Front
 	public function __construct($request, app\interfaces\Registry $registry)
 	{
 		$this->request = $request;
+		$this->registry = $registry;
 	}
 
 	public function run()
