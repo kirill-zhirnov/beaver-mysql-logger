@@ -22,10 +22,9 @@ class Front
 	 */
 	protected $controllersChain = [];
 
+//отнаследовать от registry, сделать toString, toJson, менейдж headers.
 	protected $response;
 
-	//стоп, зачем здесь Request? может его сразу из регистра брать? зачем двойная зависимость?
-	//request тут не нужен, тк Request будет в Registry. Если нужно будет отрендерить локальный - можно подменить на время в регистре.
 	public function __construct(Kit $controllerKit, Registry $registry)
 	{
 		$this->controllerKit = $controllerKit;
@@ -36,11 +35,24 @@ class Front
 	{
 		$this->makeControllersChain();
 
-//		foreach ($this->controllersChain)
+		foreach ($this->controllersChain as $controller)
+			$controller['instance']->{$controller['action']}();
 	}
 
 	public function makeControllersChain()
-	{}
+	{
+		$request = $this->registry->getRequest();
+
+		$this->controllersChain[] = [
+			'instance' => $this->controllerKit->makeController(
+				$request->getControllerPath(),
+				$request->getController(),
+				$request->getAction()
+			),
+
+			'action' => $request->getAction()
+		];
+	}
 
 	public function getControllersChain()
 	{
@@ -48,7 +60,7 @@ class Front
 	}
 
 	public function forward($controllerPath, $controller, $action)
-	{}
+	{
 
-
+	}
 } 

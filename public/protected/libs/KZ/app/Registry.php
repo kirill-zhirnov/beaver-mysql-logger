@@ -93,4 +93,24 @@ class Registry extends \KZ\Registry implements interfaces\Registry
 
 		return $this;
 	}
+
+	/**
+	 * @throws \UnderflowException
+	 * @return \KZ\controller\Request
+	 */
+	public function getRequest()
+	{
+		if (!isset($this->data['request']))
+			throw new \UnderflowException('You must setup request before calling this method!');
+
+		return $this->data['request'];
+
+	}
+
+	public function setRequest(\KZ\controller\Request $request)
+	{
+		$this->data['request'] = $request;
+
+		return $this;
+	}
 } 

@@ -47,4 +47,11 @@ interface Registry extends \ArrayAccess, \Iterator
 	 * @return $this
 	 */
 	public function setConfig(array $config);
+
+	/**
+	 * @return \KZ\controller\Request
+	 */
+	public function getRequest();
+
+	public function setRequest(\KZ\controller\Request $request);
 } 
