@@ -21,7 +21,7 @@ class Chain implements interfaces\Chain
 
 	public function pushAfterCurrent(\KZ\Controller $controller, $action)
 	{
-		return $this->pushAfterPosition($this->position, $controller, $action);
+		return $this->pushAfterPosition($this->position, $controller, $actio);
 	}
 
 	public function pushAfterPosition($position, \KZ\Controller $controller, $action)
