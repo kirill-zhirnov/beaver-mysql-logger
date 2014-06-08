@@ -18,9 +18,9 @@ class Front
 	protected $registry;
 
 	/**
-	 * @var \KZ\Controller[]
+	 * @var Chain
 	 */
-	protected $controllersChain = [];
+	protected $controllerChain;
 
 //отнаследовать от registry, сделать toString, toJson, менейдж headers.
 	protected $response;
@@ -31,36 +31,74 @@ class Front
 		$this->registry = $registry;
 	}
 
+	public function init()
+	{
+		if (!$this->controllerChain)
+			$this->makeControllerChain();
+	}
+
 	public function run()
 	{
-		$this->makeControllersChain();
+		$this->init();
 
-		foreach ($this->controllersChain as $controller)
-			$controller['instance']->{$controller['action']}();
+		foreach ($this->controllerChain as $item)
+			$item['instance']->{$item['action']}();
 	}
 
-	public function makeControllersChain()
+	/**
+	 * @return Chain
+	 */
+	public function getControllerChain()
 	{
-		$request = $this->registry->getRequest();
-
-		$this->controllersChain[] = [
-			'instance' => $this->controllerKit->makeController(
-				$request->getControllerPath(),
-				$request->getController(),
-				$request->getAction()
-			),
-
-			'action' => $request->getAction()
-		];
+		return $this->controllerChain;
 	}
 
-	public function getControllersChain()
-	{
-		return $this->controllersChain;
-	}
-
+	//todo: переименовать во что-то более подходящее, например - addInChaingAfterCurrent
 	public function forward($controllerPath, $controller, $action)
 	{
+		if (!$this->controllerChain)
+			throw new \RuntimeException('You must call init to setup controllerChain before calling this method!');
 
+		$controller = $this->makeController(
+			$controllerPath, $controller, $action
+		);
+
+		$this->controllerChain->pushAfterCurrent($controller['instance'], $controller['action']);
+
+		return $this;
+	}
+
+	/**
+	 * @return Request
+	 */
+	public function getRequest()
+	{
+		return $this->registry->getRequest();
+	}
+
+	protected function makeControllerChain()
+	{
+		$controller = $this->makeController(
+			$this->getRequest()->getControllerPath(),
+			$this->getRequest()->getController(),
+			$this->getRequest()->getAction()
+		);
+
+		$this->controllerChain = $this->registry->getKit()->makeControllerChain();
+		$this->controllerChain->push($controller['instance'], $controller['action']);
+	}
+
+	protected function makeController($controllerPath, $controller, $action)
+	{
+		$controller = $this->controllerKit->makeController(
+			$controllerPath,
+			$controller,
+			$action
+		);
+
+		return [
+			'instance' => $controller,
+			'action' => $action
+		];
 	}
 } 

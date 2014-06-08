@@ -10,5 +10,5 @@ interface Chain extends \Iterator
 
 	public function pushAfterCurrent(\KZ\Controller $controller, $action);
 
-	public function pushAfterPosition($position, \KZ\Controller $controller, $action);
+	public function pushAtPosition($position, \KZ\Controller $controller, $action);
 } 

@@ -2,6 +2,9 @@
 
 //require_once 'protected/bootstrap.php';
 
+$a = [];
+var_dump(array_slice($a, 10));
+exit();
 $a = ['a', 'b', 'c'];
 $pos = 1;
 /*foreach ($a as $key => $val) {

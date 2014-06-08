@@ -4,11 +4,11 @@ namespace KZ\controller;
 
 class Chain implements interfaces\Chain
 {
-	protected $data;
+	protected $data = [];
 
 	protected $position = 0;
 
-	public function __construct(array $controllers)
+	public function __construct(array $controllers = [])
 	{
 		foreach ($controllers as $item)
 			$this->push($item['instance'], $item['action']);
@@ -21,14 +21,14 @@ class Chain implements interfaces\Chain
 
 	public function pushAfterCurrent(\KZ\Controller $controller, $action)
 	{
-		return $this->pushAfterPosition($this->position, $controller, $action);
+		return $this->pushAtPosition($this->position + 1, $controller, $action);
 	}
 
-	public function pushAfterPosition($position, \KZ\Controller $controller, $action)
+	public function pushAtPosition($position, \KZ\Controller $controller, $action)
 	{
 		$this->data = array_merge(
 			array_slice($this->data, 0, $position),
-			$this->prepareDataItem($controller, $action),
+			[$this->prepareDataItem($controller, $action)],
 			array_slice($this->data, $position)
 		);
 
@@ -45,7 +45,7 @@ class Chain implements interfaces\Chain
 
 	public function current()
 	{
-		$this->data[$this->position];
+		return $this->data[$this->position];
 	}
 
 	public function next()

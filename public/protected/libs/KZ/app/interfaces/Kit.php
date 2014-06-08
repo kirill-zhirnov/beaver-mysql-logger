@@ -23,4 +23,11 @@ interface Kit
 	 * @return \KZ\app\interfaces\Registry
 	 */
 	public function makeRegistry();
+
+	/**
+	 * Create controller chain.
+	 *
+	 * @return \KZ\controller\Chain
+	 */
+	public function makeControllerChain();
 } 

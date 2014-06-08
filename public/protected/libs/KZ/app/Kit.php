@@ -67,6 +67,27 @@ class Kit implements interfaces\Kit
 	}
 
 	/**
+	 * Create controller chain.
+	 *
+	 * @throws \RuntimeException
+	 * @return \KZ\controller\Chain
+	 */
+	public function makeControllerChain()
+	{
+		$className = '\KZ\controller\Chain';
+		if (isset($this->config['components']['controllerChain']['class']))
+			$className = $this->config['components']['controllerChain']['class'];
+
+		$instance = new $className();
+
+		if (!$instance instanceof \KZ\controller\Chain)
+			throw new \RuntimeException('ControllerChain must be interface of \KZ\controller\Chain.');
+
+		return $instance;
+	}
+
+
+	/**
 	 * Create PDO object.
 	 *
 	 * @param array $config

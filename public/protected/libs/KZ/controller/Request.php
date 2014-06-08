@@ -43,7 +43,7 @@ abstract class Request implements controller\interfaces\Request
 	 */
 	protected $defaultRoute = 'index/index';
 
-	public function __construct($route)
+	public function __construct($route = '')
 	{
 		$this->route = $route;
 	}

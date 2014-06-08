@@ -67,5 +67,21 @@ class KitTest extends \PHPUnit_Framework_TestCase
 		]);
 		$this->assertEquals($registryMock, $kit->makeRegistry());
 	}
+
+	public function testMakeControllerChain()
+	{
+		$kit = new \KZ\app\Kit([]);
+		$this->assertInstanceOf('\KZ\controller\Chain', $kit->makeControllerChain());
+
+		$instanceMock = $this->getMock('\KZ\controller\Chain');
+		$kit = new \KZ\app\Kit([
+			'components' => [
+				'controllerChain' => [
+					'class' => get_class($instanceMock)
+				]
+			]
+		]);
+		$this->assertEquals($instanceMock, $kit->makeControllerChain());
+	}
 }
  
