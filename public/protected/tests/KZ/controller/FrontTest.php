@@ -30,6 +30,91 @@ class FrontTest extends \PHPUnit_Framework_TestCase
 		}
 	}
 
+	public function testMakeController()
+	{
+		$controller = $this->getControllerInstance();
+
+		$controllerKit = $this->makeControllerKitMock();
+		$controllerKit
+			->expects($this->once())
+			->method('makeController')
+			->with($this->equalTo('sub/path'), $this->equalTo('controller1'), $this->equalTo('testAction'))
+			->will($this->returnValue($controller))
+		;
+
+		/** @var Front $front */
+		$front = $this->getMock('\KZ\controller\Front', null, [$controllerKit, $this->makeAppRegistry()]);
+
+		$this->assertEquals([
+			'instance' => $controller,
+			'action' => 'testAction'
+		], $front->makeController('sub/path', 'controller1', 'testAction'));
+	}
+
+	public function testForwardException()
+	{
+		$this->setExpectedException('RuntimeException', 'You must call init to setup controllerChain before calling this method!');
+
+		$front = $this->getMockBuilder('\KZ\Controller\Front')
+			->disableOriginalConstructor()
+			->setMethods(null)
+			->getMock()
+		;
+
+		$front->forward('sub', 'controller', 'action1');
+	}
+
+	public function testForward()
+	{
+		$registry = $this->makeAppRegistry()
+			->setRequest($this->makeRequest())
+			->setKit($this->makeKit())
+		;
+
+		$controller = $this->getControllerInstance();
+		$nextController = $this->getControllerInstance();
+
+		$chain = [
+			['instance' => $controller, 'action' => 'test'],
+			['instance' => $nextController, 'action' => 'next'],
+		];
+
+		/** @var Front $front */
+		$front = $this->getMock('\KZ\controller\Front', ['makeController'], [$this->makeControllerKitMock(), $registry]);
+		$front
+			->expects($this->at(0))
+			->method('makeController')
+			->with($this->equalTo(''), $this->equalTo('index'), $this->equalTo('index'))
+			->will($this->returnValue($chain[0]))
+		;
+
+		$front
+			->expects($this->at(1))
+			->method('makeController')
+			->with($this->equalTo('sub/path'), $this->equalTo('forwardedController'), $this->equalTo('action'))
+			->will($this->returnValue($chain[1]))
+		;
+
+		$front
+			->expects($this->exactly(2))
+			->method('makeController')
+		;
+
+		$front->init();
+		$front->forward('sub/path', 'forwardedController', 'action');
+
+		foreach ($front->getControllerChain() as $key => $item) {
+			$this->assertEquals($chain[$key]['instance'], $item['instance']);
+			$this->assertEquals($chain[$key]['action'], $item['action']);
+		}
+	}
+
+	public function testDoubleInitCall()
+	{}
+
+	public function testRun()
+	{}
+
 	/**
 	 * @return \KZ\Controller\Kit
 	 */

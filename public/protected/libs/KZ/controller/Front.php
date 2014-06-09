@@ -33,8 +33,10 @@ class Front
 
 	public function init()
 	{
-		if (!$this->controllerChain)
-			$this->makeControllerChain();
+		if ($this->controllerChain)
+			return;
+
+		$this->makeControllerChain();
 	}
 
 	public function run()
@@ -53,7 +55,6 @@ class Front
 		return $this->controllerChain;
 	}
 
-	//todo: переименовать во что-то более подходящее, например - addInChaingAfterCurrent
 	public function forward($controllerPath, $controller, $action)
 	{
 		if (!$this->controllerChain)
@@ -76,19 +77,7 @@ class Front
 		return $this->registry->getRequest();
 	}
 
-	protected function makeControllerChain()
-	{
-		$controller = $this->makeController(
-			$this->getRequest()->getControllerPath(),
-			$this->getRequest()->getController(),
-			$this->getRequest()->getAction()
-		);
-
-		$this->controllerChain = $this->registry->getKit()->makeControllerChain();
-		$this->controllerChain->push($controller['instance'], $controller['action']);
-	}
-
-	protected function makeController($controllerPath, $controller, $action)
+	public function makeController($controllerPath, $controller, $action)
 	{
 		$controller = $this->controllerKit->makeController(
 			$controllerPath,
@@ -100,5 +89,17 @@ class Front
 			'instance' => $controller,
 			'action' => $action
 		];
+	}
+
+	protected function makeControllerChain()
+	{
+		$controller = $this->makeController(
+			$this->getRequest()->getControllerPath(),
+			$this->getRequest()->getController(),
+			$this->getRequest()->getAction()
+		);
+
+		$this->controllerChain = $this->registry->getKit()->makeControllerChain();
+		$this->controllerChain->push($controller['instance'], $controller['action']);
 	}
 } 
