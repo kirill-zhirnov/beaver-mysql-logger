@@ -1,12 +1,14 @@
 <?php
 
 namespace KZ\app;
+use KZ\controller;
 
 /**
  * This is Facade for application (pattern Facade). This class is abstract, since
  * can be different logic for web or console application. For this purposes pattern
  * Factory Method is used:
- * @see Facade::makeFrontController()
+ * @see Facade::makeRequest()
+ * @see Facade::makeControllerKit()
  *
  * Class Facade
  * @package KZ\app
@@ -34,6 +36,11 @@ abstract class Facade
 	protected $kit;
 
 	/**
+	 * @var controller\Front
+	 */
+	protected $frontController;
+
+	/**
 	 * @param array $config
 	 */
 	public function __construct(array $config)
@@ -41,16 +48,16 @@ abstract class Facade
 		$this->config = $config;
 	}
 
+	/**
+	 * Initialize application and run controllers chain.
+	 */
 	public function run()
 	{
 		if (!$this->initialized)
 			$this->initialize();
 
-		//fixme: это тоже надо вынести в initialize и класть в регистр - тогда будет меньше зависимостей
-		$frontController = $this->makeFrontController();
+		$this->frontController->run();
 	}
-
-	abstract public function makeFrontController();
 
 	/**
 	 * Initialize application. Make all necessary components and put it in registry.
@@ -63,18 +70,44 @@ abstract class Facade
 
 		//make components
 		$this->registry = $this->kit->makeRegistry();
-		$cs = $this->kit->makeConnectionStorage();
 
 		//put components in registry
 		$this->registry
-			->setConnectionStorage($cs)
+			->setConnectionStorage($this->kit->makeConnectionStorage())
 			->setKit($this->kit)
 			->setConfig($this->config)
+			->setRequest($this->makeRequest())
 		;
 
 		$this->initialized = true;
 
+		$this->frontController = $this->makeFrontController();
+
 		return $this;
+	}
+
+	/**
+	 * Makes request.
+	 *
+	 * @return \KZ\controller\Request
+	 */
+	abstract public function makeRequest();
+
+	/**
+	 * Makes controllers factory.
+	 *
+	 * @return \KZ\controller\Kit
+	 */
+	abstract public function makeControllerKit();
+
+	/**
+	 * @return controller\Front
+	 */
+	public function makeFrontController()
+	{
+		//todo: вынести в фабрику!
+		//todo: добавить проверку на inited
+		return new controller\Front($this->makeControllerKit(), $this->getRegistry());
 	}
 
 	/**
@@ -113,5 +146,18 @@ abstract class Facade
 	public function isInitialized()
 	{
 		return $this->initialized;
+	}
+
+	/**
+	 * @return controller\Front
+	 * @throws \RuntimeException
+	 */
+	public function getFrontController()
+	{
+		if (!$this->initialized)
+			throw new \RuntimeException('You must call initialize method before calling this one.');
+
+		return $this->frontController;
+
 	}
 } 

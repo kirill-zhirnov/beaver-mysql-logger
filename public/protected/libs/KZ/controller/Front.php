@@ -3,6 +3,10 @@
 namespace KZ\controller;
 use KZ\app\interfaces\Registry;
 
+/**
+ * Class Front
+ * @package KZ\controller
+ */
 class Front
 {
 	/**
@@ -25,12 +29,19 @@ class Front
 //отнаследовать от registry, сделать toString, toJson, менейдж headers.
 	protected $response;
 
+	/**
+	 * @param Kit $controllerKit
+	 * @param Registry $registry
+	 */
 	public function __construct(Kit $controllerKit, Registry $registry)
 	{
 		$this->controllerKit = $controllerKit;
 		$this->registry = $registry;
 	}
 
+	/**
+	 * Set up internal properties.
+	 */
 	public function init()
 	{
 		if ($this->controllerChain)
@@ -39,6 +50,9 @@ class Front
 		$this->makeControllerChain();
 	}
 
+	/**
+	 * Run controller chain.
+	 */
 	public function run()
 	{
 		$this->init();
@@ -55,6 +69,15 @@ class Front
 		return $this->controllerChain;
 	}
 
+	/**
+	 * Add controller in controller chain after current controller.
+	 *
+	 * @param $controllerPath
+	 * @param $controller
+	 * @param $action
+	 * @return $this
+	 * @throws \RuntimeException
+	 */
 	public function forward($controllerPath, $controller, $action)
 	{
 		if (!$this->controllerChain)
@@ -77,6 +100,14 @@ class Front
 		return $this->registry->getRequest();
 	}
 
+	/**
+	 * Make controller instance.
+	 *
+	 * @param $controllerPath
+	 * @param $controller
+	 * @param $action
+	 * @return array
+	 */
 	public function makeController($controllerPath, $controller, $action)
 	{
 		$controller = $this->controllerKit->makeController(
@@ -91,6 +122,9 @@ class Front
 		];
 	}
 
+	/**
+	 * Make controller chain by request.
+	 */
 	protected function makeControllerChain()
 	{
 		$controller = $this->makeController(

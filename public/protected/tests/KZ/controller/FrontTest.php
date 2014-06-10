@@ -110,10 +110,57 @@ class FrontTest extends \PHPUnit_Framework_TestCase
 	}
 
 	public function testDoubleInitCall()
-	{}
+	{
+		$registry = $this->makeAppRegistry()
+			->setRequest($this->makeRequest())
+			->setKit($this->makeKit())
+		;
+
+		$controller = $this->getControllerInstance();
+
+		$chain = [
+			['instance' => $controller, 'action' => 'test'],
+		];
+
+		/** @var Front $front */
+		$front = $this->getMock('\KZ\controller\Front', ['makeController'], [$this->makeControllerKitMock(), $registry]);
+		$front
+			->expects($this->once())
+			->method('makeController')
+			->will($this->returnValue($chain[0]))
+		;
+
+		$front->init();
+		$front->init();
+	}
 
 	public function testRun()
-	{}
+	{
+		$registry = $this->makeAppRegistry()
+			->setRequest($this->makeRequest())
+			->setKit($this->makeKit())
+		;
+
+		$controller = $this->getControllerInstance();
+		$controller
+			->expects($this->once())
+			->method('test')
+		;
+
+		$chain = [
+			['instance' => $controller, 'action' => 'test'],
+		];
+
+		/** @var Front $front */
+		$front = $this->getMock('\KZ\controller\Front', ['makeController'], [$this->makeControllerKitMock(), $registry]);
+		$front
+			->expects($this->once())
+			->method('makeController')
+			->will($this->returnValue($chain[0]))
+		;
+
+		$front->run();
+	}
 
 	/**
 	 * @return \KZ\Controller\Kit
@@ -158,6 +205,7 @@ class FrontTest extends \PHPUnit_Framework_TestCase
 	{
 		return $this->getMockBuilder('\KZ\Controller')
 			->disableOriginalConstructor()
+			->setMethods(['test'])
 			->getMock()
 		;
 	}
