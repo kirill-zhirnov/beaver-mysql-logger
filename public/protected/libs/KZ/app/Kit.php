@@ -8,6 +8,8 @@ use KZ\db;
  *
  * Class Kit
  * @package KZ\app
+ *
+ * todo: Make generic method to prevent copy paste in makeFrontController, makeControllerChain, etc.
  */
 class Kit implements interfaces\Kit
 {
@@ -86,6 +88,26 @@ class Kit implements interfaces\Kit
 		return $instance;
 	}
 
+	/**
+	 * @param \KZ\Controller\Kit $kit
+	 * @param interfaces\Registry $registry
+	 * @throws \RuntimeException
+	 * @return \KZ\controller\Front
+	 */
+	public function makeFrontController(\KZ\Controller\Kit $kit, interfaces\Registry $registry)
+	{
+		$className = '\KZ\controller\Front';
+		if (isset($this->config['components']['frontController']['class']))
+			$className = $this->config['components']['frontController']['class'];
+
+		$instance = new $className($kit, $registry);
+
+		if (!$instance instanceof \KZ\controller\Front)
+			throw new \RuntimeException('ControllerChain must be interface of \KZ\controller\Front.');
+
+		return $instance;
+
+	}
 
 	/**
 	 * Create PDO object.

@@ -30,4 +30,13 @@ interface Kit
 	 * @return \KZ\controller\Chain
 	 */
 	public function makeControllerChain();
+
+	/**
+	 * Create front controller.
+	 *
+	 * @param \KZ\Controller\Kit $kit
+	 * @param Registry $registry
+	 * @return \KZ\controller\Front
+	 */
+	public function makeFrontController(\KZ\Controller\Kit $kit, Registry $registry);
 } 

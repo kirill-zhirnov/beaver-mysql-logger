@@ -101,13 +101,14 @@ abstract class Facade
 	abstract public function makeControllerKit();
 
 	/**
+	 * @throws \RuntimeException
 	 * @return controller\Front
 	 */
 	public function makeFrontController()
 	{
-		//todo: вынести в фабрику!
-		//todo: добавить проверку на inited
-		return new controller\Front($this->makeControllerKit(), $this->getRegistry());
+		$this->checkIsInitialized();
+
+		return $this->kit->makeFrontController($this->makeControllerKit(), $this->getRegistry());
 	}
 
 	/**
@@ -116,8 +117,7 @@ abstract class Facade
 	 */
 	public function getRegistry()
 	{
-		if (!$this->initialized)
-			throw new \RuntimeException('You must call initialize method before calling this one.');
+		$this->checkIsInitialized();
 
 		return $this->registry;
 	}
@@ -154,10 +154,15 @@ abstract class Facade
 	 */
 	public function getFrontController()
 	{
-		if (!$this->initialized)
-			throw new \RuntimeException('You must call initialize method before calling this one.');
+		$this->checkIsInitialized();
 
 		return $this->frontController;
 
+	}
+
+	protected function checkIsInitialized()
+	{
+		if (!$this->initialized)
+			throw new \RuntimeException('You must call initialize method before calling this one.');
 	}
 } 

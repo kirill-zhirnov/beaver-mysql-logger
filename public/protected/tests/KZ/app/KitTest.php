@@ -83,5 +83,33 @@ class KitTest extends \PHPUnit_Framework_TestCase
 		]);
 		$this->assertEquals($instanceMock, $kit->makeControllerChain());
 	}
+
+	public function testMakeFrontController()
+	{
+		$kit = new \KZ\app\Kit([]);
+
+		$controllerKit = $this->getMockBuilder('\KZ\Controller\Kit')
+			->disableOriginalConstructor()
+			->getMock()
+		;
+
+		$registry = new \KZ\app\Registry([]);
+		$this->assertInstanceOf('\KZ\controller\Front', $kit->makeFrontController($controllerKit, $registry));
+
+		$instanceMock = $this->getMockBuilder('\KZ\controller\Front')
+			->disableOriginalConstructor()
+			->getMock()
+		;
+
+		$kit = new \KZ\app\Kit([
+			'components' => [
+				'frontController' => [
+					'class' => get_class($instanceMock)
+				]
+			]
+		]);
+
+		$this->assertInstanceOf(get_class($instanceMock), $kit->makeFrontController($controllerKit, $registry));
+	}
 }
  

@@ -4,6 +4,21 @@ namespace KZ\app;
 
 class FacadeTest extends \PHPUnit_Framework_TestCase
 {
+	public function testNotInitializedException()
+	{
+		/** @var \KZ\app\Facade $facade */
+		$facade = $this->getMock('\KZ\app\Facade', ['makeRequest', 'makeControllerKit'], [[]]);
+
+		$this->setExpectedException('RuntimeException', 'You must call initialize method before calling this one.');
+		$facade->makeFrontController();
+
+		$this->setExpectedException('RuntimeException', 'You must call initialize method before calling this one.');
+		$facade->getRegistry();
+
+		$this->setExpectedException('RuntimeException', 'You must call initialize method before calling this one.');
+		$facade->getFrontController();
+	}
+
 	public function testInitialize()
 	{
 		//stubbing kit to prevent PDO creation
