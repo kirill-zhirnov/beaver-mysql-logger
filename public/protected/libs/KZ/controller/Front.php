@@ -106,19 +106,23 @@ class Front
 	 * @param $controllerPath
 	 * @param $controller
 	 * @param $action
+	 * @throws \RuntimeException
 	 * @return array
 	 */
 	public function makeController($controllerPath, $controller, $action)
 	{
-		$controller = $this->controllerKit->makeController(
+		$controllerInstance = $this->controllerKit->makeController(
 			$controllerPath,
 			$controller,
 			$action
 		);
 
+		if (!$controllerInstance)
+			throw new \RuntimeException('Controller not found. Path:"' . $controllerPath . '", Controller:"' . $controller . '". Action:"' . $action . '".', 404);
+
 		return [
-			'instance' => $controller,
-			'action' => $action
+			'instance' => $controllerInstance,
+			'action' => $this->controllerKit->getActionMethod($action)
 		];
 	}
 

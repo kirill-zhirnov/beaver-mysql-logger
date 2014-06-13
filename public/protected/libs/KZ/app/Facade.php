@@ -96,7 +96,7 @@ abstract class Facade
 	/**
 	 * Makes controllers factory.
 	 *
-	 * @return \KZ\controller\Kit
+	 * @return controller\Kit
 	 */
 	abstract public function makeControllerKit();
 
@@ -108,7 +108,12 @@ abstract class Facade
 	{
 		$this->checkIsInitialized();
 
-		return $this->kit->makeFrontController($this->makeControllerKit(), $this->getRegistry());
+		$controllerKit = $this->makeControllerKit();
+		$frontController = $this->kit->makeFrontController($controllerKit, $this->getRegistry());
+
+		$controllerKit->setFrontController($frontController);
+
+		return $frontController;
 	}
 
 	/**

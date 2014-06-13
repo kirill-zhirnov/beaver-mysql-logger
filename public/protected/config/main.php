@@ -6,5 +6,11 @@ return [
 		'username' => null,
 		'password' => null,
 		'options' => []
+	],
+
+	'components' => [
+		'httpControllerKit' => [
+			'path' => realpath(PROTECTED_PATH . '/project/controllers')
+		]
 	]
 ];

@@ -111,5 +111,45 @@ class KitTest extends \PHPUnit_Framework_TestCase
 
 		$this->assertInstanceOf(get_class($instanceMock), $kit->makeFrontController($controllerKit, $registry));
 	}
+
+	public function testMakeHttpRequest()
+	{
+		$kit = new \KZ\app\Kit([]);
+		$this->assertInstanceOf('\KZ\controller\request\Http', $kit->makeHttpRequest());
+
+		$requestMock = $this->getMock('\KZ\controller\request\Http');
+		$kit = new \KZ\app\Kit([
+			'components' => [
+				'httpRequest' => [
+					'class' => get_class($requestMock)
+				]
+			]
+		]);
+		$this->assertEquals($requestMock, $kit->makeHttpRequest());
+	}
+
+	public function testMakeControllerKit()
+	{
+		$kitConfig = [
+			'path' => 'test'
+		];
+
+		$kit = new \KZ\app\Kit([]);
+		$this->assertInstanceOf('\KZ\controller\Kit', $kit->makeControllerKit($kitConfig));
+
+		$kitMock = $this->getMock('\KZ\controller\Kit', null, [$kitConfig]);
+		$kit = new \KZ\app\Kit([
+			'components' => [
+				'controllerKit' => [
+					'class' => get_class($kitMock)
+				]
+			]
+		]);
+		$this->assertInstanceOf(get_class($kitMock), $kit->makeControllerKit($kitConfig));
+
+		//no path in config - exception
+		$this->setExpectedException('OutOfBoundsException', 'Key "path" must be in config.');
+		$kit->makeControllerKit([]);
+	}
 }
  

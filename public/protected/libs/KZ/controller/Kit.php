@@ -63,8 +63,12 @@ class Kit
 		$className = $this->createClassName($controllerPath, $controller);
 		$actionName = $this->getActionMethod($action);
 
-		if (!class_exists($className) || !method_exists($className, $actionName))
+		try {
+			if (!class_exists($className) || !method_exists($className, $actionName))
+				return false;
+		} catch (\Exception $e) {
 			return false;
+		}
 
 		$class = new $className($this->frontController);
 		if (!$class instanceof \KZ\Controller)
@@ -89,7 +93,13 @@ class Kit
 		if ($this->namespacePrefix == '')
 			throw new \UnexpectedValueException('Namespace prefix must be non empty by security reasons.');
 
-		return $this->namespacePrefix . '\\' . strtolower($controllerPath) . '\\' . ucfirst(strtolower($controller));
+		$path = $this->namespacePrefix . '\\';
+		if ($controllerPath)
+			$path .= strtolower($controllerPath) . '\\';
+
+		$path .= ucfirst(strtolower($controller));
+
+		return $path;
 	}
 
 	/**

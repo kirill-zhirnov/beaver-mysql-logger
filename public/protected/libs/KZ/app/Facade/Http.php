@@ -12,17 +12,20 @@ class Http extends app\Facade
 	 */
 	public function makeRequest()
 	{
-		// TODO: Implement makeRequest() method.
+		return $this->kit->makeHttpRequest();
 	}
 
 	/**
 	 * Makes controllers factory.
 	 *
+	 * @throws \OutOfBoundsException
 	 * @return \KZ\controller\Kit
 	 */
 	public function makeControllerKit()
 	{
-		// TODO: Implement makeControllerKit() method.
-	}
+		if (!array_key_exists('httpControllerKit', $this->config['components']))
+			throw new \OutOfBoundsException('Key "httpControllerKit" must be in config!');
 
+		return $this->kit->makeControllerKit($this->config['components']['httpControllerKit']);
+	}
 } 

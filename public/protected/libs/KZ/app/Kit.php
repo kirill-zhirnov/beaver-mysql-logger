@@ -9,7 +9,6 @@ use KZ\db;
  * Class Kit
  * @package KZ\app
  *
- * todo: Make generic method to prevent copy paste in makeFrontController, makeControllerChain, etc.
  */
 class Kit implements interfaces\Kit
 {
@@ -36,18 +35,11 @@ class Kit implements interfaces\Kit
 	 */
 	public function makeConnectionStorage()
 	{
-		$className = '\KZ\db\ConnectionStorage';
-		if (isset($this->config['components']['connectionStorage']['class']))
-			$className = $this->config['components']['connectionStorage']['class'];
+		$instance = $this->makeInstance('\KZ\db\ConnectionStorage', 'connectionStorage');
 
-		$connectionStorage = new $className();
+		$instance->add($this->makePdo($this->config['db']), db\interfaces\ConnectionStorage::SQLITE, 'db', true);
 
-		if (!$connectionStorage instanceof db\interfaces\ConnectionStorage)
-			throw new \RuntimeException('Connection storage must implement interface db\interfaces\ConnectionStorage.');
-
-		$connectionStorage->add($this->makePdo($this->config['db']), db\interfaces\ConnectionStorage::SQLITE, 'db', true);
-
-		return $connectionStorage;
+		return $instance;
 	}
 
 	/**
@@ -56,16 +48,7 @@ class Kit implements interfaces\Kit
 	 */
 	public function makeRegistry()
 	{
-		$className = '\KZ\app\Registry';
-		if (isset($this->config['components']['registry']['class']))
-			$className = $this->config['components']['registry']['class'];
-
-		$registry = new $className();
-
-		if (!$registry instanceof interfaces\Registry)
-			throw new \RuntimeException('Registry must implement interface interfaces\Registry.');
-
-		return $registry;
+		return $this->makeInstance('\KZ\app\Registry', 'registry');
 	}
 
 	/**
@@ -76,16 +59,7 @@ class Kit implements interfaces\Kit
 	 */
 	public function makeControllerChain()
 	{
-		$className = '\KZ\controller\Chain';
-		if (isset($this->config['components']['controllerChain']['class']))
-			$className = $this->config['components']['controllerChain']['class'];
-
-		$instance = new $className();
-
-		if (!$instance instanceof \KZ\controller\Chain)
-			throw new \RuntimeException('ControllerChain must be interface of \KZ\controller\Chain.');
-
-		return $instance;
+		return $this->makeInstance('\KZ\controller\Chain', 'controllerChain');
 	}
 
 	/**
@@ -96,17 +70,69 @@ class Kit implements interfaces\Kit
 	 */
 	public function makeFrontController(\KZ\Controller\Kit $kit, interfaces\Registry $registry)
 	{
-		$className = '\KZ\controller\Front';
-		if (isset($this->config['components']['frontController']['class']))
-			$className = $this->config['components']['frontController']['class'];
+		return $this->makeInstance('\KZ\controller\Front', 'frontController', [
+			$kit, $registry
+		]);
+	}
 
-		$instance = new $className($kit, $registry);
+	/**
+	 * Create Http request.
+	 *
+	 * @throws \RuntimeException
+	 * @return \KZ\controller\request\Http
+	 */
+	public function makeHttpRequest()
+	{
+		return $this->makeInstance('\KZ\controller\request\Http', 'httpRequest');
+	}
 
-		if (!$instance instanceof \KZ\controller\Front)
-			throw new \RuntimeException('ControllerChain must be interface of \KZ\controller\Front.');
+	/**
+	 * Create controller Kit
+	 *
+	 * @param array $config
+	 * @throws \RuntimeException
+	 * @throws \OutOfBoundsException
+	 * @return \KZ\controller\Kit
+	 */
+	public function makeControllerKit(array $config)
+	{
+		if (!array_key_exists('path', $config))
+			throw new \OutOfBoundsException('Key "path" must be in config.');
+
+		return $this->makeInstance('\KZ\controller\Kit', 'controllerKit', [
+			$config['path'], $config
+		]);
+	}
+
+	/**
+	 * @param $className
+	 * @param $configKey
+	 * @param array $constructParams
+	 * @throws \RuntimeException
+	 * @return object
+	 */
+	protected function makeInstance($className, $configKey, array $constructParams = [])
+	{
+		$reflection = new \ReflectionClass($this->makeClassName($className, $configKey));
+		$instance = $reflection->newInstanceArgs($constructParams);
+
+		$this->validateInstance($instance, $className);
 
 		return $instance;
+	}
 
+	protected function makeClassName($className, $configKey)
+	{
+		if (isset($this->config['components'][$configKey]['class']))
+			return $this->config['components'][$configKey]['class'];
+
+		return $className;
+	}
+
+	protected function validateInstance($instance, $implement)
+	{
+		if (!($instance instanceof $implement))
+			throw new \RuntimeException('Instance must be interface of "' . $implement . '", given: "' . get_class($instance) . '".');
 	}
 
 	/**

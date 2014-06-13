@@ -31,6 +31,22 @@ interface Kit
 	 */
 	public function makeControllerChain();
 
+
+	/**
+	 * Create Http request.
+	 *
+	 * @return \KZ\controller\request\Http
+	 */
+	public function makeHttpRequest();
+
+	/**
+	 * Create controller Kit
+	 *
+	 * @param array $config
+	 * @return \KZ\controller\Kit
+	 */
+	public function makeControllerKit(array $config);
+
 	/**
 	 * Create front controller.
 	 *

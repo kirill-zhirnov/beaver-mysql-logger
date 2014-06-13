@@ -92,4 +92,9 @@ class KitTest extends \PHPUnit_Framework_TestCase
 		$this->setExpectedException('RuntimeException', 'Controller must be instance of \KZ\Controller.');
 		$kit->makeController('sub/path', 'index', 'test');
 	}
+
+	public function testMakeRequest()
+	{
+
+	}
 } 
