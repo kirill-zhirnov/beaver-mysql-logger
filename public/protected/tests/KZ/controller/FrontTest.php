@@ -42,6 +42,12 @@ class FrontTest extends \PHPUnit_Framework_TestCase
 			->will($this->returnValue($controller))
 		;
 
+		$controllerKit
+			->expects($this->any())
+			->method('getActionMethod')
+			->will($this->returnValue('testAction'))
+		;
+
 		/** @var Front $front */
 		$front = $this->getMock('\KZ\controller\Front', null, [$controllerKit, $this->makeAppRegistry()]);
 
