@@ -89,6 +89,8 @@ class ViewTest extends \PHPUnit_Framework_TestCase
 		]);
 
 		$this->assertEquals('<html>b,1', $result);
+
+		$this->unlinkTpl([__DIR__ . '/tpl.php']);
 	}
 
 	public function testRenderWithLayout()
@@ -105,12 +107,23 @@ class ViewTest extends \PHPUnit_Framework_TestCase
 		$this->assertEquals('<html><b>123</b></html>', $view->render('view', [
 			'test' => '123'
 		]));
+
+		$this->unlinkTpl([__DIR__ . '/layout.php', __DIR__ . '/view.php']);
+	}
+
+	protected function unlinkTpl($path)
+	{
+		if (!is_array($path))
+			$path = [$path];
+
+		foreach ($path as $item)
+			if (file_exists($item))
+				unlink($item);
 	}
 
 	protected function createTmpTpl($path, $content)
 	{
-		if (file_exists($path))
-			unlink($path);
+		$this->unlinkTpl($path);
 
 		file_put_contents($path, $content);
 	}
