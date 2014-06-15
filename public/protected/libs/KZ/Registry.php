@@ -10,6 +10,13 @@ class Registry implements \ArrayAccess, \Iterator
 
 	protected $keys;
 
+	/**
+	 * If true - Registry will check if setKeyName method exists, if yes - call it to set value.
+	 *
+	 * @var bool
+	 */
+	protected $setDataViaMethods = true;
+
 	public function __construct(array $data = [])
 	{
 		foreach ($data as $key => $val)
@@ -78,9 +85,11 @@ class Registry implements \ArrayAccess, \Iterator
 		if (!preg_match('/^(_|[a-z])\w*/i', $offset))
 			throw new \OutOfBoundsException('Key should be right PHP variable name ("' . $offset . '")');
 
-		$methodName = 'set' . $offset;
-		if (method_exists($this, $methodName))
-			return $this->{$methodName}($value);
+		if ($this->setDataViaMethods) {
+			$methodName = 'set' . $offset;
+			if (method_exists($this, $methodName))
+				return $this->{$methodName}($value);
+		}
 
 		$this->data[$offset] = $value;
 
@@ -92,6 +101,25 @@ class Registry implements \ArrayAccess, \Iterator
 		unset($this->data[$offset]);
 
 		return $this;
+	}
+
+	/**
+	 * @param boolean $setDataViaMethods
+	 * @return $this
+	 */
+	public function setDataViaMethods($setDataViaMethods)
+	{
+		$this->setDataViaMethods = $setDataViaMethods;
+
+		return $this;
+	}
+
+	/**
+	 * @return boolean
+	 */
+	public function isSetDataViaMethods()
+	{
+		return $this->setDataViaMethods;
 	}
 
 	protected function initIteratorKeys()

@@ -79,4 +79,26 @@ class RegistryTest extends \PHPUnit_Framework_TestCase
 
 		$this->assertEquals(sizeof($data), $i);
 	}
+
+	public function testSetDataViaMethods()
+	{
+		$registry = $this->getMock('\KZ\Registry', ['setA']);
+
+		$registry
+			->expects($this->once())
+			->method('setA')
+		;
+
+		$this->assertTrue($registry->isSetDataViaMethods());
+		$registry['a'] = 'a';
+
+		$registry = $this->getMock('\KZ\Registry', ['setB']);
+		$registry
+			->expects($this->never())
+			->method('setB')
+		;
+		$registry->setDataViaMethods(false);
+		$this->assertFalse($registry->isSetDataViaMethods());
+		$registry['b'] = 'c';
+	}
 }

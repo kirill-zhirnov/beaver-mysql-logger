@@ -29,22 +29,30 @@ interface View extends \ArrayAccess, \Iterator
 
 	/**
 	 * Render view file and move request to layout.
+	 * If $localPath is null, path will be used from self::setLocalPath().
 	 *
-	 * @param $path
+	 * @param $localPath
 	 * @param array $data
 	 * @return $this
 	 */
-	public function render($path, array $data = []);
+	public function render($localPath = null, array $data = []);
+
+	/**
+	 * Set internal local path. See self::render().
+	 *
+	 * @param $localPath
+	 * @return this
+	 */
+	public function setLocalPath($localPath);
 
 	/**
 	 * Render view without moving to layout, only view file.
 	 *
-	 * @param $path
+	 * @param $localPath
 	 * @param array $data
-	 * @param array $config
 	 * @return View
 	 */
-	public function renderPartial($path, array $data = [], array $config = []);
+	public function renderPartial($localPath, array $data = []);
 
 	/**
 	 * @param $path
@@ -57,13 +65,6 @@ interface View extends \ArrayAccess, \Iterator
 	 * @return $this
 	 */
 	public function setConfig(array $config = []);
-
-	/**
-	 * To output the result.
-	 *
-	 * @return string
-	 */
-	public function __toString();
 
 	/**
 	 * Set variable for template.

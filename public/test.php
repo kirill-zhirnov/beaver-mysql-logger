@@ -18,7 +18,7 @@ $pdo->query('
 return;
 /*
 */
-
+/*
 return;
 
 $stmt = $pdo->prepare('
@@ -37,3 +37,4 @@ $stmt->execute([
 $result = $pdo->query('select * from mysql');
 foreach ($result as $row)
 	var_dump($row);
+*/
