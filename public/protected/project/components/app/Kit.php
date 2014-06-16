@@ -5,6 +5,9 @@ use KZ\db;
 
 class Kit extends \KZ\app\Kit
 {
+	/**
+	 * @return db\interfaces\ConnectionStorage
+	 */
 	public function makeConnectionStorage()
 	{
 		$connectionStorage = parent::makeConnectionStorage();
