@@ -105,6 +105,31 @@ class Kit implements interfaces\Kit
 	}
 
 	/**
+	 * @param $templatesPath
+	 * @param array $config
+	 * @throws \RuntimeException
+	 * @return \KZ\View
+	 */
+	public function makeView($templatesPath = null, array $config = [])
+	{
+		$viewConfig = isset($this->config['components']['view']) ? $this->config['components']['view'] : [];
+
+		if (is_null($templatesPath) && isset($viewConfig['templatesPath']))
+			$templatesPath = $viewConfig['templatesPath'];
+
+		if (is_null($templatesPath))
+			throw new \RuntimeException('templatesPath is null. You must pass it in method or specify it in a views config.');
+
+		if (isset($viewConfig['config']) && is_array($viewConfig['config']))
+			$config = array_replace($viewConfig['config'], $config);
+
+		return $this->makeInstance('\KZ\View', 'view', [
+			$templatesPath,
+			$config
+		]);
+	}
+
+	/**
 	 * @param $className
 	 * @param $configKey
 	 * @param array $constructParams

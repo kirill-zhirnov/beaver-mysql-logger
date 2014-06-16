@@ -151,5 +151,36 @@ class KitTest extends \PHPUnit_Framework_TestCase
 		$this->setExpectedException('OutOfBoundsException', 'Key "path" must be in config.');
 		$kit->makeControllerKit([]);
 	}
+
+	public function testMakeView()
+	{
+		$kitConfig = [
+			'components' => [
+				'view' => [
+					'templatesPath' => '/this/is/path',
+					'config' => [
+						'extension' => '.ccc',
+						'varNameForContent' => 'bbb'
+					]
+				]
+			]
+		];
+
+		$kit = new \KZ\app\Kit($kitConfig);
+		$view = $kit->makeView();
+
+		$this->assertEquals('/this/is/path', $view->getTemplatesPath());
+		$this->assertEquals('.ccc', $view->getExtension());
+		$this->assertEquals('bbb', $view->getVarNameForContent());
+
+		$view = $kit->makeView('/new/path', [
+			'extension' => '.eee',
+			'varNameForContent' => 'hhh'
+		]);
+
+		$this->assertEquals('/new/path', $view->getTemplatesPath());
+		$this->assertEquals('.eee', $view->getExtension());
+		$this->assertEquals('hhh', $view->getVarNameForContent());
+	}
 }
  

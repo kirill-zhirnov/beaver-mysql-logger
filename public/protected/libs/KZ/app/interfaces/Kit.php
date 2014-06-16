@@ -48,6 +48,15 @@ interface Kit
 	public function makeControllerKit(array $config);
 
 	/**
+	 * Create view.
+	 *
+	 * @param $templatesPath
+	 * @param array $config
+	 * @return mixed
+	 */
+	public function makeView($templatesPath = null, array $config = []);
+
+	/**
 	 * Create front controller.
 	 *
 	 * @param \KZ\Controller\Kit $kit

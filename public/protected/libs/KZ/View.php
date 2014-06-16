@@ -65,7 +65,7 @@ class View extends Registry implements view\interfaces\View
 
 	public function setConfig(array $config = [])
 	{
-		$allowedOptions = ['extension', 'layout', 'varNameForContent'];
+		$allowedOptions = ['extension', 'layout', 'varNameForContent', 'localPath'];
 		foreach ($allowedOptions as $option) {
 			if (!isset($config[$option]))
 				continue;
@@ -116,7 +116,7 @@ class View extends Registry implements view\interfaces\View
 		$this->absolutePath = realpath($this->getAbsoluteTemplatePath($localPath));
 
 		if (!$this->absolutePath)
-			throw new \RuntimeException('Cannot open file path: "' . $this->absolutePath . '".');
+			throw new \RuntimeException('Cannot open file path: "' . $localPath . '".');
 
 		return $this->renderFile();
 	}

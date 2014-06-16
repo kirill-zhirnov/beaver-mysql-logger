@@ -11,6 +11,10 @@ return [
 	'components' => [
 		'httpControllerKit' => [
 			'path' => realpath(PROTECTED_PATH . '/project/controllers')
+		],
+
+		'view' => [
+			'templatesPath' => realpath(PROTECTED_PATH . '/project/views'),
 		]
 	]
 ];

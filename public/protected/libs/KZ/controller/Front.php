@@ -26,9 +26,6 @@ class Front
 	 */
 	protected $controllerChain;
 
-//отнаследовать от registry, сделать toString, toJson, менейдж headers.
-	protected $response;
-
 	/**
 	 * @param Kit $controllerKit
 	 * @param Registry $registry
@@ -124,6 +121,14 @@ class Front
 			'instance' => $controllerInstance,
 			'action' => $this->controllerKit->getActionMethod($action)
 		];
+	}
+
+	/**
+	 * @return Registry
+	 */
+	public function getRegistry()
+	{
+		return $this->registry;
 	}
 
 	/**
