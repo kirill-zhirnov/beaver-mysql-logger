@@ -1,12 +1,12 @@
 <?php
 
-namespace KZ\events\interfaces;
+namespace KZ\event\interfaces;
 
 /**
- * Interface Events
- * @package KZ\events\interfaces
+ * Interface Observer
+ * @package KZ\event\interfaces
  */
-interface Events
+interface Observer
 {
 	/**
 	 * @param array $events - If you want to bind many events in construct - pass it here.
@@ -15,6 +15,12 @@ interface Events
 
 	/**
 	 * @param array $events Same with __construct $events.
+	 * Array structure must be:
+	 * <code>
+	 * <?php
+	 * $events = array(array('ClassName', 'name', function() {}));
+	 * ?>
+	 * </code>
 	 * @return $this
 	 */
 	public function bindEvents(array $events);
@@ -25,7 +31,7 @@ interface Events
 	 * @param $class
 	 * @param $name
 	 * @param callable $callback
-	 * @return $this
+	 * @return int - Position in listeners array.
 	 */
 	public function bind($class, $name, callable $callback);
 
@@ -34,10 +40,11 @@ interface Events
 	 *
 	 * @param $class
 	 * @param $name
+	 * @param $sender
 	 * @param array $params
 	 * @return Event
 	 */
-	public function trigger($class, $name, array $params = []);
+	public function trigger($class, $name, $sender, array $params = []);
 
 	/**
 	 * Unbind event|s.
@@ -45,7 +52,17 @@ interface Events
 	 * @param null $class - if $class passed - only event related to this class will be removed.
 	 * @param null $name - if $name passed, $class has to be passed too. Only $class => $name events will be removed.
 	 * @param null $key
-	 * @return $this
+	 * @return boolean - if listeners exist - it will unset and return true, if not - false.
 	 */
 	public function unbind($class = null, $name = null, $key = null);
+
+	/**
+	 * Get listeners.
+	 *
+	 * @param null $class
+	 * @param null $name
+	 * @param null $key
+	 * @return array|callable|boolean
+	 */
+	public function getListeners($class = null, $name = null, $key = null);
 } 

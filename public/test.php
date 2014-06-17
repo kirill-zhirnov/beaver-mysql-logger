@@ -1,8 +1,17 @@
 <?php
 
+$a = function() {
+	return 'a';
+};
 
-$pdo = new PDO('sqlite:' . __DIR__ . '/protected/db.sq3', null, null);
-$pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+$b = function() {
+	return 'a';
+};
+
+var_dump($a == $b);
+return;
+//$pdo = new PDO('sqlite:' . __DIR__ . '/protected/db.sq3', null, null);
+//$pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
 
 /*
 $pdo->query('
