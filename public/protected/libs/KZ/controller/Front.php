@@ -1,7 +1,8 @@
 <?php
 
 namespace KZ\controller;
-use KZ\app\interfaces\Registry;
+use KZ\app\interfaces\Registry,
+	KZ\event;
 
 /**
  * Class Front
@@ -44,7 +45,7 @@ class Front
 		if ($this->controllerChain)
 			return;
 
-		$this->makeControllerChain();
+		$this->controllerChain = $this->makeControllerChain();
 	}
 
 	/**
@@ -54,8 +55,15 @@ class Front
 	{
 		$this->init();
 
-		foreach ($this->controllerChain as $item)
-			$item['instance']->{$item['action']}();
+		$event = $this->registry
+			->getObserver()
+			->trigger($this, 'beforeRunControllerChain', $this)
+		;
+
+		//listeners can prevent running chain
+		if (!$event->isDefaultPrevented())
+			foreach ($this->controllerChain as $item)
+				$item['instance']->{$item['action']}();
 	}
 
 	/**
@@ -133,6 +141,8 @@ class Front
 
 	/**
 	 * Make controller chain by request.
+	 *
+	 * @return Chain
 	 */
 	protected function makeControllerChain()
 	{
@@ -142,7 +152,9 @@ class Front
 			$this->getRequest()->getAction()
 		);
 
-		$this->controllerChain = $this->registry->getKit()->makeControllerChain();
-		$this->controllerChain->push($controller['instance'], $controller['action']);
+		$chain = $this->registry->getKit()->makeControllerChain();
+		$chain->push($controller['instance'], $controller['action']);
+
+		return $chain;
 	}
 } 

@@ -28,7 +28,7 @@ interface Observer
 	/**
 	 * Bind single event.
 	 *
-	 * @param $class
+	 * @param $class - Class name or object. If object passed, basic parent class will be used.
 	 * @param $name
 	 * @param callable $callback
 	 * @return int - Position in listeners array.
@@ -38,7 +38,7 @@ interface Observer
 	/**
 	 * Trigger event.
 	 *
-	 * @param $class
+	 * @param $class - Class name or object. If object passed, basic parent class will be used.
 	 * @param $name
 	 * @param $sender
 	 * @param array $params

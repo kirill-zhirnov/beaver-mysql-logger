@@ -182,5 +182,21 @@ class KitTest extends \PHPUnit_Framework_TestCase
 		$this->assertEquals('.eee', $view->getExtension());
 		$this->assertEquals('hhh', $view->getVarNameForContent());
 	}
+
+	public function testObserver()
+	{
+		$kit = new \KZ\app\Kit([]);
+		$this->assertInstanceOf('\KZ\event\Observer', $kit->makeObserver());
+
+		$requestMock = $this->getMock('\KZ\event\Observer');
+		$kit = new \KZ\app\Kit([
+			'components' => [
+				'observer' => [
+					'class' => get_class($requestMock)
+				]
+			]
+		]);
+		$this->assertEquals($requestMock, $kit->makeObserver());
+	}
 }
  

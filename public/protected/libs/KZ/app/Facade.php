@@ -73,6 +73,7 @@ abstract class Facade
 
 		//put components in registry
 		$this->registry
+			->setObserver($this->kit->makeObserver())
 			->setConnectionStorage($this->kit->makeConnectionStorage())
 			->setKit($this->kit)
 			->setConfig($this->config)

@@ -145,6 +145,7 @@ class FrontTest extends \PHPUnit_Framework_TestCase
 		$registry = $this->makeAppRegistry()
 			->setRequest($this->makeRequest())
 			->setKit($this->makeKit())
+			->setObserver($this->makeObserver())
 		;
 
 		$controller = $this->getControllerInstance();
@@ -166,6 +167,24 @@ class FrontTest extends \PHPUnit_Framework_TestCase
 		;
 
 		$front->run();
+	}
+
+	public function testBeforeRunControllerChainEvent()
+	{
+		$registry = $this->makeAppRegistry()
+			->setObserver($this->makeObserver())
+		;
+
+		$front = $this->getMock('\KZ\controller\Front', ['makeControllerChain'], [$this->makeControllerKitMock(), $registry]);
+		$front
+			->expects($this->once())
+			->method('makeControllerChain')
+			->will($this->returnValue($this->makeControllerChain()))
+		;
+
+		$front->run();
+
+		//stop here! test events!
 	}
 
 	/**
@@ -212,6 +231,25 @@ class FrontTest extends \PHPUnit_Framework_TestCase
 		return $this->getMockBuilder('\KZ\Controller')
 			->disableOriginalConstructor()
 			->setMethods(['test'])
+			->getMock()
+		;
+	}
+
+	/**
+	 * @return \KZ\event\Observer
+	 */
+	protected function makeObserver()
+	{
+		return new \KZ\event\Observer();
+	}
+
+	/**
+	 * @return \KZ\Controller\Chain
+	 */
+	protected function makeControllerChain()
+	{
+		return $this->getMockBuilder('\KZ\Controller\Chain')
+			->setMethods(null)
 			->getMock()
 		;
 	}

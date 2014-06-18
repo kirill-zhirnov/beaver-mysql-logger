@@ -53,5 +53,20 @@ interface Registry extends \ArrayAccess, \Iterator
 	 */
 	public function getRequest();
 
+	/**
+	 * @param \KZ\controller\Request $request
+	 * @return $this
+	 */
 	public function setRequest(\KZ\controller\Request $request);
+
+	/**
+	 * @return \KZ\event\Observer
+	 */
+	public function getObserver();
+
+	/**
+	 * @param \KZ\event\Observer $observer
+	 * @return $this
+	 */
+	public function setObserver(\KZ\event\Observer $observer);
 } 

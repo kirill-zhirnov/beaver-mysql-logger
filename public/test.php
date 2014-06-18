@@ -1,5 +1,30 @@
 <?php
 
+class A {
+	public function test() {
+		echo get_class($this);
+	}
+}
+
+class B extends A
+{
+
+}
+
+class C extends B
+{}
+
+$class = new C;
+
+if (is_object($class))
+	$class = get_class($class);
+
+while ($tmpClass = get_parent_class($class))
+	$class = $tmpClass;
+
+var_dump($class);
+
+/*
 $a = function() {
 	return 'a';
 };
@@ -10,6 +35,7 @@ $b = function() {
 
 var_dump($a == $b);
 return;
+*/
 //$pdo = new PDO('sqlite:' . __DIR__ . '/protected/db.sq3', null, null);
 //$pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
 

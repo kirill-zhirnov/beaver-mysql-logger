@@ -64,4 +64,11 @@ interface Kit
 	 * @return \KZ\controller\Front
 	 */
 	public function makeFrontController(\KZ\Controller\Kit $kit, Registry $registry);
+
+	/**
+	 * Create Observer.
+	 *
+	 * @return \KZ\event\interfaces\Observer
+	 */
+	public function makeObserver();
 } 

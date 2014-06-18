@@ -62,6 +62,7 @@ class FacadeTest extends \PHPUnit_Framework_TestCase
 		$this->assertInstanceOf('\KZ\app\interfaces\Kit', $registry->getKit());
 		$this->assertInstanceOf('\KZ\db\interfaces\ConnectionStorage', $registry->getConnectionStorage());
 		$this->assertInstanceOf('\KZ\controller\Request', $registry->getRequest());
+		$this->assertInstanceOf('\KZ\event\Observer', $registry->getObserver());
 		$this->assertInstanceOf('\KZ\controller\Front', $facade->getFrontController());
 	}
 

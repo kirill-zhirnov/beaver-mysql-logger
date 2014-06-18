@@ -98,6 +98,4 @@ class Event implements interfaces\Event
 
 		return $this;
 	}
-
-
-} 
+}

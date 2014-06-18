@@ -130,6 +130,16 @@ class Kit implements interfaces\Kit
 	}
 
 	/**
+	 * Create Observer.
+	 *
+	 * @return \KZ\event\Observer
+	 */
+	public function makeObserver()
+	{
+		return $this->makeInstance('\KZ\event\Observer', 'observer');
+	}
+
+	/**
 	 * @param $className
 	 * @param $configKey
 	 * @param array $constructParams

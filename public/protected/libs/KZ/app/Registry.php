@@ -31,8 +31,7 @@ class Registry extends \KZ\Registry implements interfaces\Registry
 	 */
 	public function getConnectionStorage()
 	{
-		if (!isset($this->data['connectionStorage']))
-			throw new \UnderflowException('You must setup connectionStorage before calling this method!');
+		$this->checkKey('connectionStorage');
 
 		return $this->data['connectionStorage'];
 	}
@@ -54,8 +53,7 @@ class Registry extends \KZ\Registry implements interfaces\Registry
 	 */
 	public function getKit()
 	{
-		if (!isset($this->data['kit']))
-			throw new \UnderflowException('You must setup kit before calling this method!');
+		$this->checkKey('kit');
 
 		return $this->data['kit'];
 	}
@@ -77,8 +75,7 @@ class Registry extends \KZ\Registry implements interfaces\Registry
 	 */
 	public function getConfig()
 	{
-		if (!isset($this->data['config']))
-			throw new \UnderflowException('You must setup config before calling this method!');
+		$this->checkKey('config');
 
 		return $this->data['config'];
 	}
@@ -100,17 +97,46 @@ class Registry extends \KZ\Registry implements interfaces\Registry
 	 */
 	public function getRequest()
 	{
-		if (!isset($this->data['request']))
-			throw new \UnderflowException('You must setup request before calling this method!');
+		$this->checkKey('request');
 
 		return $this->data['request'];
-
 	}
 
+	/**
+	 * @param \KZ\controller\Request $request
+	 * @return $this
+	 */
 	public function setRequest(\KZ\controller\Request $request)
 	{
 		$this->data['request'] = $request;
 
 		return $this;
+	}
+
+	/**
+	 * @return \KZ\event\Observer
+	 */
+	public function getObserver()
+	{
+		$this->checkKey('observer');
+
+		return $this->data['observer'];
+	}
+
+	/**
+	 * @param \KZ\event\Observer $observer
+	 * @return $this
+	 */
+	public function setObserver(\KZ\event\Observer $observer)
+	{
+		$this->data['observer'] = $observer;
+
+		return $this;
+	}
+
+	protected function checkKey($key)
+	{
+		if (!isset($this->data[$key]))
+			throw new \UnderflowException('You must setup "' . $key . '" before calling this method!');
 	}
 } 

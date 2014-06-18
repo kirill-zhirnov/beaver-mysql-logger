@@ -49,6 +49,8 @@ class Observer implements interfaces\Observer
 	 */
 	public function bind($class, $name, callable $callback)
 	{
+		$class = $this->prepareClass($class);
+
 		if (!isset($this->listeners[$class]))
 			$this->listeners[$class] = [];
 
@@ -67,6 +69,8 @@ class Observer implements interfaces\Observer
 	 */
 	public function trigger($class, $name, $sender, array $params = [])
 	{
+		$class = $this->prepareClass($class);
+
 		$event = new Event($sender, $params);
 
 		if (isset($this->listeners[$class][$name]))
@@ -150,5 +154,19 @@ class Observer implements interfaces\Observer
 		}
 
 		return $this->listeners;
+	}
+
+	public function prepareClass($class)
+	{
+		if (is_object($class))
+			$class = get_class($class);
+
+		if (!class_exists($class, false))
+			return $class;
+
+		while ($tmpClass = get_parent_class($class))
+			$class = $tmpClass;
+
+		return $class;
 	}
 } 

@@ -2,7 +2,6 @@
 
 namespace KZ\event;
 
-
 class ObserverTest extends \PHPUnit_Framework_TestCase
 {
 	public function testBindEvents()
@@ -87,6 +86,47 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
 		$this->assertInstanceOf('\KZ\event\interfaces\Event', $event);
 		$this->assertTrue($event->isDefaultPrevented());
 		$this->assertEquals(2, $called);
+	}
+
+	public function testBindByObject()
+	{
+		$stdMock = $this->getMock('\StdClass', ['test']);
+		$stdMock
+			->expects($this->once())
+			->method('test')
+		;
+		$callback = function() use($stdMock) {
+			$stdMock->test();
+		};
+
+		$obj = new \StdClass;
+		$observer = new Observer([
+			[$obj, 'test', $callback]
+		]);
+		$observer->trigger($obj, 'test', $obj);
+	}
+
+	/**
+	 * We test here, that events will be binded to "stdClass" name, not Mock_****
+	 */
+	public function testParentClass()
+	{
+		$stdMock = $this->getMock('\StdClass', ['test']);
+		$stdMock
+			->expects($this->exactly(2))
+			->method('test')
+		;
+		$callback = function() use($stdMock) {
+			$stdMock->test();
+		};
+
+		$sender = $this->getMock('StdClass');
+
+		$observer = new Observer([
+			[$sender, 'test', $callback]
+		]);
+		$observer->trigger('stdClass', 'test', $sender);
+		$observer->trigger($sender, 'test', $sender);
 	}
 }
  
