@@ -172,19 +172,72 @@ class FrontTest extends \PHPUnit_Framework_TestCase
 	public function testBeforeRunControllerChainEvent()
 	{
 		$registry = $this->makeAppRegistry()
+			->setRequest($this->makeRequest())
+			->setKit($this->makeKit())
 			->setObserver($this->makeObserver())
 		;
 
-		$front = $this->getMock('\KZ\controller\Front', ['makeControllerChain'], [$this->makeControllerKitMock(), $registry]);
-		$front
+		$controller = $this->getControllerInstance();
+		$controller
 			->expects($this->once())
-			->method('makeControllerChain')
-			->will($this->returnValue($this->makeControllerChain()))
+			->method('test')
 		;
 
-		$front->run();
+		$chain = [
+			['instance' => $controller, 'action' => 'test'],
+		];
 
-		//stop here! test events!
+		/** @var Front $front */
+		$front = $this->getMock('KZ\controller\Front', ['makeController'], [$this->makeControllerKitMock(), $registry]);
+		$front
+			->expects($this->once())
+			->method('makeController')
+			->will($this->returnValue($chain[0]))
+		;
+
+		$listenerCalled = false;
+		$registry->getObserver()->bind('KZ\controller\Front', 'beforeRunControllerChain', function() use(&$listenerCalled) {
+			$listenerCalled = true;
+		});
+
+		$front->run();
+		$this->assertTrue($listenerCalled);
+	}
+
+	public function testPreventRunControllerChain()
+	{
+		$registry = $this->makeAppRegistry()
+			->setRequest($this->makeRequest())
+			->setKit($this->makeKit())
+			->setObserver($this->makeObserver())
+		;
+
+		$controller = $this->getControllerInstance();
+		$controller
+			->expects($this->never())
+			->method('test')
+		;
+
+		$chain = [
+			['instance' => $controller, 'action' => 'test'],
+		];
+
+		/** @var Front $front */
+		$front = $this->getMock('KZ\controller\Front', ['makeController'], [$this->makeControllerKitMock(), $registry]);
+		$front
+			->expects($this->once())
+			->method('makeController')
+			->will($this->returnValue($chain[0]))
+		;
+
+		$listenerCalled = false;
+		$registry->getObserver()->bind('KZ\controller\Front', 'beforeRunControllerChain', function($event) use(&$listenerCalled) {
+			$listenerCalled = true;
+			$event->preventDefault();
+		});
+
+		$front->run();
+		$this->assertTrue($listenerCalled);
 	}
 
 	/**

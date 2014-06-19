@@ -50,14 +50,17 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
 		}
 	}
 
+	/**
+	 * Also we test "prepareClass" - events bound to stdClass, but triggered by Mock_*** class ($sender)
+	 */
 	public function testTrigger()
 	{
 		$called = 0;
-		$sender = new \stdClass;
+		$sender = $this->getMock('\StdClass');
 
 		$observer = new Observer([
 			[
-				'Test',
+				'stdClass',
 				'test',
 				function($event) use($sender, &$called) {
 					$this->assertInstanceOf('\KZ\event\interfaces\Event', $event);
@@ -70,7 +73,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
 				}
 			],
 			[
-				'Test',
+				'stdClass',
 				'test',
 				function($event) use($sender, &$called) {
 					$this->assertInstanceOf('\KZ\event\interfaces\Event', $event);
@@ -82,7 +85,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
 		]);
 
 
-		$event = $observer->trigger('Test', 'test', $sender, ['a' => 'b']);
+		$event = $observer->trigger($sender, 'test', ['a' => 'b']);
 		$this->assertInstanceOf('\KZ\event\interfaces\Event', $event);
 		$this->assertTrue($event->isDefaultPrevented());
 		$this->assertEquals(2, $called);
@@ -103,30 +106,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
 		$observer = new Observer([
 			[$obj, 'test', $callback]
 		]);
-		$observer->trigger($obj, 'test', $obj);
-	}
-
-	/**
-	 * We test here, that events will be binded to "stdClass" name, not Mock_****
-	 */
-	public function testParentClass()
-	{
-		$stdMock = $this->getMock('\StdClass', ['test']);
-		$stdMock
-			->expects($this->exactly(2))
-			->method('test')
-		;
-		$callback = function() use($stdMock) {
-			$stdMock->test();
-		};
-
-		$sender = $this->getMock('StdClass');
-
-		$observer = new Observer([
-			[$sender, 'test', $callback]
-		]);
-		$observer->trigger('stdClass', 'test', $sender);
-		$observer->trigger($sender, 'test', $sender);
+		$observer->trigger($obj, 'test');
 	}
 }
  

@@ -38,13 +38,12 @@ interface Observer
 	/**
 	 * Trigger event.
 	 *
-	 * @param $class - Class name or object. If object passed, basic parent class will be used.
+	 * @param object $sender - Basic parent class will be used as $class.
 	 * @param $name
-	 * @param $sender
 	 * @param array $params
 	 * @return Event
 	 */
-	public function trigger($class, $name, $sender, array $params = []);
+	public function trigger($sender, $name, array $params = []);
 
 	/**
 	 * Unbind event|s.

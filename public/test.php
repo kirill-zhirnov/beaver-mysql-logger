@@ -1,5 +1,7 @@
 <?php
 
+session_start();
+
 class A {
 	public function test() {
 		echo get_class($this);
@@ -12,18 +14,16 @@ class B extends A
 }
 
 class C extends B
-{}
+{
+	public $time = 0;
+}
 
-$class = new C;
+//$class = new C;
 
-if (is_object($class))
-	$class = get_class($class);
-
-while ($tmpClass = get_parent_class($class))
-	$class = $tmpClass;
-
-var_dump($class);
-
+//$_SESSION['c'] = $class;
+var_dump($_SESSION);
+$c = $_SESSION['c'];
+//$c->time++;
 /*
 $a = function() {
 	return 'a';

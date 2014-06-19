@@ -57,7 +57,7 @@ class Front
 
 		$event = $this->registry
 			->getObserver()
-			->trigger($this, 'beforeRunControllerChain', $this)
+			->trigger($this, 'beforeRunControllerChain')
 		;
 
 		//listeners can prevent running chain

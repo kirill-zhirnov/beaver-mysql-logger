@@ -61,15 +61,19 @@ class Observer implements interfaces\Observer
 	}
 
 	/**
-	 * @param $class
+	 * @see \KZ\event\interfaces\Observer
+	 * @param object $sender
 	 * @param $name
-	 * @param $sender
 	 * @param array $params
+	 * @throws \InvalidArgumentException
 	 * @return interfaces\Event
 	 */
-	public function trigger($class, $name, $sender, array $params = [])
+	public function trigger($sender, $name, array $params = [])
 	{
-		$class = $this->prepareClass($class);
+		if (!is_object($sender))
+			throw new \InvalidArgumentException('Sender must be an object!');
+
+		$class = $this->prepareClass($sender);
 
 		$event = new Event($sender, $params);
 

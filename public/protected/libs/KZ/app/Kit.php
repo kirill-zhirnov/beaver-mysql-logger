@@ -136,7 +136,9 @@ class Kit implements interfaces\Kit
 	 */
 	public function makeObserver()
 	{
-		return $this->makeInstance('\KZ\event\Observer', 'observer');
+		$events = isset($this->config['components']['observer']['events']) ? $this->config['components']['observer']['events'] : [];
+
+		return $this->makeInstance('\KZ\event\Observer', 'observer', [$events]);
 	}
 
 	/**

@@ -23,6 +23,19 @@ return [
 
 		'registry' => [
 			'class' => '\components\app\Registry'
+		],
+
+		'observer' => [
+			'events' => [
+				[
+					'KZ\controller\Front',
+					'beforeRunControllerChain',
+					function($event) {
+						$handler = new \eventHandlers\Setup();
+						$handler->onBeforeRunControllerChain($event);
+					}
+				]
+			]
 		]
 	]
 ];
