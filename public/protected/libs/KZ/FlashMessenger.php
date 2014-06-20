@@ -69,7 +69,7 @@ class FlashMessenger implements  flashMessenger\interfaces\FlashMessenger
 	 */
 	public function delete($position)
 	{
-		if (isset($this->messages[$position])
+		if (isset($this->messages[$position]))
 			unset($this->messages[$position]);
 
 		return $this;
