@@ -134,6 +134,29 @@ class Registry extends \KZ\Registry implements interfaces\Registry
 		return $this;
 	}
 
+	/**
+	 * @return \KZ\flashMessenger\interfaces\FlashMessenger
+	 */
+	public function getFlashMessenger()
+	{
+		$this->checkKey('flashMessenger');
+
+		return $this->data['flashMessenger'];
+
+	}
+
+	/**
+	 * @param \KZ\flashMessenger\interfaces\FlashMessenger $messenger
+	 * @return $this
+	 */
+	public function setFlashMessenger(\KZ\flashMessenger\interfaces\FlashMessenger $messenger)
+	{
+		$this->data['flashMessenger'] = $messenger;
+
+		return $this;
+	}
+
+
 	protected function checkKey($key)
 	{
 		if (!isset($this->data[$key]))

@@ -241,6 +241,20 @@ class FrontTest extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
+	 * @runInSeparateProcess
+	 */
+	public function testRedirect()
+	{
+		$front = $this->getMock('\KZ\controller\Front', ['makeController'], [
+			$this->makeControllerKitMock(),
+			$this->makeAppRegistry()
+		]);
+
+		$front->redirect('test.php', false);
+		$this->assertContains('Location: test.php', xdebug_get_headers());
+	}
+
+	/**
 	 * @return \KZ\Controller\Kit
 	 */
 	protected function makeControllerKitMock()

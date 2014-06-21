@@ -1,5 +1,7 @@
 <?php
 
+session_start();
+
 defined('PROTECTED_PATH') || define('PROTECTED_PATH', __DIR__);
 
 //set include path and setup default autoload

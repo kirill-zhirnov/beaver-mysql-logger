@@ -9,8 +9,12 @@ class KitTest extends \PHPUnit_Framework_TestCase
 	public function testMakeConnectionStorage()
 	{
 		$config = [
-			'db' => [
-				'dsn' => 'testDsn'
+			'components' => [
+				'db' => [
+					'connection' => [
+						'dsn' => 'testDsn'
+					]
+				]
 			]
 		];
 
@@ -19,7 +23,7 @@ class KitTest extends \PHPUnit_Framework_TestCase
 		$kit = $this->getMock('\KZ\app\Kit', ['makePdo'], [$config]);
 		$kit->expects($this->once())
 			->method('makePdo')
-			->with($this->identicalTo($config['db']))
+			->with($this->identicalTo($config['components']['db']['connection']))
 			->will($this->returnValue($pdoMock))
 		;
 
@@ -33,8 +37,8 @@ class KitTest extends \PHPUnit_Framework_TestCase
 		$csMock = $this->getMock('\KZ\db\ConnectionStorage');
 
 		$config = [
-			'db' => [],
 			'components' => [
+				'db' => [],
 				'connectionStorage' => [
 					'class'=> get_class($csMock)
 				]

@@ -69,4 +69,15 @@ interface Registry extends \ArrayAccess, \Iterator
 	 * @return $this
 	 */
 	public function setObserver(\KZ\event\Observer $observer);
-} 
+
+	/**
+	 * @return \KZ\flashMessenger\interfaces\FlashMessenger
+	 */
+	public function getFlashMessenger();
+
+	/**
+	 * @param \KZ\flashMessenger\interfaces\FlashMessenger $messenger
+	 * @return $this
+	 */
+	public function setFlashMessenger(\KZ\flashMessenger\interfaces\FlashMessenger $messenger);
+}

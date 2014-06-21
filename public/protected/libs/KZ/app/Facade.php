@@ -80,6 +80,8 @@ abstract class Facade
 			->setRequest($this->makeRequest())
 		;
 
+		$this->setupConnectionForTableModels();
+
 		$this->initialized = true;
 
 		$this->frontController = $this->makeFrontController();
@@ -170,5 +172,12 @@ abstract class Facade
 	{
 		if (!$this->initialized)
 			throw new \RuntimeException('You must call initialize method before calling this one.');
+	}
+
+	protected function setupConnectionForTableModels()
+	{
+		$connection = $this->registry->getDb();
+		if (isset($this->config['components']['db']['tableModelClass']) && $connection)
+			call_user_func($this->config['components']['db']['tableModelClass'] . '::setDefaultConnection', $connection);
 	}
 } 

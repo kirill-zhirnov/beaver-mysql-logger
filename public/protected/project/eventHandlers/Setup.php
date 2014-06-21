@@ -2,7 +2,8 @@
 
 namespace eventHandlers;
 use KZ\event,
-	KZ\controller
+	KZ\controller,
+	KZ\db
 ;
 
 class Setup
@@ -29,11 +30,29 @@ class Setup
 		if (!$this->controllerFront instanceof controller\Front)
 			throw new \UnexpectedValueException('Sender must be instance of controller\Front.');
 
+		//здесь сделать проверку на контроллера - иначе это вечное перенаправление!!!
 		$this->checkMysql();
 	}
 
 	protected function checkMysql()
 	{
+		$mysqlModel = new \models\Mysql();
+		$mysql = $mysqlModel->getMysqlConnection();
 
+		$setupRoute = 'setup/index';
+
+		if (is_null($mysql)) {
+			$link = $this->controllerFront->makeLink($setupRoute);
+			$this->controllerFront->redirect($link->getLink());
+		}
+
+		if ($mysql === false) {
+			$link = $this->controllerFront->makeLink($setupRoute);
+			$this->controllerFront->redirect($link->getLink());
+		}
+
+		$this->controllerFront->getRegistry()->getConnectionStorage()
+			->add($mysql, db\ConnectionStorage::SQLITE, false)
+		;
 	}
 } 

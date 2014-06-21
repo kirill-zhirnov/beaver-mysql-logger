@@ -1,5 +1,8 @@
 <?php
 
+var_dump(array_merge(['r' => 'test'], ['r' => 'replaced', 'b' => ['a' => 'c']]));
+//return;
+/*
 session_start();
 
 //$_SESSION['c'] = [
@@ -11,4 +14,4 @@ session_start();
 /*
 $c['a']++;*/
 //unset($c['a']);
-var_dump($_SESSION);
+//var_dump($_SESSION);

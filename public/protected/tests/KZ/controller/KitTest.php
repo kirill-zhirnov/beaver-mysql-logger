@@ -40,7 +40,7 @@ class KitTest extends \PHPUnit_Framework_TestCase
 		$kit = $this->getMock('\KZ\controller\Kit', ['createClassName'], ['']);
 		$kit->setFrontController($frontController);
 
-		$controller = $this->getMock('\KZ\Controller', ['actionTest'], [$frontController]);
+		$controller = $this->getMock('\KZ\Controller', ['actionTest', 'init'], [$frontController]);
 
 		$kit->expects($this->once())
 			->method('createClassName')
@@ -60,7 +60,7 @@ class KitTest extends \PHPUnit_Framework_TestCase
 
 		$kit = $this->getMock('\KZ\controller\Kit', ['createClassName'], ['']);
 		$kit->setFrontController($frontController);
-		$controller = $this->getMock('\KZ\Controller', null, [$frontController]);
+		$controller = $this->getMock('\KZ\Controller', ['init'], [$frontController]);
 
 		$kit->expects($this->once())
 			->method('createClassName')
@@ -91,10 +91,5 @@ class KitTest extends \PHPUnit_Framework_TestCase
 
 		$this->setExpectedException('RuntimeException', 'Controller must be instance of \KZ\Controller.');
 		$kit->makeController('sub/path', 'index', 'test');
-	}
-
-	public function testMakeRequest()
-	{
-
 	}
 } 

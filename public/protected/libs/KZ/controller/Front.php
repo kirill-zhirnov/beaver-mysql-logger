@@ -140,6 +140,33 @@ class Front
 	}
 
 	/**
+	 * Redirect to a given URL.
+	 *
+	 * @param $url
+	 * @param bool $exit
+	 */
+	public function redirect($url, $exit = true)
+	{
+		header('Location: ' . $url);
+
+		if ($exit)
+			exit();
+	}
+
+	/**
+	 * @param $route
+	 * @param array $params
+	 * @return \KZ\link\interfaces\Link
+	 */
+	public function makeLink($route, array $params = [])
+	{
+		$link = $this->registry->getKit()->makeLink($route, $params);
+		$link->setRequest($this->getRequest());
+
+		return $link;
+	}
+
+	/**
 	 * Make controller chain by request.
 	 *
 	 * @return Chain

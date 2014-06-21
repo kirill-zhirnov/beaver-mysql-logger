@@ -71,4 +71,20 @@ interface Kit
 	 * @return \KZ\event\interfaces\Observer
 	 */
 	public function makeObserver();
+
+	/**
+	 * Create flash messenger object.
+	 *
+	 * @return \KZ\flashMessenger\interfaces\FlashMessenger
+	 */
+	public function makeFlashMessenger();
+
+	/**
+	 * Create link.
+	 *
+	 * @param $route
+	 * @param array $params
+	 * @return \KZ\link\interfaces\Link
+	 */
+	public function makeLink($route, array $params = []);
 } 

@@ -193,7 +193,7 @@ class FlashMessenger implements  flashMessenger\interfaces\FlashMessenger
 			$val['liveCounter']++;
 
 			if ($val['liveCounter'] == 2)
-				unset($this->messages[$key]['liveCounter']);
+				$this->delete($key);
 		}
 	}
 } 
