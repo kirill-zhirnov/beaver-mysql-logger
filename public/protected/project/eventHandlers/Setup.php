@@ -3,7 +3,8 @@
 namespace eventHandlers;
 use KZ\event,
 	KZ\controller,
-	KZ\db
+	KZ\db,
+	KZ\app
 ;
 
 class Setup
@@ -19,6 +20,11 @@ class Setup
 	protected $controllerFront;
 
 	/**
+	 * @var app\interfaces\Registry
+	 */
+	protected $registry;
+
+	/**
 	 * @param event\interfaces\Event $event
 	 * @throws \UnexpectedValueException
 	 */
@@ -30,25 +36,43 @@ class Setup
 		if (!$this->controllerFront instanceof controller\Front)
 			throw new \UnexpectedValueException('Sender must be instance of controller\Front.');
 
-		//здесь сделать проверку на контроллера - иначе это вечное перенаправление!!!
+		$this->registry = $this->controllerFront->getRegistry();
+
 		$this->checkMysql();
 	}
 
 	protected function checkMysql()
 	{
+		foreach ($this->controllerFront->getControllerChain() as $item) {
+			if (
+				get_class($item['instance']) == 'controllers\Setup'
+				&&
+				strtolower($item['action']) == 'actionindex'
+			)
+				return;
+
+			break;
+		}
+
 		$mysqlModel = new \models\Mysql();
 		$mysql = $mysqlModel->getMysqlConnection();
 
 		$setupRoute = 'setup/index';
 
 		if (is_null($mysql)) {
-			$link = $this->controllerFront->makeLink($setupRoute);
-			$this->controllerFront->redirect($link->getLink());
+			$this->controllerFront->redirect(
+				$this->controllerFront->makeLink($setupRoute)
+			);
 		}
 
 		if ($mysql === false) {
-			$link = $this->controllerFront->makeLink($setupRoute);
-			$this->controllerFront->redirect($link->getLink());
+			$this->registry->getFlashMessenger()
+				->add('Cannot connect to Mysql!', 'error')
+			;
+
+			$this->controllerFront->redirect(
+				$this->controllerFront->makeLink($setupRoute)
+			);
 		}
 
 		$this->controllerFront->getRegistry()->getConnectionStorage()

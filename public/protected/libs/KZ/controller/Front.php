@@ -2,7 +2,9 @@
 
 namespace KZ\controller;
 use KZ\app\interfaces\Registry,
-	KZ\event;
+	KZ\event,
+	KZ\link
+;
 
 /**
  * Class Front
@@ -147,6 +149,9 @@ class Front
 	 */
 	public function redirect($url, $exit = true)
 	{
+		if ($url instanceof link\interfaces\Link)
+			$url = $url->getLink();
+
 		header('Location: ' . $url);
 
 		if ($exit)

@@ -1,6 +1,7 @@
 <?php
 
-var_dump(array_merge(['r' => 'test'], ['r' => 'replaced', 'b' => ['a' => 'c']]));
+var_dump(array_merge(['a'], ['b']));
+//var_dump(array_merge(['r' => 'test'], ['r' => 'replaced', 'b' => ['a' => 'c']]));
 //return;
 /*
 session_start();
