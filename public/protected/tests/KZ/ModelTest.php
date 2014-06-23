@@ -76,6 +76,46 @@ class ModelTest extends \PHPUnit_Framework_TestCase
 		$model->save();
 	}
 
+	public function testValidationFalse()
+	{
+		$model = $this->makeModelMockup([
+			'name' => [['validateName', 'option1' => 'val1', 'option2' => 'val2']],
+			'surname' => []
+		], ['rules', 'validateName']);
+
+		$model
+			->expects($this->once())
+			->method('validateName')
+			->with($this->equalTo('name'), $this->equalTo([
+				'option1' => 'val1',
+				'option2' => 'val2'
+			]))
+			->will($this->returnCallback(function($attribute, $options) use($model) {
+				$model->addError($attribute, 'text');
+			}))
+		;
+
+		$this->assertFalse($model->validate());
+	}
+
+	public function testValidationTrue()
+	{
+		$model = $this->makeModelMockup([
+			'name' => [['validateName']],
+			'surname' => []
+		], ['rules', 'validateName']);
+
+		$model
+			->expects($this->once())
+			->method('validateName')
+			->with($this->equalTo('name'))
+			->will($this->returnCallback(function($attribute, $options) use($model) {
+			}))
+		;
+
+		$this->assertTrue($model->validate());
+	}
+
 	/**
 	 * @param array $rules
 	 * @param array $methods

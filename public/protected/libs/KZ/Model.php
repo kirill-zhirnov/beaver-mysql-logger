@@ -57,7 +57,7 @@ abstract class Model implements model\interfaces\Model
 	{
 		$this->clearErrors();
 
-		foreach ($this->rules() as $attribute => $validators)
+		foreach ($this->rules() as $attribute => $validators) {
 			foreach ($validators as $validator) {
 				if (!isset($validator[0]))
 					throw new \UnexpectedValueException('Validator row must contain method name at first position.');
@@ -65,8 +65,9 @@ abstract class Model implements model\interfaces\Model
 				if (!method_exists($this, $validator[0]))
 					throw new \UnexpectedValueException('Method "' . $validator[0] . '" does not exist.');
 
-				call_user_func_array([$this, $validator[0]], array_merge([$attribute], array_slice($validator, 1)));
+				call_user_func_array([$this, $validator[0]], array_merge([$attribute], [array_slice($validator, 1)]));
 			}
+		}
 
 		return $this->errors ? false : true;
 	}

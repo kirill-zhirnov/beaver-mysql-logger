@@ -1,6 +1,8 @@
 <?php
 
 namespace KZ;
+use KZ\view\interfaces\HelperKit;
+use KZ\view\interfaces\Helper;
 
 /**
  * For more details @see \KZ\view\interfaces\View
@@ -10,6 +12,13 @@ namespace KZ;
  */
 class View extends Registry implements view\interfaces\View
 {
+	/**
+	 * Singleton instance of helperKit for all view instances.
+	 *
+	 * @var view\interfaces\HelperKit
+	 */
+	protected static $helperKitInstance;
+
 	/**
 	 * Path to templates
 	 *
@@ -57,6 +66,13 @@ class View extends Registry implements view\interfaces\View
 	 */
 	protected $localPath;
 
+	/**
+	 * Config for helper kit.
+	 *
+	 * @var array
+	 */
+	protected $helperKit;
+
 	public function __construct($templatesPath, array $config = [])
 	{
 		$this->setTemplatesPath($templatesPath);
@@ -65,7 +81,7 @@ class View extends Registry implements view\interfaces\View
 
 	public function setConfig(array $config = [])
 	{
-		$allowedOptions = ['extension', 'layout', 'varNameForContent', 'localPath'];
+		$allowedOptions = ['extension', 'layout', 'varNameForContent', 'localPath', 'helperKit'];
 		foreach ($allowedOptions as $option) {
 			if (!isset($config[$option]))
 				continue;
@@ -239,6 +255,50 @@ class View extends Registry implements view\interfaces\View
 		$this->localPath = $localPath;
 
 		return $this;
+	}
+
+	/**
+	 * @param $name
+	 * @return Helper
+	 */
+	public function helper($name)
+	{
+		return $this->getHelperKit()->getHelper($name);
+	}
+
+	/**
+	 * @throws \RuntimeException
+	 * @return HelperKit
+	 */
+	public function getHelperKit()
+	{
+		if (!self::$helperKitInstance) {
+			$config = (isset($this->helperKit['config'])) ? $this->helperKit['config'] : [];
+			$class = $this->getHelperKitClass();
+
+			if (!class_exists($class))
+				throw new \RuntimeException('Class "' . $class . '" does not exist.');
+
+			self::$helperKitInstance = new $class($config);
+
+			if (!self::$helperKitInstance instanceof HelperKit)
+				throw new \RuntimeException('HelperKit must be instance of \KZ\view\interfaces\HelperKit');
+		}
+
+		return self::$helperKitInstance;
+	}
+
+	/**
+	 * Returns class name for helper kit class.
+	 *
+	 * @return string
+	 */
+	public function getHelperKitClass()
+	{
+		if (isset($this->helperKit['class']))
+			return $this->helperKit['class'];
+
+		return '\KZ\view\HelperKit';
 	}
 
 	protected function renderFile()

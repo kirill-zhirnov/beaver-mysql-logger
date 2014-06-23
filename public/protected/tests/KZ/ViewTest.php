@@ -111,6 +111,43 @@ class ViewTest extends \PHPUnit_Framework_TestCase
 		$this->unlinkTpl([__DIR__ . '/layout.php', __DIR__ . '/view.php']);
 	}
 
+	public function testGetHelperKitClass()
+	{
+		$view = new View(__DIR__);
+		$this->assertEquals('\KZ\view\HelperKit', $view->getHelperKitClass());
+
+		$helperKit = $this->getHelperKit();
+		$view->setConfig([
+			'helperKit' => [
+				'class' => get_class($helperKit)
+			]
+		]);
+
+		$this->assertEquals(get_class($helperKit), $view->getHelperKitClass());
+	}
+
+	public function testHelperKitException()
+	{
+		$this->setExpectedException('RuntimeException', 'Class "bbb" does not exist.');
+
+		$view = new View(__DIR__, [
+			'helperKit' => [
+				'class' => 'bbb'
+			]
+		]);
+		$view->getHelperKit();
+	}
+
+	public function testSameInstanceHelperKit()
+	{
+		$view = new View(__DIR__);
+		$helper = $view->getHelperKit();
+
+		$view2 = new View(__DIR__);
+
+		$this->assertTrue($helper == $view2->getHelperKit());
+	}
+
 	protected function unlinkTpl($path)
 	{
 		if (!is_array($path))
@@ -126,5 +163,13 @@ class ViewTest extends \PHPUnit_Framework_TestCase
 		$this->unlinkTpl($path);
 
 		file_put_contents($path, $content);
+	}
+
+	/**
+	 * @return \KZ\view\HelperKit
+	 */
+	protected function getHelperKit()
+	{
+		return $this->getMock('\KZ\view\HelperKit');
 	}
 } 

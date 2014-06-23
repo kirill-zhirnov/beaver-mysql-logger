@@ -11,5 +11,7 @@ set_include_path(get_include_path() . PATH_SEPARATOR . implode(PATH_SEPARATOR, [
 //fix autoload for unit tests:
 spl_autoload_register(function($className) {
 	$className = str_replace('\\', DIRECTORY_SEPARATOR, $className);
-	require_once $className . '.php';
+	$filePath = $className . '.php';
+
+	@include_once $filePath;
 });

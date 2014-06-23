@@ -82,4 +82,15 @@ interface View extends \ArrayAccess, \Iterator
 	 * @return mixed
 	 */
 	public function __get($key);
+
+	/**
+	 * @param $name
+	 * @return Helper
+	 */
+	public function helper($name);
+
+	/**
+	 * @return HelperKit
+	 */
+	public function getHelperKit();
 }

@@ -1,18 +1,5 @@
 <?php
 
-var_dump(array_merge(['a'], ['b']));
-//var_dump(array_merge(['r' => 'test'], ['r' => 'replaced', 'b' => ['a' => 'c']]));
-//return;
-/*
-session_start();
+require_once 'protected/bootstrap.php';
 
-//$_SESSION['c'] = [
-//	'a' => 1,
-//	'b' => 2
-//];
-
-//$c = &$_SESSION['c'];
-/*
-$c['a']++;*/
-//unset($c['a']);
-//var_dump($_SESSION);
+$facade = new \KZ\app\Facade\Http($config);
