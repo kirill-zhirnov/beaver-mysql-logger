@@ -79,7 +79,7 @@ interface TableModel
 	 * @param array $parts
 	 * @return string
 	 */
-	public function buildQuery(array $parts = []);
+	public function buildSelectQuery(array $parts = []);
 
 	/**
 	 * @param $sql

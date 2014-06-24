@@ -81,4 +81,18 @@ interface Model
 	 * @return array
 	 */
 	public function getAttrNames();
+
+	/**
+	 * @param string $attribute
+	 * @return boolean
+	 */
+	public function hasAttribute($attribute);
+
+	/**
+	 * Returns attribute value.
+	 *
+	 * @param string $attribute
+	 * @return mixed
+	 */
+	public function getAttribute($attribute);
 } 

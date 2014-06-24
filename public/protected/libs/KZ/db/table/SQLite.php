@@ -95,7 +95,7 @@ abstract class SQLite implements interfaces\TableModel
 	 */
 	public function findAll(array $parts = [], array $params = [])
 	{
-		$stmt = $this->makeStmt($this->buildQuery($parts), $params);
+		$stmt = $this->makeStmt($this->buildSelectQuery($parts), $params);
 		$stmt->execute();
 
 		$out = $stmt->fetchAll(\PDO::FETCH_ASSOC);
@@ -160,7 +160,7 @@ abstract class SQLite implements interfaces\TableModel
 	 * @param array $parts
 	 * @return string
 	 */
-	public function buildQuery(array $parts = [])
+	public function buildSelectQuery(array $parts = [])
 	{
 		$parts = array_replace([
 			'select' => '*',

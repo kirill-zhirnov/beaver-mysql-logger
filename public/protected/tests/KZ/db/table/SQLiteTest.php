@@ -51,7 +51,7 @@ class SQLiteTest extends \PHPUnit_Framework_TestCase
 			->will($this->returnValue('xx_test'))
 		;
 
-		$query = trim($sqlLite->buildQuery([
+		$query = trim($sqlLite->buildSelectQuery([
 			'select' => 'a,b',
 			'condition' => 'a=:param',
 			'group' => 'a',

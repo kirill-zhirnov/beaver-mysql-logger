@@ -154,6 +154,34 @@ abstract class Model implements model\interfaces\Model
 	}
 
 	/**
+	 * @param string $attribute
+	 * @return boolean
+	 */
+	public function hasAttribute($attribute)
+	{
+		return (in_array($attribute, $this->getAttrNames()) && property_exists($this, $attribute));
+	}
+
+	/**
+	 * Returns attribute value.
+	 *
+	 * @param string $attribute
+	 * @return mixed
+	 */
+	public function getAttribute($attribute)
+	{
+		$this->checkAttrName($attribute);
+
+		return $this->{$attribute};
+	}
+
+	public function required($attribute)
+	{
+		if (trim($this->getAttribute($attribute)) == '')
+			$this->addError($attribute, 'Value cannot be blank.');
+	}
+
+	/**
 	 * If attribute does not exist - exception will be thrown.
 	 *
 	 * @param $attribute
@@ -161,7 +189,7 @@ abstract class Model implements model\interfaces\Model
 	 */
 	protected function checkAttrName($attribute)
 	{
-		if (!in_array($attribute, $this->getAttrNames()))
+		if (!$this->hasAttribute($attribute))
 			throw new \OutOfBoundsException('Attribute "' . $attribute . '" does not exist!');
 	}
 }

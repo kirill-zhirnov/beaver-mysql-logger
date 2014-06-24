@@ -1,1 +1,1 @@
-this is index layout!
+this is index layout! MySQL connected!

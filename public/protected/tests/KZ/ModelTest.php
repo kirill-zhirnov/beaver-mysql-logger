@@ -12,6 +12,7 @@ class ModelTest extends \PHPUnit_Framework_TestCase
 			'name' => null,
 			'surname' => null
 		], $model->getAttributes());
+
 		$this->assertEquals(['name', 'surname'], $model->getAttrNames());
 
 		//errors must be empty
