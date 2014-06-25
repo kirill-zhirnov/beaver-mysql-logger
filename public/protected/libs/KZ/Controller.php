@@ -1,6 +1,7 @@
 <?php
 
 namespace KZ;
+use KZ\model\interfaces\Model;
 
 /**
  * Class Controller
@@ -34,6 +35,48 @@ abstract class Controller
 		$this->registry = $this->frontController->getRegistry();
 
 		$this->init();
+	}
+
+	public function posted()
+	{
+		$models = [];
+		foreach (func_get_args() as $model) {
+			if (is_array($model))
+				$models = array_merge($models, $model);
+			else
+				$models[] = $model;
+		}
+
+		$out = false;
+		foreach ($models as $model) {
+			if (!$model instanceof Model)
+				throw new \UnexpectedValueException('Argument must be instance of KZ\model\interfaces\Model or an array!');
+
+			/** @var string $prefix */
+			$prefix = $this->view->helper('html')->getModelPrefix($model);
+
+			if (isset($_POST[$prefix])) {
+				$model->setAttributes($_POST[$prefix]);
+				$out = true;
+			}
+		}
+
+		return $out;
+	}
+
+	/**
+	 * @param $route
+	 * @param array $params
+	 * @return link\interfaces\Link
+	 */
+	public function makeLink($route, array $params = [])
+	{
+		return $this->frontController->makeLink($route, $params);
+	}
+
+	public function redirect($url, $exit = true)
+	{
+		$this->frontController->redirect($url, $exit);
 	}
 
 	protected function init()

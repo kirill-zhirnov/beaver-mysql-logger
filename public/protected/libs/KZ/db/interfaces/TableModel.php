@@ -74,12 +74,47 @@ interface TableModel
 	public function findByPk(array $pk);
 
 	/**
-	 * Extremely simple query builder.
+	 * Update row by primary key.
+	 *
+	 * @param array $pk
+	 * @param array $set
+	 * @return $this
+	 */
+	public function updateByPk(array $pk, array $set);
+
+	/**
+	 * Insert row.
+	 *
+	 * @param array $values
+	 * @return $this
+	 */
+	public function insert(array $values);
+
+	/**
+	 * Extremely simple query builder for UPDATE.
+	 *
+	 * @param array $parts
+	 * @param array $params
+	 * @return string
+	 */
+	public function buildUpdateQuery(array $parts, array &$params = []);
+
+	/**
+	 * Extremely simple query builder for SELECT.
 	 *
 	 * @param array $parts
 	 * @return string
 	 */
 	public function buildSelectQuery(array $parts = []);
+
+	/**
+	 * Extremely simple query builder for INSERT.
+	 *
+	 * @param array $parts
+	 * @param array $params
+	 * @return mixed
+	 */
+	public function buildInsertQuery(array $parts, array &$params = []);
 
 	/**
 	 * @param $sql

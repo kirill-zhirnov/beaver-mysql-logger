@@ -12,17 +12,29 @@ class SetupMysql extends \KZ\Model
 
 	public $options;
 
+	/**
+	 * Model
+	 *
+	 * @var Mysql
+	 */
+	protected $mysql;
+
+	/**
+	 * @var array
+	 */
+	protected $mysqlRow;
+
 	public function __construct()
 	{
-		$mysql = new Mysql();
-		$row = $mysql->find();
+		$this->mysql = new Mysql();
+		$this->mysqlRow = $this->mysql->find();
 
-		if ($row)
+		if ($this->mysqlRow)
 			$this->setAttributes([
-				'dsn' => $row['mysql_dsn'],
-				'username' => $row['mysql_username'],
-				'password' => $row['mysql_password'],
-				'options' => $row['mysql_options']
+				'dsn' => $this->mysqlRow['mysql_dsn'],
+				'username' => $this->mysqlRow['mysql_username'],
+				'password' => $this->mysqlRow['mysql_password'],
+				'options' => $this->mysqlRow['mysql_options']
 			]);
 	}
 
@@ -47,7 +59,19 @@ class SetupMysql extends \KZ\Model
 
 	public function save()
 	{
+		$columns = [
+			'mysql_dsn' => $this->dsn,
+			'mysql_username' => $this->username,
+			'mysql_password' => $this->password,
+			'mysql_options' => $this->options
+		];
 
+		if ($this->mysqlRow)
+			$this->mysql->updateByPk([$this->mysqlRow['mysql_id']], $columns);
+		else
+			$this->mysql->insert($columns);
+
+		return $this;
 	}
 
 	public function validateConnection($attribute)
