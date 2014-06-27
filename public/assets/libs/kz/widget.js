@@ -79,5 +79,7 @@ if (typeof(kz) == 'undefined' || !kz) {
 		this.el = newEl;
 
 		this.setup();
+
+		return this;
 	}
 }) (jQuery);

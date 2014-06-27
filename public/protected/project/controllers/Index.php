@@ -38,4 +38,39 @@ class Index extends \KZ\Controller
 			])
 		]);
 	}
+
+	public function actionAjaxTest()
+	{
+		echo $this->view->render('index/ajaxTest');
+	}
+
+	public function actionError()
+	{
+		header('Status: 404 Not found');
+		exit();
+	}
+
+	public function actionPopup()
+	{
+		header('Content-type: application/json');
+		echo json_encode([
+			'html' => $this->view->renderPartial('index/popup')
+		]);
+	}
+
+	public function actionPopup2()
+	{
+		header('Content-type: application/json');
+		echo json_encode([
+			'html' => $this->view->renderPartial('index/popup2')
+		]);
+	}
+
+	public function actionPopup3()
+	{
+		header('Content-type: application/json');
+		echo json_encode([
+			'html' => $this->view->renderPartial('index/popup3')
+		]);
+	}
 } 

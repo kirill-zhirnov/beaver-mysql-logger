@@ -30,6 +30,14 @@ if (typeof(kz) == 'undefined' || !kz) {
 		$.post(this.el.attr('action'), this.el.serializeArray(), function(data) {
 			if (typeof(data.html) != 'undefined')
 				that.replace(data.html);
+
+			that.afterSubmit(data);
 		}, 'json');
 	}
+
+	kz.form.prototype.afterSubmit = function(data)
+	{
+		this.el.trigger('afterSetup.widget', [this, data]);
+	}
+
 }) (jQuery);
