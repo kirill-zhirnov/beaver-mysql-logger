@@ -3,34 +3,51 @@ if (typeof(kz) == 'undefined' || !kz) {
 }
 
 (function($) {
-	kz.modal = function(el, config)
-	{
-		config = $.extend({
-			wrapperSelector : '#modal',
-			bsConfig : {
-				show : false
-			},
-			closeOnFormSuccess : true
-		}, config);
+	kz.modal = (function() {
+		var instances = {};
 
-		this.wrapperEl = $(config.wrapperSelector).modal(config.bsConfig);
+		return function modalSingletone (config) {
 
-		if (!(el instanceof jQuery))
+			config = $.extend({
+				wrapperSelector : '#modal',
+				bsConfig : {
+					show : false
+				},
+				closeOnFormSuccess : true
+			}, config);
+
+			//singleton part
+			if (typeof(instances[config.wrapperSelector]) != 'undefined')
+				return instances[config.wrapperSelector];
+
+			if (this && this.constructor === modalSingletone)
+				instances[config.wrapperSelector] = this;
+			else
+				return new modalSingletone(name);
+
+			//prepare args and call parent constructor
+			this.wrapperEl = $(config.wrapperSelector).modal(config.bsConfig);
 			el = this.wrapperEl.find('.modal-dialog');
 
-		kz.form.superclass.constructor.call(this, el, config);
+			kz.modal.superclass.constructor.call(this, el, config);
 
-		this.setupFormListeners();
-	}
+			this.setupInstance();
+		};
+	} ());
 
 	extend(kz.modal, kz.widget);
+
+	kz.modal.prototype.setupInstance = function()
+	{
+		this.setupFormListeners();
+	}
 
 	kz.modal.prototype.setupFormListeners = function()
 	{
 		var that = this;
 		this.wrapperEl.on('afterSubmit.widget', 'form', function(e, formWidget, data) {
-			console.log(that.wrapperEl.find('form'));
-//			console.log(data);
+			if (that.config.closeOnFormSuccess && typeof(data.result) != 'undefined' && data.result)
+				that.hide();
 		});
 	}
 
