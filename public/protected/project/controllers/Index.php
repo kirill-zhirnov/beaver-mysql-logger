@@ -36,7 +36,7 @@ class Index extends \KZ\Controller
 			'html' => $this->view->renderPartial('index/form', [
 				'val' => 'updated:' . time()
 			]),
-			'result' => true
+			'redirect' => $this->makeLink('index/modalMsgTest')->getLink()
 		]);
 	}
 
@@ -78,5 +78,10 @@ class Index extends \KZ\Controller
 	public function actionJsHierarchyTest()
 	{
 		echo $this->view->render('index/jsHierarchyTest');
+	}
+
+	public function actionModalMsgTest()
+	{
+		echo $this->view->render('index/modalMsgTest');
 	}
 } 

@@ -3,20 +3,29 @@ if (typeof(kz) == 'undefined' || !kz) {
 }
 
 (function($) {
-	kz.ajaxResponse = function(app)
+	kz.ajaxResponse = function()
 	{
-		this.app = app;
 	}
 
 	kz.ajaxResponse.prototype.response = function(responseJSON)
 	{
-		if (typeof(responseJSON.redirect) == 'string')
-			alert('redirect must be here!');
+		if (typeof(responseJSON.redirect) == 'string') {
+			kz.util.redirect(responseJSON.redirect);
 
-		if (typeof(responseJSON.reload) == 'boolean' && responseJSON.reload)
-			alert('reload must be here!');
+			return;
+		}
 
-		if (typeof(responseJSON.openPopup) == 'string')
-			alert('open popup must be here!');
+		if (typeof(responseJSON.reload) == 'boolean' && responseJSON.reload) {
+			kz.util.reload();
+
+			return;
+		}
+
+		if (typeof(responseJSON.openPopup) == 'string') {
+			var modal = new kz.modal();
+			modal.load(responseJSON.openPopup);
+
+			return;
+		}
 	}
 }) (jQuery);

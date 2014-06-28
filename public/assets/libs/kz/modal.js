@@ -7,13 +7,13 @@ if (typeof(kz) == 'undefined' || !kz) {
 		var instances = {};
 
 		return function modalSingletone (config) {
-
 			config = $.extend({
 				wrapperSelector : '#modal',
 				bsConfig : {
 					show : false
 				},
-				closeOnFormSuccess : true
+				closeOnFormSuccess : true,
+				elSelector : '.modal-dialog'
 			}, config);
 
 			//singleton part
@@ -23,11 +23,11 @@ if (typeof(kz) == 'undefined' || !kz) {
 			if (this && this.constructor === modalSingletone)
 				instances[config.wrapperSelector] = this;
 			else
-				return new modalSingletone(name);
+				return new modalSingletone(config);
 
 			//prepare args and call parent constructor
 			this.wrapperEl = $(config.wrapperSelector).modal(config.bsConfig);
-			el = this.wrapperEl.find('.modal-dialog');
+			el = this.wrapperEl.find(config.elSelector);
 
 			kz.modal.superclass.constructor.call(this, el, config);
 
