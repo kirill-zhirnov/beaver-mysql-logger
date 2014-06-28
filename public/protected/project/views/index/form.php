@@ -1,4 +1,4 @@
-<form action="<?=$this->helper('link')->get('index/submitForm')?>" method="post" id="my-form" data-form="">
+<form action="<?=$this->helper('link')->get('index/submitForm')?>" method="post" data-form="">
 	<input type="text" value="<?=isset($val) ? $val : 'no value'?>" />
 	<input type="submit" value="1" />
 	<input type="button" value="2" />

@@ -9,7 +9,8 @@ if (typeof(kz) == 'undefined' || !kz) {
 			wrapperSelector : '#modal',
 			bsConfig : {
 				show : false
-			}
+			},
+			closeOnFormSuccess : true
 		}, config);
 
 		this.wrapperEl = $(config.wrapperSelector).modal(config.bsConfig);
@@ -18,9 +19,20 @@ if (typeof(kz) == 'undefined' || !kz) {
 			el = this.wrapperEl.find('.modal-dialog');
 
 		kz.form.superclass.constructor.call(this, el, config);
+
+		this.setupFormListeners();
 	}
 
 	extend(kz.modal, kz.widget);
+
+	kz.modal.prototype.setupFormListeners = function()
+	{
+		var that = this;
+		this.wrapperEl.on('afterSubmit.widget', 'form', function(e, formWidget, data) {
+			console.log(that.wrapperEl.find('form'));
+//			console.log(data);
+		});
+	}
 
 	kz.modal.prototype.show = function()
 	{

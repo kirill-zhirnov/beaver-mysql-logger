@@ -18,7 +18,14 @@ if (typeof(kz) == 'undefined' || !kz) {
 			loadingSelector : '#loading'
 		};
 
+		/**
+		 * @type kz.loading
+		 */
 		this.loading = null;
+
+		/**
+		 * @type kz.ajaxResponse
+		 */
 		this.ajaxResponse = null;
 	}
 
@@ -76,10 +83,11 @@ if (typeof(kz) == 'undefined' || !kz) {
 			var el = $(this),
 				className = el.data('modal') ? el.data('modal') : 'modal',
 				modal = new kz[className](),
-				href = (typeof(el.attr('href')) != 'undefined') ? el.attr('href') : el.data('modal-url')
+				href = (typeof(el.attr('href')) != 'undefined') ? el.attr('href') : el.data('modal-url'),
+				modal = new kz.modal()
 			;
 
-			console.log(href);
+			modal.load(href);
 		});
 	}
 

@@ -37,7 +37,7 @@ if (typeof(kz) == 'undefined' || !kz) {
 
 	kz.form.prototype.afterSubmit = function(data)
 	{
-		this.el.trigger('afterSetup.widget', [this, data]);
+		this.el.trigger('afterSubmit.widget', [this, data]);
 	}
 
 }) (jQuery);

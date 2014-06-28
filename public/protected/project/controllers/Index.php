@@ -35,7 +35,8 @@ class Index extends \KZ\Controller
 		echo json_encode([
 			'html' => $this->view->renderPartial('index/form', [
 				'val' => 'updated:' . time()
-			])
+			]),
+			'result' => true
 		]);
 	}
 
@@ -72,5 +73,10 @@ class Index extends \KZ\Controller
 		echo json_encode([
 			'html' => $this->view->renderPartial('index/popup3')
 		]);
+	}
+
+	public function actionJsHierarchyTest()
+	{
+		echo $this->view->render('index/jsHierarchyTest');
 	}
 } 
