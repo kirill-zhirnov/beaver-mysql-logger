@@ -84,4 +84,9 @@ class Index extends \KZ\Controller
 	{
 		echo $this->view->render('index/modalMsgTest');
 	}
-} 
+
+	public function actionLayoutTest()
+	{
+		echo $this->view->render('index/layoutTest');
+	}
+}
