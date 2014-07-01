@@ -137,7 +137,14 @@ module.exports = function(grunt) {
 
 					//project libs and files:
 					'js/extend.js',
-					'js/kz/*'
+					'js/kz/util.js',
+					'js/kz/widget.js',
+					'js/kz/loading.js',
+					'js/kz/ajaxResponse.js',
+					'js/kz/form.js',
+					'js/kz/modal.js',
+					'js/kz/modalMsg.js',
+					'js/kz/app.js'
 				],
 				dest: '<%= jsFile %>'
 			}

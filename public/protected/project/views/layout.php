@@ -15,13 +15,17 @@
 		</script>
 	</head>
 	<body>
+		<div class="container">
+			<?=$this->renderPartial('layout/navbar')?>
+			<?=$this->renderPartial('layout/pageHeader')?>
+			<?=$content?>
+		</div>
+		<div id="loading" class="ajax-loading">Loading</div>
 		<div id="modal" class="modal fade" tabindex="-1">
 			<div class="modal-dialog"></div>
 		</div>
 		<div id="modal-msg" class="modal" tabindex="-1">
 			<div class="modal-msg"></div>
 		</div>
-		<?=$content?>
-		<div id="loading" class="ajax-loading">Loading</div>
 	</body>
 </html>

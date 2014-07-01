@@ -4,6 +4,13 @@ namespace controllers;
 
 class Index extends \KZ\Controller
 {
+	protected function init()
+	{
+		parent::init();
+
+		$this->view->getLayout()->curLink = 'log';
+	}
+
 	public function actionIndex()
 	{
 		echo $this->view->render('index/index');

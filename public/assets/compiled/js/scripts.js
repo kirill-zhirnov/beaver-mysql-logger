@@ -2164,6 +2164,143 @@ if (typeof(kz) == 'undefined' || !kz) {
 }
 
 (function($) {
+	kz.util = {
+		redirect : function(url)
+		{
+			if (window.location.href == url) {
+				this.reload();
+				return;
+			}
+
+			var modalMsg = new kz.modalMsg();
+			modalMsg.show('You are being redirected...');
+
+			window.location = url;
+		},
+
+		reload : function()
+		{
+			var modalMsg = new kz.modalMsg();
+			modalMsg.show('You are being redirected...');
+
+			window.location.reload();
+		}
+	};
+}) (jQuery);
+if (typeof(kz) == 'undefined' || !kz) {
+	var kz = {};
+}
+
+(function($) {
+	kz.widget = function(el, config)
+	{
+		if (!(el instanceof jQuery))
+			throw new Error('Element must be instance of JQuery.');
+
+		this.el = el;
+		this.config = $.extend({
+			/**
+			 * Bind initial events
+			 */
+			bindEvents : true,
+
+			/**
+			 * Selector will be used to find new element during replacement.
+			 */
+			replaceSelector : 'div:first',
+
+			/**
+			 * Callback which will be called after setup.
+			 */
+			afterSetup : null
+		}, config);
+	}
+
+	kz.widget.prototype.setup = function()
+	{
+		this.config.replaceSelector = this.makeReplaceSelector();
+
+		this.onSetup();
+
+		this.afterSetup();
+	}
+
+	/**
+	 * This method for children: redefine it to have additional logic.
+	 */
+	kz.widget.prototype.onSetup = function()
+	{}
+
+	kz.widget.prototype.afterSetup = function()
+	{
+		if (typeof(this.config.afterSetup) == 'callback')
+			this.config.afterSetup.call(this);
+
+		this.el.trigger('afterSetup.widget', [this]);
+	}
+
+	kz.widget.prototype.makeReplaceSelector = function()
+	{
+		var selector = this.el.prop('tagName').toLowerCase(),
+			classes = this.el.attr('class');
+
+		if (typeof(classes) == 'string')
+			$.each(classes.split(/\s+/), function(key, val) {
+				selector += '.' + val;
+			});
+
+		selector += ':first';
+
+		return selector;
+	}
+
+	kz.widget.prototype.replace = function(html)
+	{
+		html = (html instanceof jQuery) ? html : $(html);
+
+		var wrapper = $('<div></div>').append(html),
+			newEl = wrapper.find(this.config.replaceSelector);
+
+		if (newEl.size() == 0)
+			throw new Error('Cannot find new element');
+
+		this.el.replaceWith(newEl);
+		this.el = newEl;
+
+		this.setup();
+
+		return this;
+	}
+}) (jQuery);
+if (typeof(kz) == 'undefined' || !kz) {
+	var kz = {};
+}
+
+(function($) {
+	kz.loading = function(config)
+	{
+		this.config = $.extend({
+			selector : '#loading'
+		}, config);
+
+		this.el = $(this.config.selector);
+	}
+
+	kz.loading.prototype.show = function()
+	{
+		this.el.show();
+	}
+
+	kz.loading.prototype.hide = function()
+	{
+		this.el.hide();
+	}
+}) (jQuery);
+if (typeof(kz) == 'undefined' || !kz) {
+	var kz = {};
+}
+
+(function($) {
 	kz.ajaxResponse = function()
 	{
 	}
@@ -2191,100 +2328,6 @@ if (typeof(kz) == 'undefined' || !kz) {
 	}
 }) (jQuery);
 
-if (typeof(kz) == 'undefined' || !kz) {
-	var kz = {};
-}
-
-(function($) {
-	kz.app = function(el)
-	{
-		if (typeof(el) == 'undefined')
-			el = $('html');
-
-		if (!(el instanceof jQuery))
-			throw new Error('Element must be instance of JQuery.');
-
-		this.el = el;
-
-		this.config = {
-			showLoading : true,
-			loadingSelector : '#loading'
-		};
-
-		/**
-		 * @type kz.loading
-		 */
-		this.loading = null;
-
-		/**
-		 * @type kz.ajaxResponse
-		 */
-		this.ajaxResponse = null;
-	}
-
-	kz.app.prototype.setup = function()
-	{
-		this.loading = new kz.loading({
-			selector: this.config.loadingSelector
-		});
-
-		this.ajaxResponse = new kz.ajaxResponse();
-
-		this.setupAjax();
-		this.setupGlobalListeners();
-	}
-
-	kz.app.prototype.showLoading = function(val)
-	{
-		this.config.showLoading = Boolean(val);
-
-		return this;
-	}
-
-	kz.app.prototype.setupAjax = function()
-	{
-		var that = this;
-		$(document).ajaxStart(function() {
-			if (that.config.showLoading)
-				that.loading.show();
-		});
-
-		$(document).ajaxComplete(function(e, jqXHR, ajaxOptions) {
-			that.loading.hide();
-
-			if (typeof(jqXHR.responseJSON) != 'undefined')
-				that.ajaxResponse.response(jqXHR.responseJSON);
-		});
-	}
-
-	kz.app.prototype.setupGlobalListeners = function()
-	{
-		this.el.on('submit', 'form[data-form]', function(e) {
-			var el = $(this),
-				className = el.data('form') ? el.data('form') : 'form';
-
-			var form = new kz[className](el, {
-				bindEvents : false
-			});
-			form.setup();
-			form.onSubmit(e);
-		});
-
-		this.el.on('click', 'a[data-modal],input[data-modal],button[data-modal]', function(e) {
-			e.preventDefault();
-
-			var el = $(this),
-				className = el.data('modal') ? el.data('modal') : 'modal',
-				modal = new kz[className](),
-				href = (typeof(el.attr('href')) != 'undefined') ? el.attr('href') : el.data('modal-url'),
-				modal = new kz.modal()
-			;
-
-			modal.load(href);
-		});
-	}
-
-}) (jQuery);
 if (typeof(kz) == 'undefined' || !kz) {
 	var kz = {};
 }
@@ -2327,30 +2370,6 @@ if (typeof(kz) == 'undefined' || !kz) {
 		this.el.trigger('afterSubmit.widget', [this, data]);
 	}
 
-}) (jQuery);
-if (typeof(kz) == 'undefined' || !kz) {
-	var kz = {};
-}
-
-(function($) {
-	kz.loading = function(config)
-	{
-		this.config = $.extend({
-			selector : '#loading'
-		}, config);
-
-		this.el = $(this.config.selector);
-	}
-
-	kz.loading.prototype.show = function()
-	{
-		this.el.show();
-	}
-
-	kz.loading.prototype.hide = function()
-	{
-		this.el.hide();
-	}
 }) (jQuery);
 if (typeof(kz) == 'undefined' || !kz) {
 	var kz = {};
@@ -2470,111 +2489,92 @@ if (typeof(kz) == 'undefined' || !kz) {
 }
 
 (function($) {
-	kz.util = {
-		redirect : function(url)
-		{
-			if (window.location.href == url) {
-				this.reload();
-				return;
-			}
-
-			var modalMsg = new kz.modalMsg();
-			modalMsg.show('You are being redirected...');
-
-			window.location = url;
-		},
-
-		reload : function()
-		{
-			var modalMsg = new kz.modalMsg();
-			modalMsg.show('You are being redirected...');
-
-			window.location.reload();
-		}
-	};
-}) (jQuery);
-if (typeof(kz) == 'undefined' || !kz) {
-	var kz = {};
-}
-
-(function($) {
-	kz.widget = function(el, config)
+	kz.app = function(el)
 	{
+		if (typeof(el) == 'undefined')
+			el = $('html');
+
 		if (!(el instanceof jQuery))
 			throw new Error('Element must be instance of JQuery.');
 
 		this.el = el;
-		this.config = $.extend({
-			/**
-			 * Bind initial events
-			 */
-			bindEvents : true,
 
-			/**
-			 * Selector will be used to find new element during replacement.
-			 */
-			replaceSelector : 'div:first',
+		this.config = {
+			showLoading : true,
+			loadingSelector : '#loading'
+		};
 
-			/**
-			 * Callback which will be called after setup.
-			 */
-			afterSetup : null
-		}, config);
+		/**
+		 * @type kz.loading
+		 */
+		this.loading = null;
+
+		/**
+		 * @type kz.ajaxResponse
+		 */
+		this.ajaxResponse = null;
 	}
 
-	kz.widget.prototype.setup = function()
+	kz.app.prototype.setup = function()
 	{
-		this.config.replaceSelector = this.makeReplaceSelector();
+		this.loading = new kz.loading({
+			selector: this.config.loadingSelector
+		});
 
-		this.onSetup();
+		this.ajaxResponse = new kz.ajaxResponse();
 
-		this.afterSetup();
+		this.setupAjax();
+		this.setupGlobalListeners();
 	}
 
-	/**
-	 * This method for children: redefine it to have additional logic.
-	 */
-	kz.widget.prototype.onSetup = function()
-	{}
-
-	kz.widget.prototype.afterSetup = function()
+	kz.app.prototype.showLoading = function(val)
 	{
-		if (typeof(this.config.afterSetup) == 'callback')
-			this.config.afterSetup.call(this);
-
-		this.el.trigger('afterSetup.widget', [this]);
-	}
-
-	kz.widget.prototype.makeReplaceSelector = function()
-	{
-		var selector = this.el.prop('tagName').toLowerCase(),
-			classes = this.el.attr('class');
-
-		if (typeof(classes) == 'string')
-			$.each(classes.split(/\s+/), function(key, val) {
-				selector += '.' + val;
-			});
-
-		selector += ':first';
-
-		return selector;
-	}
-
-	kz.widget.prototype.replace = function(html)
-	{
-		html = (html instanceof jQuery) ? html : $(html);
-
-		var wrapper = $('<div></div>').append(html),
-			newEl = wrapper.find(this.config.replaceSelector);
-
-		if (newEl.size() == 0)
-			throw new Error('Cannot find new element');
-
-		this.el.replaceWith(newEl);
-		this.el = newEl;
-
-		this.setup();
+		this.config.showLoading = Boolean(val);
 
 		return this;
 	}
+
+	kz.app.prototype.setupAjax = function()
+	{
+		var that = this;
+		$(document).ajaxStart(function() {
+			if (that.config.showLoading)
+				that.loading.show();
+		});
+
+		$(document).ajaxComplete(function(e, jqXHR, ajaxOptions) {
+			that.loading.hide();
+
+			if (typeof(jqXHR.responseJSON) != 'undefined')
+				that.ajaxResponse.response(jqXHR.responseJSON);
+		});
+	}
+
+	kz.app.prototype.setupGlobalListeners = function()
+	{
+		this.el.on('submit', 'form[data-form]', function(e) {
+			var el = $(this),
+				className = el.data('form') ? el.data('form') : 'form';
+
+			var form = new kz[className](el, {
+				bindEvents : false
+			});
+			form.setup();
+			form.onSubmit(e);
+		});
+
+		this.el.on('click', 'a[data-modal],input[data-modal],button[data-modal]', function(e) {
+			e.preventDefault();
+
+			var el = $(this),
+				className = el.data('modal') ? el.data('modal') : 'modal',
+				modal = new kz[className](),
+				href = (typeof(el.attr('href')) != 'undefined') ? el.attr('href') : el.data('modal-url'),
+				modal = new kz.modal()
+			;
+
+			modal.load(href);
+		});
+	}
+
 }) (jQuery);
