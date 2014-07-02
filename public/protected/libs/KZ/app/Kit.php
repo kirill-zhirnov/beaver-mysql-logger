@@ -221,6 +221,20 @@ class Kit implements interfaces\Kit
 	}
 
 	/**
+	 * @param \KZ\Controller\interfaces\Request $request
+	 * @return \KZ\Controller\interfaces\Response
+	 */
+	public function makeResponse(\KZ\Controller\interfaces\Request $request)
+	{
+		return $this->makeInstance(
+			'\KZ\Controller\Response',
+			'response',
+			[$request],
+			'\KZ\controller\interfaces\Response'
+		);
+	}
+
+	/**
 	 * @param $className
 	 * @param $configKey
 	 * @param array $constructParams

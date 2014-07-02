@@ -7,6 +7,19 @@ use KZ\view\interfaces;
 class Html implements interfaces\Helper
 {
 	/**
+	 * Generates <label for="id"></label>
+	 *
+	 * @param $model
+	 * @param $attribute
+	 * @param $text
+	 * @return string
+	 */
+	public function label($model, $attribute, $text)
+	{
+		return '<label for="' . $this->id($model, $attribute) . '">' . $this->encode($text) . '</label>';
+	}
+
+	/**
 	 * Generates <input type="text" />.
 	 *
 	 * @param object|string $model
@@ -19,7 +32,8 @@ class Html implements interfaces\Helper
 		$htmlAttributes = array_replace([
 			'name' => $this->name($model, $attribute),
 			'value' => $this->value($model, $attribute, false),
-			'type' => 'text'
+			'type' => 'text',
+			'id' => $this->id($model, $attribute)
 		], $htmlAttributes);
 
 		return '<input ' . $this->getTagAttrs($htmlAttributes) . ' />';
@@ -36,7 +50,8 @@ class Html implements interfaces\Helper
 	public function textArea($model, $attribute, array $htmlAttributes = [])
 	{
 		$htmlAttributes = array_replace([
-			'name' => $this->name($model, $attribute)
+			'name' => $this->name($model, $attribute),
+			'id' => $this->id($model, $attribute)
 		], $htmlAttributes);
 
 		return '<textarea ' . $this->getTagAttrs($htmlAttributes) . '>' . $this->value($model, $attribute) . '</textarea>';
@@ -120,6 +135,25 @@ class Html implements interfaces\Helper
 		else
 			return $className . '[' . $attribute . ']';
 
+	}
+
+	/**
+	 * Generates id by $model and attribute.
+	 *
+	 * @param object|string $model
+	 * @param $attribute
+	 * @return string
+	 */
+	public function id($model, $attribute)
+	{
+		$className = $this->getModelPrefix($model);
+
+		$attribute = strtr($attribute, [
+			'[' => '_',
+			']' => ''
+		]);
+
+		return $className . '_' . $attribute;
 	}
 
 	/**

@@ -80,4 +80,15 @@ interface Registry extends \ArrayAccess, \Iterator
 	 * @return $this
 	 */
 	public function setFlashMessenger(\KZ\flashMessenger\interfaces\FlashMessenger $messenger);
+
+	/**
+	 * @param \KZ\controller\interfaces\Response $response
+	 * @return $this;
+	 */
+	public function setResponse(\KZ\controller\interfaces\Response $response);
+
+	/**
+	 * @return \KZ\controller\interfaces\Response
+	 */
+	public function getResponse();
 }

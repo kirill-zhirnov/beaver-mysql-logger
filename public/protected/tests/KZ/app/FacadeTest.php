@@ -87,7 +87,7 @@ class FacadeTest extends \PHPUnit_Framework_TestCase
 	 */
 	protected function makeRequest($route = '')
 	{
-		return $this->getMock('\KZ\controller\Request', ['getScriptName'], [$route]);
+		return $this->getMock('\KZ\controller\Request', ['getScriptName', 'isAjaxRequest'], [$route]);
 	}
 
 	/**

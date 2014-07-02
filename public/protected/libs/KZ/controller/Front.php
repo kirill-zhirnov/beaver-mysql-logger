@@ -142,23 +142,6 @@ class Front
 	}
 
 	/**
-	 * Redirect to a given URL.
-	 *
-	 * @param $url
-	 * @param bool $exit
-	 */
-	public function redirect($url, $exit = true)
-	{
-		if ($url instanceof link\interfaces\Link)
-			$url = $url->getLink();
-
-		header('Location: ' . $url);
-
-		if ($exit)
-			exit();
-	}
-
-	/**
 	 * @param $route
 	 * @param array $params
 	 * @return \KZ\link\interfaces\Link

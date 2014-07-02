@@ -87,4 +87,10 @@ interface Kit
 	 * @return \KZ\link\interfaces\Link
 	 */
 	public function makeLink($route, array $params = []);
+
+	/**
+	 * @param \KZ\Controller\interfaces\Request $request
+	 * @return \KZ\Controller\interfaces\Response
+	 */
+	public function makeResponse(\KZ\Controller\interfaces\Request $request);
 } 

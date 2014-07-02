@@ -60,7 +60,7 @@ class Setup
 		$setupRoute = 'setup/index';
 
 		if (is_null($mysql)) {
-			$this->controllerFront->redirect(
+			$this->registry->getResponse()->redirect(
 				$this->controllerFront->makeLink($setupRoute)
 			);
 		}
@@ -70,7 +70,7 @@ class Setup
 				->add('Cannot connect to Mysql!', 'error')
 			;
 
-			$this->controllerFront->redirect(
+			$this->registry->getResponse()->redirect(
 				$this->controllerFront->makeLink($setupRoute)
 			);
 		}

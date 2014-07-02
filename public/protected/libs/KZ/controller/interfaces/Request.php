@@ -43,4 +43,6 @@ interface Request
 	 * @return string
 	 */
 	public function getScriptName();
+
+	public function isAjaxRequest();
 }

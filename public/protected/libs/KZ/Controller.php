@@ -1,7 +1,6 @@
 <?php
 
 namespace KZ;
-use KZ\model\interfaces\Model;
 
 /**
  * Class Controller
@@ -15,7 +14,7 @@ abstract class Controller
 	protected $frontController;
 
 	/**
-	 * @var View
+	 * @var view\interfaces\View
 	 */
 	protected $view;
 
@@ -29,12 +28,24 @@ abstract class Controller
 	 */
 	protected $registry;
 
+	/**
+	 * @var controller\interfaces\Response
+	 */
+	protected $response;
+
 	public function __construct(controller\Front $frontController)
 	{
 		$this->frontController = $frontController;
-		$this->registry = $this->frontController->getRegistry();
 
 		$this->init();
+	}
+
+	public function __call($name, array $args)
+	{
+		if (in_array($name, ['render', 'redirect', 'setJson', 'json']))
+			return call_user_func_array([$this->response, $name], $args);
+
+		throw new \BadMethodCallException('Method "' . $name . '" does not exist!');
 	}
 
 	public function posted()
@@ -49,7 +60,7 @@ abstract class Controller
 
 		$out = false;
 		foreach ($models as $model) {
-			if (!$model instanceof Model)
+			if (!$model instanceof model\interfaces\Model)
 				throw new \UnexpectedValueException('Argument must be instance of KZ\model\interfaces\Model or an array!');
 
 			/** @var string $prefix */
@@ -74,13 +85,32 @@ abstract class Controller
 		return $this->frontController->makeLink($route, $params);
 	}
 
-	public function redirect($url, $exit = true)
+	/**
+	 * @return view\interfaces\View
+	 */
+	public function getView()
 	{
-		$this->frontController->redirect($url, $exit);
+		return $this->view;
+	}
+
+	/**
+	 * @param view\interfaces\View $view
+	 * @return $this
+	 */
+	public function setView(view\interfaces\View $view)
+	{
+		$this->view = $view;
+
+		return $this;
 	}
 
 	protected function init()
 	{
+		$this->registry = $this->frontController->getRegistry();
+
+		$this->response = $this->registry->getResponse();
+		$this->response->setController($this);
+
 		$this->initializeView();
 	}
 

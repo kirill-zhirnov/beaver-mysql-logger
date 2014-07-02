@@ -57,6 +57,6 @@ class LinkTest extends \PHPUnit_Framework_TestCase
 	 */
 	protected function makeRequest()
 	{
-		return $this->getMock('\KZ\controller\Request', ['getScriptName']);
+		return $this->getMock('\KZ\controller\Request', ['getScriptName', 'isAjaxRequest']);
 	}
 }

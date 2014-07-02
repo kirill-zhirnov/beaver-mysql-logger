@@ -17,9 +17,6 @@ class Setup extends \KZ\Controller
 
 	public function actionIndex()
 	{
-		//если пользователь хочет изменить соединение - то должны быть кнопки домой,
-		//если соединения нету - кнопок домой быть не должно!
-
 		$model = new \models\SetupMysql();
 
 		if ($this->posted($model) && $model->validate()) {
@@ -29,7 +26,7 @@ class Setup extends \KZ\Controller
 			$this->redirect($this->makeLink('index/index'));
 		}
 
-		echo $this->view->render('setup/index', [
+		$this->render('setup/index', [
 			'model' => $model
 		]);
 	}

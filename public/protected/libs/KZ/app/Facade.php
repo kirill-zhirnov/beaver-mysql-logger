@@ -71,13 +71,16 @@ abstract class Facade
 		//make components
 		$this->registry = $this->kit->makeRegistry();
 
+		$request = $this->makeRequest();
+
 		//put components in registry
 		$this->registry
 			->setObserver($this->kit->makeObserver())
 			->setConnectionStorage($this->kit->makeConnectionStorage())
 			->setKit($this->kit)
 			->setConfig($this->config)
-			->setRequest($this->makeRequest())
+			->setRequest($request)
+			->setResponse($this->makeResponse($request))
 		;
 
 		$this->setupConnectionForTableModels();
@@ -102,6 +105,15 @@ abstract class Facade
 	 * @return controller\Kit
 	 */
 	abstract public function makeControllerKit();
+
+	/**
+	 * @param controller\interfaces\Request $request
+	 * @return \KZ\Controller\interfaces\Response
+	 */
+	public function makeResponse(controller\interfaces\Request $request)
+	{
+		return $this->kit->makeResponse($request);
+	}
 
 	/**
 	 * @throws \RuntimeException

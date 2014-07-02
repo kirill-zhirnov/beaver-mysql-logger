@@ -156,6 +156,27 @@ class Registry extends \KZ\Registry implements interfaces\Registry
 		return $this;
 	}
 
+	/**
+	 * @param \KZ\controller\interfaces\Response $response
+	 * @return $this;
+	 */
+	public function setResponse(\KZ\controller\interfaces\Response $response)
+	{
+		$this->data['response'] = $response;
+
+		return $this;
+	}
+
+	/**
+	 * @return \KZ\controller\interfaces\Response
+	 */
+	public function getResponse()
+	{
+		$this->checkKey('response');
+
+		return $this->data['response'];
+	}
+
 
 	protected function checkKey($key)
 	{
