@@ -5,6 +5,15 @@ namespace KZ;
 /**
  * Class Controller
  * @package KZ
+ *
+ * Magic methods:
+ * @method void render() render(\string $localPath, array $data = [])
+ * @method void redirect() redirect(\string $url)
+ * @method controller\interfaces\Response setJson() setJson(array $json)
+ * @method void json() json(array $json = [])
+ *
+ * Magic property:
+ * @property-read flashMessenger\interfaces\FlashMessenger $flashMessenger
  */
 abstract class Controller
 {
@@ -46,6 +55,16 @@ abstract class Controller
 			return call_user_func_array([$this->response, $name], $args);
 
 		throw new \BadMethodCallException('Method "' . $name . '" does not exist!');
+	}
+
+	public function __get($name)
+	{
+		switch ($name) {
+			case 'flashMessenger':
+				return $this->registry->getFlashMessenger();
+			default:
+				throw new \DomainException('Unknown property "' . $name . '"');
+		}
 	}
 
 	public function posted()

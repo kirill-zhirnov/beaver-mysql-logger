@@ -1,22 +1,31 @@
 <?php
 
 namespace KZ\view\helpers;
-use KZ\model\interfaces\Model;
-use KZ\view\interfaces;
 
-class Html implements interfaces\Helper
+use KZ\view\interfaces as viewInterfaces,
+	KZ\model\interfaces as modelInterfaces,
+	KZ\view
+;
+
+class Html extends view\Helper
 {
 	/**
-	 * Generates <label for="id"></label>
+	 * Generates <label for="id">text</label>
 	 *
 	 * @param $model
 	 * @param $attribute
 	 * @param $text
+	 * @param array $htmlAttributes
 	 * @return string
 	 */
-	public function label($model, $attribute, $text)
+	public function label($model, $attribute, $text, array $htmlAttributes = [])
 	{
-		return '<label for="' . $this->id($model, $attribute) . '">' . $this->encode($text) . '</label>';
+		$htmlAttributes = array_replace([
+			'for' => $this->id($model, $attribute),
+			'class' => 'control-label',
+		], $htmlAttributes);
+
+		return '<label ' .  $this->getTagAttrs($htmlAttributes) . '>' . $this->encode($text) . '</label>';
 	}
 
 	/**
@@ -166,5 +175,30 @@ class Html implements interfaces\Helper
 	{
 		$model = (is_object($model)) ? get_class($model) : $model;
 		return str_replace('\\', '_', $model);
+	}
+
+	/**
+	 * Generates open tag and add special classes in case of error:
+	 * <div class="form-group">
+	 *
+	 * @param $model
+	 * @param $attribute
+	 * @param string $classes
+	 * @param array $htmlAttributes
+	 * @return string
+	 */
+	public function formGroup($model, $attribute, $classes = '', array $htmlAttributes = [])
+	{
+		$htmlAttributes = array_replace([
+			'class' => 'form-group ' . $classes
+		], $htmlAttributes);
+
+		if ($model instanceof modelInterfaces\Model
+			&& $model->hasAttribute($attribute)
+			&& $model->getErrors($attribute)
+		)
+			$htmlAttributes['class'] .= ' has-error';
+
+		return '<div ' . $this->getTagAttrs($htmlAttributes) . '>';
 	}
 }

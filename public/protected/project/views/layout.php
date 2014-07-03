@@ -18,6 +18,7 @@
 		<div class="container">
 			<?=$this->renderPartial('layout/navbar')?>
 			<?=$this->renderPartial('layout/pageHeader')?>
+			<?=$this->renderPartial('layout/')?>
 			<?=$content?>
 		</div>
 		<div id="loading" class="ajax-loading">Loading</div>

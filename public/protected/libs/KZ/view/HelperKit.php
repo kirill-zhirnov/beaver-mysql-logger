@@ -2,7 +2,9 @@
 
 namespace KZ\view;
 
-use KZ\view\interfaces\Helper;
+use KZ\view\interfaces,
+	KZ\app\interfaces as appInterfaces
+;
 
 class HelperKit implements interfaces\HelperKit
 {
@@ -21,6 +23,11 @@ class HelperKit implements interfaces\HelperKit
 	 * @var array
 	 */
 	protected $helpers = [];
+
+	/**
+	 * @var appInterfaces\Registry
+	 */
+	protected $registry;
 
 	/**
 	 * @param array $config
@@ -87,12 +94,18 @@ class HelperKit implements interfaces\HelperKit
 		if (!class_exists($class))
 			throw new \RuntimeException('Helper "' . $class . '" does not exist!');
 
-		$this->helpers[$name] = new $class();
+		/** @var interfaces\Helper $helper */
+		$helper = new $class();
 
-		if (!$this->helpers[$name] instanceof Helper)
+		if (!$helper instanceof Helper)
 			throw new \RuntimeException('"' . $name . '" must be instance \KZ\view\interfaces\Helper.');
 
-		return $this->helpers[$name];
+		if ($this->registry)
+			$helper->setRegistry($this->registry);
+
+		$this->helpers[$name] = $helper;
+
+		return $helper;
 	}
 
 	public function getHelperClass($name)
@@ -103,5 +116,28 @@ class HelperKit implements interfaces\HelperKit
 			return $this->config['helpers'][$name];
 
 		return '\KZ\view\helpers\\' . ucfirst($name);
+	}
+
+	/**
+	 * @param appInterfaces\Registry $registry
+	 * @return $this
+	 */
+	public function setRegistry(appInterfaces\Registry $registry)
+	{
+		$this->registry = $registry;
+
+		return $this;
+	}
+
+	/**
+	 * @throws \RuntimeException
+	 * @return appInterfaces\Registry
+	 */
+	public function getRegistry()
+	{
+		if (!$this->registry)
+			throw new \RuntimeException('You must set registry before calling this method.');
+
+		return $this->registry;
 	}
 } 

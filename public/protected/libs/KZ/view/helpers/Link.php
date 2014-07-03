@@ -1,10 +1,15 @@
 <?php
 
 namespace KZ\view\helpers;
-use KZ\view\interfaces;
+use KZ\view;
 
-class Link implements interfaces\Helper
+class Link extends view\Helper
 {
+	/**
+	 * @param $route
+	 * @param array $params
+	 * @return \KZ\Link
+	 */
 	public function get($route, array $params = [])
 	{
 		return new \KZ\Link($route, $params);

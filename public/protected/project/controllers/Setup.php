@@ -22,7 +22,7 @@ class Setup extends \KZ\Controller
 		if ($this->posted($model) && $model->validate()) {
 			$model->save();
 
-			//добавить тут сообщение!
+			$this->flashMessenger->add('Form was successfully saved.');
 			$this->redirect($this->makeLink('index/index'));
 		}
 

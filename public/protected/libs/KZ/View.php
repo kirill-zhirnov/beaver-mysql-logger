@@ -1,8 +1,9 @@
 <?php
 
 namespace KZ;
-use KZ\view\interfaces\HelperKit;
-use KZ\view\interfaces\Helper;
+use KZ\app\interfaces as appInterfaces,
+	KZ\view\interfaces as viewInterfaces
+;
 
 /**
  * For more details @see \KZ\view\interfaces\View
@@ -73,6 +74,11 @@ class View extends Registry implements view\interfaces\View
 	 */
 	protected $helperKit;
 
+	/**
+	 * @var appInterfaces\Registry
+	 */
+	protected $registry;
+
 	public function __construct($templatesPath, array $config = [])
 	{
 		$this->setTemplatesPath($templatesPath);
@@ -81,7 +87,7 @@ class View extends Registry implements view\interfaces\View
 
 	public function setConfig(array $config = [])
 	{
-		$allowedOptions = ['extension', 'layout', 'varNameForContent', 'localPath', 'helperKit'];
+		$allowedOptions = ['extension', 'layout', 'varNameForContent', 'localPath', 'helperKit', 'registry'];
 		foreach ($allowedOptions as $option) {
 			if (!isset($config[$option]))
 				continue;
@@ -259,7 +265,7 @@ class View extends Registry implements view\interfaces\View
 
 	/**
 	 * @param $name
-	 * @return Helper
+	 * @return viewInterfaces\Helper
 	 */
 	public function helper($name)
 	{
@@ -268,7 +274,7 @@ class View extends Registry implements view\interfaces\View
 
 	/**
 	 * @throws \RuntimeException
-	 * @return HelperKit
+	 * @return viewInterfaces\HelperKit
 	 */
 	public function getHelperKit()
 	{
@@ -283,6 +289,9 @@ class View extends Registry implements view\interfaces\View
 
 			if (!self::$helperKitInstance instanceof HelperKit)
 				throw new \RuntimeException('HelperKit must be instance of \KZ\view\interfaces\HelperKit');
+
+			if ($this->registry)
+				self::$helperKitInstance->setRegistry($this->registry);
 		}
 
 		return self::$helperKitInstance;
@@ -301,6 +310,36 @@ class View extends Registry implements view\interfaces\View
 		return '\KZ\view\HelperKit';
 	}
 
+	/**
+	 * Set registry to be able pass it in helpers.
+	 *
+	 * @param appInterfaces\Registry $registry
+	 * @return $this
+	 */
+	public function setRegistry(appInterfaces\Registry $registry)
+	{
+		$this->registry = $registry;
+
+		return $this;
+	}
+
+	/**
+	 * @throws \RuntimeException
+	 * @return appInterfaces\Registry
+	 */
+	public function getRegistry()
+	{
+		if (!$this->registry)
+			throw new \RuntimeException('You must set registry before calling this method.');
+
+		return $this->registry;
+	}
+
+	/**
+	 * Render file $this->absolutePath and return the result.
+	 *
+	 * @return string
+	 */
 	protected function renderFile()
 	{
 		extract($this->data);

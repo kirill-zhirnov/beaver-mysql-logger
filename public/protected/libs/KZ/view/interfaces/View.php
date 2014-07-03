@@ -1,6 +1,7 @@
 <?php
 
 namespace KZ\view\interfaces;
+use KZ\app\interfaces as appInterfaces;
 
 /**
  * Interface for View.
@@ -93,4 +94,17 @@ interface View extends \ArrayAccess, \Iterator
 	 * @return HelperKit
 	 */
 	public function getHelperKit();
+
+	/**
+	 * Set registry to be able pass it in helpers.
+	 *
+	 * @param appInterfaces\Registry $registry
+	 * @return $this
+	 */
+	public function setRegistry(appInterfaces\Registry $registry);
+
+	/**
+	 * @return appInterfaces\Registry
+	 */
+	public function getRegistry();
 }
