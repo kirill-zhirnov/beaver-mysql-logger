@@ -16,6 +16,8 @@ class FlashMessenger implements  flashMessenger\interfaces\FlashMessenger
 	 */
 	protected $iteratorPosition = 0;
 
+	protected $iteratorKeys = [];
+
 	/**
 	 * Key in session.
 	 *
@@ -154,7 +156,7 @@ class FlashMessenger implements  flashMessenger\interfaces\FlashMessenger
 	 */
 	public function current()
 	{
-		return $this->messages[$this->iteratorPosition]['text'];
+		return $this->messages[$this->iteratorKeys[$this->iteratorPosition]]['text'];
 	}
 
 	/**
@@ -164,12 +166,13 @@ class FlashMessenger implements  flashMessenger\interfaces\FlashMessenger
 	 */
 	public function key()
 	{
-		return $this->messages[$this->iteratorPosition]['type'];
+		return $this->messages[$this->iteratorKeys[$this->iteratorPosition]]['type'];
 	}
 
 	public function rewind()
 	{
 		$this->iteratorPosition = 0;
+		$this->iteratorKeys = array_keys($this->messages);
 	}
 
 	public function next()
@@ -179,7 +182,10 @@ class FlashMessenger implements  flashMessenger\interfaces\FlashMessenger
 
 	public function valid()
 	{
-		return isset($this->messages[$this->iteratorPosition]);
+		return isset(
+			$this->iteratorKeys[$this->iteratorPosition],
+			$this->messages[$this->iteratorKeys[$this->iteratorPosition]]
+		);
 	}
 
 	protected function initMessages()

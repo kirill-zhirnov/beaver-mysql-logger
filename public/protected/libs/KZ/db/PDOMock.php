@@ -15,4 +15,9 @@ class PDOMock extends \PDO
 	{
 		$this->dsn = $dsn;
 	}
+
+	public function getDsn()
+	{
+		return $this->dsn;
+	}
 } 

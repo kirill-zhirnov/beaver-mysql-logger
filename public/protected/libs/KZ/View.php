@@ -287,7 +287,7 @@ class View extends Registry implements view\interfaces\View
 
 			self::$helperKitInstance = new $class($config);
 
-			if (!self::$helperKitInstance instanceof HelperKit)
+			if (!self::$helperKitInstance instanceof viewInterfaces\HelperKit)
 				throw new \RuntimeException('HelperKit must be instance of \KZ\view\interfaces\HelperKit');
 
 			if ($this->registry)

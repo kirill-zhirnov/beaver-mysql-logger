@@ -137,6 +137,13 @@ abstract class Controller
 	{
 		$this->view = $this->registry->getKit()->makeView();
 
+		/** Set registry to HelperKit, since it is singleton */
+		if ($this->registry)
+			$this->view
+				->getHelperKit()
+				->setRegistry($this->registry)
+			;
+
 		if ($this->layoutLocalPath) {
 			$layout = $this->registry->getKit()->makeView(null, [
 				'localPath' => $this->layoutLocalPath

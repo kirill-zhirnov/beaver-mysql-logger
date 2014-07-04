@@ -3,10 +3,10 @@
 namespace KZ\db\table;
 use KZ\db;
 
-abstract class SQLite extends db\Table
+abstract class Mysql extends db\Table
 {
 	/**
 	 * @var \PDO
 	 */
 	protected static $defaultConnection;
-}
+} 

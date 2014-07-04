@@ -31,7 +31,7 @@ class Mysql extends SQLite
 	 */
 	public function getTableName()
 	{
-		return 'mysql';
+		return 'mysql_credentials';
 	}
 
 	/**

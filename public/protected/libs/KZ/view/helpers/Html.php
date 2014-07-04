@@ -80,7 +80,7 @@ class Html extends view\Helper
 			'class' => 'errors'
 		], $htmlAttributes);
 
-		if (!$model instanceof Model
+		if (!$model instanceof modelInterfaces\Model
 			|| !$model->hasAttribute($attribute)
 			|| !$errors = $model->getErrors($attribute)
 		)
@@ -119,7 +119,7 @@ class Html extends view\Helper
 	 */
 	public function value($model, $attribute, $encode = true)
 	{
-		if ($model instanceof Model && $model->hasAttribute($attribute)) {
+		if ($model instanceof modelInterfaces\Model && $model->hasAttribute($attribute)) {
 			$value = $model->getAttribute($attribute);
 
 			return $encode ? $this->encode($value) : $value;

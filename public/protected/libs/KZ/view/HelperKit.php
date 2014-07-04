@@ -97,7 +97,7 @@ class HelperKit implements interfaces\HelperKit
 		/** @var interfaces\Helper $helper */
 		$helper = new $class();
 
-		if (!$helper instanceof Helper)
+		if (!$helper instanceof interfaces\Helper)
 			throw new \RuntimeException('"' . $name . '" must be instance \KZ\view\interfaces\Helper.');
 
 		if ($this->registry)

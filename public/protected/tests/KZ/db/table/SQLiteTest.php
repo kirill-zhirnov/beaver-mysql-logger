@@ -146,7 +146,7 @@ class SQLiteTest extends \PHPUnit_Framework_TestCase
 		$query = preg_replace('#\s+#i', ' ', $query);
 
 		$this->assertEquals(
-			'update xx_test set a=:set0, c=:set1 where pk=:pk order by b limit 1 offset 5',
+			'update xx_test set a=:set0, c=:set1 where pk=:pk order by b limit 1',
 			$query
 		);
 		$this->assertEquals([

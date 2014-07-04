@@ -81,6 +81,7 @@ abstract class Facade
 			->setConfig($this->config)
 			->setRequest($request)
 			->setResponse($this->makeResponse($request))
+			->setFlashMessenger($this->kit->makeFlashMessenger())
 		;
 
 		$this->setupConnectionForTableModels();
