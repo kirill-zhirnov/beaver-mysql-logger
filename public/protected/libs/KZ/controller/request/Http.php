@@ -12,6 +12,18 @@ class Http extends controller\Request
 		parent::__construct($route);
 	}
 
+	public function getParam($key, $default = null)
+	{
+		if (array_key_exists($key, $this->params))
+			return $this->params[$key];
+		elseif (isset($_POST[$key]))
+			return $_POST[$key];
+		else
+			return $_GET[$key];
+
+		return $default;
+	}
+
 	public function getScriptName()
 	{
 		return $_SERVER['SCRIPT_NAME'];

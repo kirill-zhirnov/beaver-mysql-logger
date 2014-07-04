@@ -21,10 +21,6 @@ return [
 			'templatesPath' => realpath(PROTECTED_PATH . '/project/views'),
 		],
 
-		'kit' => [
-			'class' => '\components\app\Kit'
-		],
-
 		'registry' => [
 			'class' => '\components\app\Registry'
 		],

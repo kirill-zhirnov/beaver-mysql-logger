@@ -144,6 +144,7 @@ module.exports = function(grunt) {
 					'js/kz/form.js',
 					'js/kz/modal.js',
 					'js/kz/modalMsg.js',
+					'js/kz/ajaxLink.js',
 					'js/kz/app.js'
 				],
 				dest: '<%= jsFile %>'

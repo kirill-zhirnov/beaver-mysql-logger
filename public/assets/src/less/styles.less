@@ -48,3 +48,34 @@ form .errors > li {
 form .errors > li:last-of-type {
     margin-bottom: 0;
 }
+
+.bs-callout {
+    margin: (@padding-large-vertical * 2) 0;
+    padding: (@padding-large-vertical * 2);
+    .border-top-radius(@border-radius-small);
+    .border-bottom-radius(@border-radius-small);
+    border-width: 1px 1px 1px 5px;
+    border-color: @gray-lighter;
+    border-style: solid;
+
+    h4 {
+        margin-top: 0;
+        margin-bottom: @padding-small-vertical;
+    }
+
+    p:last-child {
+        margin-bottom: 0;
+    }
+}
+
+.bs-callout-danger {
+    border-left-color: @brand-danger;
+
+    h4 {
+        color: @brand-danger;
+    }
+}
+
+.bs-callout.bs-callout-bg {
+    background: @navbar-default-bg;
+}

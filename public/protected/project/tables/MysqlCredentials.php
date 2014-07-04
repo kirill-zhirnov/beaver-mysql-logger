@@ -1,9 +1,9 @@
 <?php
 
 namespace tables;
-use KZ\db\table\SQLite;
+use KZ\db\table;
 
-class MysqlCredentials extends SQLite
+class MysqlCredentials extends table\SQLite
 {
 	/**
 	 * @return bool|null|\PDO

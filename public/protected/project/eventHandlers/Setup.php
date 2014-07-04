@@ -57,26 +57,23 @@ class Setup
 		$mysqlModel = new \tables\MysqlCredentials();
 		$mysql = $mysqlModel->getMysqlConnection();
 
-		$setupRoute = 'setup/index';
+		$setupLink = $this->controllerFront->makeLink('setup/index');
 
-		if (is_null($mysql)) {
-			$this->registry->getResponse()->redirect(
-				$this->controllerFront->makeLink($setupRoute)
-			);
-		}
+		if (is_null($mysql))
+			$this->registry->getResponse()->redirect($setupLink);
 
 		if ($mysql === false) {
 			$this->registry->getFlashMessenger()
 				->add('Cannot connect to Mysql!', 'error')
 			;
 
-			$this->registry->getResponse()->redirect(
-				$this->controllerFront->makeLink($setupRoute)
-			);
+			$this->registry->getResponse()->redirect($setupLink);
 		}
 
 		$this->controllerFront->getRegistry()->getConnectionStorage()
-			->add($mysql, db\ConnectionStorage::SQLITE, false)
+			->add($mysql, db\ConnectionStorage::MYSQL, false)
 		;
+
+		db\table\Mysql::setDefaultConnection($mysql);
 	}
 } 

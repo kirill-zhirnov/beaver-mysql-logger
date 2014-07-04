@@ -89,6 +89,21 @@ if (typeof(kz) == 'undefined' || !kz) {
 
 			modal.load(href);
 		});
+
+		this.el.on('click', 'a[data-ajax-link]', function(e) {
+			var $el = $(this);
+			if ($el.data('ajax-link-instance') instanceof kz.ajaxLink) {
+				var instance = $el.data('ajax-link-instance');
+				console.log(instance);
+			} else {
+				var instance = new kz.ajaxLink($el, {
+					bindEvents: false
+				});
+				$el.data('ajax-link-instance', instance);
+			}
+
+			instance.onClick(e);
+		});
 	}
 
 }) (jQuery);

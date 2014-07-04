@@ -6205,4 +6205,31 @@ form .errors > li {
 form .errors > li:last-of-type {
   margin-bottom: 0;
 }
+.bs-callout {
+  margin: 20px 0;
+  padding: 20px;
+  border-top-right-radius: 3px;
+  border-top-left-radius: 3px;
+  border-bottom-right-radius: 3px;
+  border-bottom-left-radius: 3px;
+  border-width: 1px 1px 1px 5px;
+  border-color: #eeeeee;
+  border-style: solid;
+}
+.bs-callout h4 {
+  margin-top: 0;
+  margin-bottom: 5px;
+}
+.bs-callout p:last-child {
+  margin-bottom: 0;
+}
+.bs-callout-danger {
+  border-left-color: #d9534f;
+}
+.bs-callout-danger h4 {
+  color: #d9534f;
+}
+.bs-callout.bs-callout-bg {
+  background: #f8f8f8;
+}
 /*# sourceMappingURL=styles.css.map */

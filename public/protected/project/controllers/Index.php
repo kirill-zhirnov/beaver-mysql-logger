@@ -13,7 +13,19 @@ class Index extends \KZ\Controller
 
 	public function actionIndex()
 	{
-		echo $this->view->render('index/index');
+		$mysqlLog = new \tables\MysqlLog();
+
+		echo $this->view->render('index/index', [
+			'mysqlLog' => $mysqlLog
+		]);
+	}
+
+	public function actionSetLoggerActive()
+	{
+		$mysqlLog = new \tables\MysqlLog();
+		$mysqlLog->setLogActive((boolean) $this->request->getParam('value'));
+
+		$this->redirect($this->makeLink('index/index'));
 	}
 
 	public function actionTest()

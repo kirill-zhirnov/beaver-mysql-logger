@@ -2489,6 +2489,41 @@ if (typeof(kz) == 'undefined' || !kz) {
 }
 
 (function($) {
+	kz.ajaxLink = function(el, config)
+	{
+		if (!(el instanceof jQuery))
+			throw new Error('Element must be instance of JQuery.');
+
+		this.el = el;
+		this.config = $.extend({
+			/**
+			 * Bind initial events
+			 */
+			bindEvents : true
+		}, config);
+	}
+
+	kz.ajaxLink.prototype.setup = function()
+	{
+		if (this.config.bindEvents)
+			this.el.on('click', $.proxy(this.onClick, this));
+	}
+
+	kz.ajaxLink.prototype.onClick = function(e)
+	{
+		e.preventDefault();
+
+		var that = this;
+		$.post(this.el.attr('href'), {}, function(data) {
+			that.el.trigger('afterPost.ajaxLink', [this, data]);
+		}, 'json');
+	}
+}) (jQuery);
+if (typeof(kz) == 'undefined' || !kz) {
+	var kz = {};
+}
+
+(function($) {
 	kz.app = function(el)
 	{
 		if (typeof(el) == 'undefined')
@@ -2574,6 +2609,21 @@ if (typeof(kz) == 'undefined' || !kz) {
 			;
 
 			modal.load(href);
+		});
+
+		this.el.on('click', 'a[data-ajax-link]', function(e) {
+			var $el = $(this);
+			if ($el.data('ajax-link-instance') instanceof kz.ajaxLink) {
+				var instance = $el.data('ajax-link-instance');
+				console.log(instance);
+			} else {
+				var instance = new kz.ajaxLink($el, {
+					bindEvents: false
+				});
+				$el.data('ajax-link-instance', instance);
+			}
+
+			instance.onClick(e);
 		});
 	}
 

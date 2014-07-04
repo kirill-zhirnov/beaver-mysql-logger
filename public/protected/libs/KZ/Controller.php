@@ -14,6 +14,7 @@ namespace KZ;
  *
  * Magic property:
  * @property-read flashMessenger\interfaces\FlashMessenger $flashMessenger
+ * @property-read controller\interfaces\Request $request
  */
 abstract class Controller
 {
@@ -60,6 +61,8 @@ abstract class Controller
 	public function __get($name)
 	{
 		switch ($name) {
+			case 'request':
+				return $this->registry->getRequest();
 			case 'flashMessenger':
 				return $this->registry->getFlashMessenger();
 			default:
