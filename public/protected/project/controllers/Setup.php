@@ -17,7 +17,7 @@ class Setup extends \KZ\Controller
 
 	public function actionIndex()
 	{
-		$model = new \models\SetupMysql();
+		$model = new \tables\SetupMysql();
 
 		if ($this->posted($model) && $model->validate()) {
 			$model->save();

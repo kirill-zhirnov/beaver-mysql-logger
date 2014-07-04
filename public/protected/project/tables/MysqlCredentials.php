@@ -1,10 +1,13 @@
 <?php
 
-namespace models;
+namespace tables;
 use KZ\db\table\SQLite;
 
-class Mysql extends SQLite
+class MysqlCredentials extends SQLite
 {
+	/**
+	 * @return bool|null|\PDO
+	 */
 	public function getMysqlConnection()
 	{
 		$row = $this->find();

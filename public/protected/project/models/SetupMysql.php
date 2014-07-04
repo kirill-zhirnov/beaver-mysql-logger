@@ -15,7 +15,7 @@ class SetupMysql extends \KZ\Model
 	/**
 	 * Model
 	 *
-	 * @var Mysql
+	 * @var \tables\MysqlCredentials
 	 */
 	protected $mysql;
 
@@ -26,7 +26,7 @@ class SetupMysql extends \KZ\Model
 
 	public function __construct()
 	{
-		$this->mysql = new Mysql();
+		$this->mysql = new \tables\MysqlCredentials();
 		$this->mysqlRow = $this->mysql->find();
 
 		if ($this->mysqlRow)

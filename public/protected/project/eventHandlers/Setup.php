@@ -54,7 +54,7 @@ class Setup
 			break;
 		}
 
-		$mysqlModel = new \models\Mysql();
+		$mysqlModel = new \tables\MysqlCredentials();
 		$mysql = $mysqlModel->getMysqlConnection();
 
 		$setupRoute = 'setup/index';
