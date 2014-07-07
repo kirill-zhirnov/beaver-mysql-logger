@@ -1,5 +1,5 @@
 <?php
-/** @var \tables\MysqlLog $mysqlLog */
+/** @var \tables\GeneralLog $mysqlLog */
 /** @var \KZ\view\helpers\Link $link */
 $link = $this->helper('link');
 ?>

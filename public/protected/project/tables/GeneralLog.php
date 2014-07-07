@@ -3,7 +3,7 @@
 namespace tables;
 use KZ\db\table;
 
-class MysqlLog extends table\Mysql
+class GeneralLog extends table\Mysql
 {
 	/**
 	 * Return table name.
@@ -75,6 +75,17 @@ class MysqlLog extends table\Mysql
 		foreach ($stmt->fetchAll(\PDO::FETCH_ASSOC) as $row)
 			$out[$row['Variable_name']] = $row['Value'];
 
+		$stmt->closeCursor();
+
+		return $out;
+	}
+
+	public function getCommandTypeOptions()
+	{
+		$stmt = $this->makeStmt("select distinct command_type from general_log");
+		$stmt->execute();
+
+		$out = array_column($stmt->fetchAll(\PDO::FETCH_ASSOC), 'command_type', 'command_type');
 		$stmt->closeCursor();
 
 		return $out;

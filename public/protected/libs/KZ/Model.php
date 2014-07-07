@@ -19,6 +19,18 @@ abstract class Model implements model\interfaces\Model
 	protected $attrNames = [];
 
 	/**
+	 * Attributes default values.
+	 *
+	 * @var array
+	 */
+	protected $defaultValues = [];
+
+	public function __construct()
+	{
+		$this->setupDefaultValues();
+	}
+
+	/**
 	 * Set values to model's attributes.
 	 *
 	 * @param array $attributes
@@ -181,6 +193,13 @@ abstract class Model implements model\interfaces\Model
 			$this->addError($attribute, 'Value cannot be blank.');
 	}
 
+	public function getDefaultValue($attribute)
+	{
+		$this->checkAttrName($attribute);
+
+		return $this->defaultValues[$attribute];
+	}
+
 	/**
 	 * If attribute does not exist - exception will be thrown.
 	 *
@@ -191,5 +210,11 @@ abstract class Model implements model\interfaces\Model
 	{
 		if (!$this->hasAttribute($attribute))
 			throw new \OutOfBoundsException('Attribute "' . $attribute . '" does not exist!');
+	}
+
+	protected function setupDefaultValues()
+	{
+		foreach ($this->getAttrNames() as $attr)
+			$this->defaultValues[$attr] = $this->{$attr};
 	}
 }

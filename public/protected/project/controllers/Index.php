@@ -13,7 +13,7 @@ class Index extends \KZ\Controller
 
 	public function actionIndex()
 	{
-		$mysqlLog = new \tables\MysqlLog();
+		$mysqlLog = new \tables\GeneralLog();
 
 		echo $this->view->render('index/index', [
 			'mysqlLog' => $mysqlLog
@@ -22,7 +22,7 @@ class Index extends \KZ\Controller
 
 	public function actionSetLoggerActive()
 	{
-		$mysqlLog = new \tables\MysqlLog();
+		$mysqlLog = new \tables\GeneralLog();
 		$mysqlLog->setLogActive((boolean) $this->request->getParam('value'));
 
 		$this->redirect($this->makeLink('index/index'));
@@ -30,7 +30,11 @@ class Index extends \KZ\Controller
 
 	public function actionTest()
 	{
-		echo $this->view->render('index/test');
+		$filter = new \models\GeneralLogFilter();
+		$grid = new \grids\GeneralLog($this->registry);
+		$grid->setFilter($filter);
+
+		var_dump($grid);
 	}
 
 	public function actionUpdate()

@@ -36,6 +36,8 @@ class SetupMysql extends \KZ\Model
 				'password' => $this->mysqlRow['mysql_password'],
 				'options' => $this->mysqlRow['mysql_options']
 			]);
+
+		parent::__construct();
 	}
 
 	public function rules()

@@ -95,4 +95,12 @@ interface Model
 	 * @return mixed
 	 */
 	public function getAttribute($attribute);
-} 
+
+	/**
+	 * Get default value for attribute.
+	 *
+	 * @param string $attribute
+	 * @return mixed
+	 */
+	public function getDefaultValue($attribute);
+}
