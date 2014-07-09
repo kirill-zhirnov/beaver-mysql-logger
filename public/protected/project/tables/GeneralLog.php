@@ -90,4 +90,56 @@ class GeneralLog extends table\Mysql
 
 		return $out;
 	}
+
+	public function showKeys()
+	{
+		$stmt = $this->makeStmt("
+			show keys from general_log
+		");
+		$stmt->execute();
+
+		$out = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+		$stmt->closeCursor();
+
+		return $out;
+	}
+
+	public function createKeys()
+	{
+		$loggerIsActive = $this->isLogActive();
+
+		if ($loggerIsActive)
+			$this->setLogActive(false);
+
+		$stmt = $this->makeStmt("
+			alter table general_log engine = MyISAM;
+		");
+		$stmt->execute();
+		$stmt->closeCursor();
+
+		$stmt = $this->makeStmt("
+			alter table general_log
+				add index debugThreadId (thread_id, event_time),
+				add index debugEventTime (event_time)
+		");
+		$stmt->execute();
+		$stmt->closeCursor();
+
+		if ($loggerIsActive)
+			$this->setLogActive(true);
+	}
+
+	public function isKeysCreated()
+	{
+		$requiredKeys = [
+			'debugThreadId' => 1,
+			'debugEventTime' => 1
+		];
+
+		foreach ($this->showKeys() as $row)
+			if (isset($requiredKeys[$row['Key_name']]))
+				unset($requiredKeys[$row['Key_name']]);
+
+		return empty($requiredKeys);
+	}
 } 

@@ -2,7 +2,7 @@
 
 namespace grids;
 use KZ\grid;
-use KZ\grid\interfaces\Pager;
+use KZ\grid\interfaces;
 
 class GeneralLog extends grid\Grid
 {
@@ -12,104 +12,73 @@ class GeneralLog extends grid\Grid
 	protected $filter;
 
 	/**
-	 * @var array
-	 */
-	protected $rows;
-
-	/**
-	 * @var Pager
-	 */
-	protected $pager;
-
-	/**
-	 * SQL query with params since we need it twice: for rows and for pager.
-	 *
-	 * @var array
-	 */
-	protected $query;
-
-	/**
-	 * @param \KZ\Filter $filter
+	 * @param \KZ\model\Filter $filter
 	 * @return $this
 	 */
-	public function setFilter(\KZ\Filter $filter)
+	public function setFilter(\KZ\model\Filter $filter)
 	{
 		$this->filter = $filter;
 
 		return $this;
 	}
 
-	/**
-	 * @return array
-	 */
-	public function getRows()
-	{
-		if (isset($this->rows))
-			return $this->rows;
-
-		return [];
-	}
-
-	/**
-	 * @return Pager
-	 */
 	public function getPager()
 	{
-		if ($this->pager)
-			return $this->pager;
+		$pager = parent::getPager();
+		$pager
+			->setPageSize(100)
+			->setCurrentPage($this->filter->p)
+			->setPageRange(24)
+		;
 
-		$sql = $this->buildQuery();
-		//preg_replace select ... -> select count()
+		return $pager;
 	}
 
-	/**
-	 * @return $this
-	 */
-	public function reset()
-	{
-		$this->pager = null;
-		$this->rows = null;
-		$this->query = null;
-
-		return $this;
-	}
 
 	/**
 	 * @throws \RuntimeException
 	 * @return array
 	 */
-	protected function buildQuery()
+	public function buildQuery()
 	{
-		if ($this->query)
-			return $this->query;
-
 		if (!$this->filter)
 			throw new \RuntimeException('You must setup filter before calling this method!');
 
 		$this->filter->makeFilters();
 
-		$params = [];
+		$this->params = [];
 		$where = [];
 		$order = '';
 
-		$this->appendFilterCondition($where, $order, $params);
+		$this->appendFilterCondition($where, $order);
 
-		$sql = 'select t.* from general_log t';
+		$sql = "
+			select
+				t.*
+			from
+				general_log t
+				inner join (
+					select
+						thread_id,
+						concat(UNIX_TIMESTAMP(max(event_time)), ' ', thread_id) as maxTime
+					from
+						general_log
+					group by thread_id
+				) t2 on t.thread_id = t2.thread_id
+		";
+
 		if ($where)
 			$sql .= ' where ' . implode(' and ', $where);
 
 		if ($order)
 			$sql .= ' order by ' . $order;
 
-		$this->query = [
-			'sql' => $sql,
-			'params' => $params
-		];
+		$this->query = $sql;
 
 		return $this->query;
 	}
 
-	protected function appendFilterCondition(&$where, &$order, &$params)
+	protected function appendFilterCondition(&$where, &$order)
 	{
 		foreach ($this->filter->getAttrNames() as $attr) {
 			$value = $this->filter->getAttribute($attr);
@@ -120,27 +89,32 @@ class GeneralLog extends grid\Grid
 			switch ($attr) {
 				case 'threadId':
 					$where[] = 't.thread_id = :threadId';
-					$params[':threadId'] = $value;
+					$this->params[':threadId'] = $value;
 					break;
 				case 'serverId':
 					$where[] = 't.server_id = :serverId';
-					$params[':serverId'] = $value;
+					$this->params[':serverId'] = $value;
 					break;
 				case 'commandType':
 					$where[] = 't.command_type = :commandType';
-					$params[':commandType'] = $value;
+					$this->params[':commandType'] = $value;
 					break;
 				case 'argument':
 					$where[] = 't.argument like :argument';
-					$params[':argument'] = '%' . $value . '%';
+					$this->params[':argument'] = '%' . $value . '%';
 					break;
 				case 'sortBy':
-					$mode = isset($this->filter->sortMode) ? $this->filter->sortMode : 'asc';
-					$order = $value . ' ' . $mode;
+					$order = $this->getOrderSql($value);
 					break;
-				default:
-					throw new \RuntimeException('Unknown attribute name "' . $attr . '".');
 			}
+		}
+	}
+
+	protected function getOrderSql($sort)
+	{
+		switch ($sort) {
+			case 'default';
+				return 't2.maxTime desc, t.event_time desc';
 		}
 	}
 } 

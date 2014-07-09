@@ -235,6 +235,20 @@ class Kit implements interfaces\Kit
 	}
 
 	/**
+	 * @param int $itemCount
+	 * @return \KZ\grid\Pager
+	 */
+	public function makePager($itemCount)
+	{
+		return $this->makeInstance(
+			'\KZ\grid\Pager',
+			'pager',
+			[$itemCount],
+			'\KZ\grid\interfaces\Pager'
+		);
+	}
+
+	/**
 	 * @param $className
 	 * @param $configKey
 	 * @param array $constructParams

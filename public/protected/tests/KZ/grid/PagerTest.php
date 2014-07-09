@@ -41,5 +41,29 @@ class PagerTest extends \PHPUnit_Framework_TestCase
 		$this->assertEquals(0, $pager->getOffset());
 		$this->assertEquals(1, $pager->getCurrentPage());
 	}
+
+	public function testPagesInRange()
+	{
+		$pager = new Pager(100);
+		$pager
+			->setPageSize(2)
+			->setPageRange(5)
+		;
+
+		$this->assertEquals([1,2,3,4,5], $pager->getPagesInRange());
+
+		$pager->setCurrentPage(50);
+		$this->assertEquals([46,47,48,49,50], $pager->getPagesInRange());
+
+		$pager->setCurrentPage(30);
+		$this->assertEquals([28,29,30,31,32], $pager->getPagesInRange());
+
+		$pager = new Pager(10);
+		$pager
+			->setPageSize(5)
+			->setPageRange(5)
+		;
+		$this->assertEquals([1,2], $pager->getPagesInRange());
+	}
 }
  

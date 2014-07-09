@@ -93,4 +93,10 @@ interface Kit
 	 * @return \KZ\Controller\interfaces\Response
 	 */
 	public function makeResponse(\KZ\Controller\interfaces\Request $request);
+
+	/**
+	 * @param int $itemCount
+	 * @return \KZ\grid\Pager
+	 */
+	public function makePager($itemCount);
 } 

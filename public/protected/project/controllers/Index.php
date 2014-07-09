@@ -13,10 +13,17 @@ class Index extends \KZ\Controller
 
 	public function actionIndex()
 	{
-		$mysqlLog = new \tables\GeneralLog();
+		$generalLog = new \tables\GeneralLog();
 
-		echo $this->view->render('index/index', [
-			'mysqlLog' => $mysqlLog
+		$filter = new \models\GeneralLogFilter();
+		$filter->setAttributes($_GET);
+
+		$grid = new \grids\GeneralLog($this->registry, $generalLog);
+		$grid->setFilter($filter);
+
+		$this->render('index/index', [
+			'generalLog' => $generalLog,
+			'grid' => $grid
 		]);
 	}
 
@@ -28,13 +35,14 @@ class Index extends \KZ\Controller
 		$this->redirect($this->makeLink('index/index'));
 	}
 
-	public function actionTest()
+	public function actionCreateKeys()
 	{
-		$filter = new \models\GeneralLogFilter();
-		$grid = new \grids\GeneralLog($this->registry);
-		$grid->setFilter($filter);
+		$model = new \tables\GeneralLog();
 
-		var_dump($grid);
+		if (!$model->isKeysCreated())
+			$model->createKeys();
+
+		$this->redirect($this->makeLink('index/index'));
 	}
 
 	public function actionUpdate()

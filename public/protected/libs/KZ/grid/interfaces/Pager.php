@@ -64,4 +64,15 @@ interface Pager
 	 * @return int
 	 */
 	public	function getPageCount();
+
+	/**
+	 * @param int $range
+	 * @return $this
+	 */
+	public function setPageRange($range);
+
+	/**
+	 * @return array
+	 */
+	public function getPagesInRange();
 } 

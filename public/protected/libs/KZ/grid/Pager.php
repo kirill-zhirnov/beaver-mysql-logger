@@ -19,6 +19,8 @@ class Pager implements interfaces\Pager
 	 */
 	protected $currentPage = 1;
 
+	protected $pageRange = 5;
+
 	/**
 	 * @param int $itemCount
 	 * @throws \InvalidArgumentException
@@ -120,5 +122,32 @@ class Pager implements interfaces\Pager
 	public function getPageCount()
 	{
 		return (int) ceil($this->itemCount / $this->pageSize);
+	}
+
+	/**
+	 * @param int $range
+	 * @return $this
+	 */
+	public function setPageRange($range)
+	{
+		$this->pageRange = $range;
+
+		return $this;
+	}
+
+	/**
+	 * @return array
+	 */
+	public function getPagesInRange()
+	{
+		$start = max(1, $this->getCurrentPage() - intval($this->pageRange / 2));
+		$end = $start + $this->pageRange - 1;
+
+		if ($end > $this->getPageCount()) {
+			$end = $this->getPageCount();
+			$start = max(1, $end - $this->pageRange + 1);
+		}
+
+		return array_keys(array_fill($start, $end - $start + 1, 1));
 	}
 }

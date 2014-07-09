@@ -6232,4 +6232,15 @@ form .errors > li:last-of-type {
 .bs-callout.bs-callout-bg {
   background: #f8f8f8;
 }
+.general-log thead th {
+  white-space: nowrap;
+}
+.general-log .another-thread {
+  background: #d9edf7;
+  text-align: center;
+  font-size: 12px;
+}
+.general-log .command-type {
+  text-align: center;
+}
 /*# sourceMappingURL=styles.css.map */
