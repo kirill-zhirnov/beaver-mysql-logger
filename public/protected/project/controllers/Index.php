@@ -16,7 +16,7 @@ class Index extends \KZ\Controller
 		$generalLog = new \tables\GeneralLog();
 
 		$filter = new \models\GeneralLogFilter();
-		$filter->setAttributes($_GET);
+		$this->setAttrsForModels([$filter], ['post', 'get']);
 
 		$grid = new \grids\GeneralLog($this->registry, $generalLog);
 		$grid->setFilter($filter);

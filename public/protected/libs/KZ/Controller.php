@@ -70,31 +70,69 @@ abstract class Controller
 		}
 	}
 
+	public function applyGetAttributes()
+	{
+		return $this->setAttrsForModels(func_get_args(), ['get']);
+	}
+
 	public function posted()
 	{
+		return $this->setAttrsForModels(func_get_args(), ['post']);
+	}
+
+	/**
+	 * @param model\interfaces\Model[] $models
+	 * @param array $sources
+	 * @return bool
+	 */
+	public function setAttrsForModels(array $models, array $sources = ['post', 'get'])
+	{
+		$out = false;
+		foreach ($this->getModelsByArgs($models) as $model) {
+			/** @var string $prefix */
+			$prefix = $this->view->helper('html')->getModelPrefix($model);
+
+			foreach ($sources as $source) {
+				switch ($source) {
+					case 'post':
+						$source = &$_POST;
+						break;
+					case 'get':
+						$source = &$_GET;
+						break;
+				}
+
+				if (isset($source[$prefix])) {
+					$model->setAttributes($source[$prefix]);
+					$out = true;
+					break;
+				}
+			}
+		}
+
+		return $out;
+	}
+
+	/**
+	 * @param array $args
+	 * @throws \UnexpectedValueException
+	 * @return array
+	 */
+	public function getModelsByArgs(array $args)
+	{
 		$models = [];
-		foreach (func_get_args() as $model) {
+		foreach ($args as $model) {
 			if (is_array($model))
 				$models = array_merge($models, $model);
 			else
 				$models[] = $model;
 		}
 
-		$out = false;
-		foreach ($models as $model) {
+		foreach ($models as $model)
 			if (!$model instanceof model\interfaces\Model)
 				throw new \UnexpectedValueException('Argument must be instance of KZ\model\interfaces\Model or an array!');
 
-			/** @var string $prefix */
-			$prefix = $this->view->helper('html')->getModelPrefix($model);
-
-			if (isset($_POST[$prefix])) {
-				$model->setAttributes($_POST[$prefix]);
-				$out = true;
-			}
-		}
-
-		return $out;
+		return $models;
 	}
 
 	/**

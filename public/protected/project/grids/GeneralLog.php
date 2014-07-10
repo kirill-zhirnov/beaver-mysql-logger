@@ -22,6 +22,14 @@ class GeneralLog extends grid\Grid
 		return $this;
 	}
 
+	/**
+	 * @return \models\GeneralLogFilter
+	 */
+	public function getFilter()
+	{
+		return $this->filter;
+	}
+
 	public function getPager()
 	{
 		$pager = parent::getPager();
@@ -72,7 +80,7 @@ class GeneralLog extends grid\Grid
 
 		if ($order)
 			$sql .= ' order by ' . $order;
-
+\fb::log($sql);
 		$this->query = $sql;
 
 		return $this->query;
@@ -83,7 +91,7 @@ class GeneralLog extends grid\Grid
 		foreach ($this->filter->getAttrNames() as $attr) {
 			$value = $this->filter->getAttribute($attr);
 
-			if (!isset($value))
+			if (!isset($value) || $value == '')
 				continue;
 
 			switch ($attr) {
@@ -102,6 +110,14 @@ class GeneralLog extends grid\Grid
 				case 'argument':
 					$where[] = 't.argument like :argument';
 					$this->params[':argument'] = '%' . $value . '%';
+					break;
+				case 'eventTime':
+					$where[] = 't.event_time like :eventTime';
+					$this->params[':eventTime'] = $value . '%';
+					break;
+				case 'userHost':
+					$where[] = 't.user_host like :userHost';
+					$this->params[':userHost'] = '%' . $value . '%';
 					break;
 				case 'sortBy':
 					$order = $this->getOrderSql($value);

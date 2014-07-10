@@ -6232,15 +6232,56 @@ form .errors > li:last-of-type {
 .bs-callout.bs-callout-bg {
   background: #f8f8f8;
 }
-.general-log thead th {
-  white-space: nowrap;
+.general-log {
+  /* column width */
 }
-.general-log .another-thread {
+.general-log .thread-id {
+  width: 95px;
+}
+.general-log .command-type {
+  width: 140px;
+}
+.general-log .event-time {
+  width: 130px;
+}
+.general-log .server-id {
+  width: 100px;
+}
+.general-log .user-host {
+  width: 100px;
+}
+.general-log .grid thead th {
+  white-space: nowrap;
+  text-align: center;
+}
+.general-log .grid .another-thread {
   background: #d9edf7;
   text-align: center;
   font-size: 12px;
 }
-.general-log .command-type {
+.general-log .grid .thread-id,
+.general-log .grid .command-type,
+.general-log .grid .server-id {
   text-align: center;
+}
+.general-log .grid .event-time .date {
+  color: #777777;
+}
+.general-log .grid .event-time .time {
+  display: block;
+  text-align: right;
+  margin-bottom: 5px;
+}
+.general-log .grid-filter .form-control {
+  padding-left: 5px;
+  padding-right: 5px;
+}
+.general-log .grid-filter .sort-by {
+  width: auto;
+  display: inline-block;
+}
+.general-log .grid-filter .submit-row {
+  background: #f9f9f9;
+  text-align: right;
 }
 /*# sourceMappingURL=styles.css.map */

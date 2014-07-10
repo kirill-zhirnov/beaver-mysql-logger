@@ -1,13 +1,15 @@
 <?php
-/** @var \tables\GeneralLog $generalLog */
-/** @var \grids\GeneralLog $grid */
-/** @var \KZ\view\helpers\Link $link */
+	/** @var \tables\GeneralLog $generalLog */
+	/** @var \grids\GeneralLog $grid */
+	/** @var \KZ\view\helpers\Link $link */
 
-$link = $this->helper('link');
-$threadId = null;
+	$link = $this->helper('link');
+	$threadId = null;
 ?>
 <div class="table-responsive general-log">
-	<table class="table table-hover table-bordered">
+	<?=$this->renderPartial('index/grid/filter', ['grid' => $grid])?>
+	<br/>
+	<table class="table table-hover table-bordered grid table-striped">
 		<thead>
 			<tr>
 				<th>Thread ID</th>
@@ -29,7 +31,7 @@ $threadId = null;
 					<?php $threadId = $row['thread_id']?>
 				<?php endif?>
 				<tr>
-					<td><?=$row['thread_id']?></td>
+					<td class="thread-id"><?=$row['thread_id']?></td>
 					<td class="command-type">
 						<?php if ($row['command_type'] == 'Connect'):?>
 							<span class="glyphicon glyphicon-flash"></span>
@@ -44,53 +46,21 @@ $threadId = null;
 						<?php endif?>
 						<?=$row['command_type']?>
 					</td>
-					<td><?=$row['argument']?></td>
-					<td><?=$row['event_time']?></td>
-					<td><?=$row['server_id']?></td>
-					<td><?=$row['user_host']?></td>
+					<td class="argument"><?=$row['argument']?></td>
+					<td class="event-time">
+						<?php
+							$date = new \DateTime($row['event_time']);
+						?>
+						<time class="time"><?=$date->format('H:i:s')?></time>
+						<time class="date"><?=$date->format('d.m.Y')?></time>
+					</td>
+					<td class="server-id"><?=$row['server_id']?></td>
+					<td class="user-host"><?=$row['user_host']?></td>
 				</tr>
 			<?php endforeach?>
 		</tbody>
 	</table>
-	<?php
-		$pager = $grid->getPager();
-		$pagesInRange = $pager->getPagesInRange();
-	?>
-	<ul class="pagination pagination-sm">
-		<?php
-			$classes = [];
-			if (in_array(1, $pagesInRange))
-				$classes[] = 'disabled';
-		?>
-		<li <?php if ($classes):?>class="<?=implode(' ', $classes)?>"<?php endif?>>
-			<a href="<?=$link->get('index/index', ['p' => 1])?>">
-				<span>&laquo;</span> First
-			</a>
-		</li>
-		<?php foreach ($pagesInRange as $page):?>
-			<?php
-				$classes = [];
-				if ($page == $pager->getCurrentPage())
-					$classes[] = 'active';
-
-				$url = $link->get('index/index', ['p' => $page]);
-			?>
-			<li <?php if ($classes):?>class="<?=implode(' ', $classes)?>"<?php endif?>>
-				<a href="<?=$url?>"><?=$page?></a>
-			</li>
-		<?php endforeach?>
-		<?php
-			$last = $pager->getPageCount();
-			$classes = [];
-			if (in_array($last, $pagesInRange))
-				$classes[] = 'disabled';
-		?>
-		<li <?php if ($classes):?>class="<?=implode(' ', $classes)?>"<?php endif?>>
-			<a href="<?=$link->get('index/index', ['p' => $last])?>">
-				Last <span>&raquo;</span>
-			</a>
-		</li>
-	</ul>
+	<?=$this->renderPartial('index/grid/pagination')?>
 </div>
 <script type="text/javascript">
 	$(function() {

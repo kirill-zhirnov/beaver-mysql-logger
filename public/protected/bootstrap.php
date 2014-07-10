@@ -12,3 +12,6 @@ set_include_path(get_include_path() . PATH_SEPARATOR . implode(PATH_SEPARATOR, [
 spl_autoload_register();
 
 $config = require 'config/main.php';
+
+require_once 'FirePHPCore/FirePHP.class.php';
+require_once 'FirePHPCore/fb.php';

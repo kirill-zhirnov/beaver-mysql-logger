@@ -148,6 +148,9 @@ class Pager implements interfaces\Pager
 			$start = max(1, $end - $this->pageRange + 1);
 		}
 
+		if (!$end)
+			return [];
+
 		return array_keys(array_fill($start, $end - $start + 1, 1));
 	}
 }

@@ -65,5 +65,16 @@ class PagerTest extends \PHPUnit_Framework_TestCase
 		;
 		$this->assertEquals([1,2], $pager->getPagesInRange());
 	}
+
+	public function testEmptyPager()
+	{
+		$pager = new Pager(0);
+		$pager
+			->setPageSize(2)
+			->setPageRange(5)
+		;
+
+		$this->assertEquals([], $pager->getPagesInRange());
+	}
 }
  

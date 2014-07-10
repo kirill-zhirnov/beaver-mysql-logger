@@ -48,6 +48,32 @@ class Html extends view\Helper
 		return '<input ' . $this->getTagAttrs($htmlAttributes) . ' />';
 	}
 
+	public function dropDownList($model, $attribute, array $list = [], array $htmlAttributes = [])
+	{
+		$htmlAttributes = array_replace([
+			'name' => $this->name($model, $attribute),
+			'value' => $this->value($model, $attribute, false),
+			'id' => $this->id($model, $attribute)
+		], $htmlAttributes);
+
+		$value = $htmlAttributes['value'];
+		unset($htmlAttributes['value']);
+
+		$out = '<select ' . $this->getTagAttrs($htmlAttributes) . '>';
+		foreach ($list as $optVal => $label) {
+			$attrs = ['value' => $optVal];
+
+			if ($optVal == $value)
+				$attrs['selected'] = 'selected';
+
+			$out .= '<option ' . $this->getTagAttrs($attrs) . '>' . $label . '</option>';
+		}
+
+		$out .= '</select>';
+
+		return $out;
+	}
+
 	/**
 	 * Generates <textarea></textarea>.
 	 *

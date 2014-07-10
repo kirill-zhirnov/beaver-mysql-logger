@@ -12,6 +12,10 @@ class GeneralLogFilter extends \KZ\model\Filter
 
 	public $argument;
 
+	public $eventTime;
+
+	public $userHost;
+
 	public $sortBy = 'default';
 
 	public $p = 1;
@@ -27,6 +31,8 @@ class GeneralLogFilter extends \KZ\model\Filter
 				['validateCommandType']
 			],
 			'argument' => [],
+			'eventTime' => [],
+			'userHost' => [],
 			'sortBy' => [
 				['validateSortBy']
 			],

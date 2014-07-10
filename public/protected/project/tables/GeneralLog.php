@@ -120,7 +120,8 @@ class GeneralLog extends table\Mysql
 		$stmt = $this->makeStmt("
 			alter table general_log
 				add index debugThreadId (thread_id, event_time),
-				add index debugEventTime (event_time)
+				add index debugEventTime (event_time),
+				add index debugCommandType (command_type)
 		");
 		$stmt->execute();
 		$stmt->closeCursor();
@@ -133,7 +134,8 @@ class GeneralLog extends table\Mysql
 	{
 		$requiredKeys = [
 			'debugThreadId' => 1,
-			'debugEventTime' => 1
+			'debugEventTime' => 1,
+			'debugCommandType' => 1
 		];
 
 		foreach ($this->showKeys() as $row)

@@ -81,18 +81,72 @@ form .errors > li:last-of-type {
 }
 
 .general-log {
-
-    thead th {
-        white-space: nowrap;
-    }
-
-    .another-thread {
-        background: @state-info-bg;
-        text-align: center;
-        font-size: @font-size-small;
+    /* column width */
+    .thread-id {
+        width: 95px;
     }
 
     .command-type {
-        text-align: center;
+        width: 140px;
+    }
+
+    .event-time {
+        width: 130px;
+    }
+
+    .server-id {
+        width: 100px;
+    }
+
+    .user-host {
+        width: 100px;
+    }
+
+    .grid {
+        thead th {
+            white-space: nowrap;
+            text-align: center;
+        }
+
+        .another-thread {
+            background: @state-info-bg;
+            text-align: center;
+            font-size: @font-size-small;
+        }
+
+        .thread-id,
+        .command-type,
+        .server-id {
+            text-align: center;
+        }
+
+        .event-time {
+            .date {
+                color: @gray-light;
+            }
+
+            .time {
+                display: block;
+                text-align: right;
+                margin-bottom: @padding-small-vertical;
+            }
+        }
+    }
+
+    .grid-filter {
+        .form-control {
+            padding-left: (@padding-small-horizontal / 2);
+            padding-right: (@padding-small-horizontal / 2);
+        }
+
+        .sort-by {
+            width: auto;
+            display: inline-block;
+        }
+
+        .submit-row {
+            background: @table-bg-accent;
+            text-align: right;
+        }
     }
 }
