@@ -64,16 +64,22 @@
 			</tr>
 			<tr>
 				<td colspan="6" class="submit-row">
-					<?=$html->label($model, 'sortBy', 'Sort by', [])?>
+					<?=$html->label($model, 'sortBy', 'Sort by:', [])?>
 					<?=$html->dropDownList(
 						$model,
 						'sortBy',
 						$model->getSortByOptions(),
-						['class' => 'form-control sort-by']
+						['class' => 'form-control sort-by input-sm']
 					)?>
 					<?=$html->errors($model, 'sortBy')?>
-					<button type="submit" class="btn btn-default">Search</button>
-					<button type="button" class="btn btn-default grid-reset">Reset</button>
+					<button type="submit" class="btn btn-primary btn-sm">
+						<span class="glyphicon glyphicon-search"></span>
+						Search
+					</button>
+					<button type="button" class="btn btn-default btn-sm grid-reset">
+						<span class="glyphicon glyphicon-remove-circle"></span>
+						Reset
+					</button>
 				</td>
 			</tr>
 		</tbody>

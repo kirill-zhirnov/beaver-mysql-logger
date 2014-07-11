@@ -44,7 +44,7 @@ if (typeof(kz) == 'undefined' || !kz) {
 
 	kz.widget.prototype.afterSetup = function()
 	{
-		if (typeof(this.config.afterSetup) == 'callback')
+		if (typeof(this.config.afterSetup) == 'function')
 			this.config.afterSetup.call(this);
 
 		this.el.trigger('afterSetup.widget', [this]);

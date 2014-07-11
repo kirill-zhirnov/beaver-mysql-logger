@@ -144,4 +144,12 @@ class GeneralLog extends table\Mysql
 
 		return empty($requiredKeys);
 	}
+
+	public function clearLogs()
+	{
+		$stmt = $this->makeStmt("
+			truncate table general_log
+		");
+		$stmt->execute();
+	}
 } 

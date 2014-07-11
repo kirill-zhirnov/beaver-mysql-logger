@@ -32,7 +32,7 @@
 				<?php endif?>
 				<tr>
 					<td class="thread-id"><?=$row['thread_id']?></td>
-					<td class="command-type">
+					<td class="command-type type-<?=strtolower(str_replace(' ', '-', $row['command_type']))?>">
 						<?php if ($row['command_type'] == 'Connect'):?>
 							<span class="glyphicon glyphicon-flash"></span>
 						<?php elseif ($row['command_type'] == 'Quit'):?>
@@ -46,7 +46,9 @@
 						<?php endif?>
 						<?=$row['command_type']?>
 					</td>
-					<td class="argument"><?=$row['argument']?></td>
+					<td class="argument">
+						<?=$this->helper('sqlFormatter')->format($row['argument'])?>
+					</td>
 					<td class="event-time">
 						<?php
 							$date = new \DateTime($row['event_time']);
@@ -64,7 +66,24 @@
 </div>
 <script type="text/javascript">
 	$(function() {
-		var grid = new kz.grid($('.general-log'));
+		var grid = new kz.grid($('.general-log'), {
+			afterSetup : function() {
+				var maxHeight = null;
+				this.el.find('.argument pre').click(function(e) {
+					e.preventDefault();
+
+					$el = $(this);
+console.log($el.height());
+					return;
+					if ($el.css('max-height') != 'none') {
+						maxHeight = $el.css('max-height');
+						$el.css('max-height', 'none');
+					} else {
+						$el.css('max-height', maxHeight);
+					}
+				});
+			}
+		});
 		grid.setup();
 	});
 </script>

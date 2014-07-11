@@ -131,6 +131,33 @@ form .errors > li:last-of-type {
                 margin-bottom: @padding-small-vertical;
             }
         }
+
+        .command-type.type-connect {
+            color: @brand-warning;
+        }
+
+        .command-type.type-query {
+            color: @brand-info;
+        }
+
+        .command-type.type-quit {
+            color: @gray-light;
+        }
+
+        .command-type.type-init-db {
+            color: @brand-success;
+        }
+
+        .command-type.type-field-list {
+            color: darken(@brand-success, 15%);
+        }
+
+        .argument pre {
+            margin-bottom: 0;
+            max-height: 120px;
+            overflow: hidden;
+            cursor: pointer;
+        }
     }
 
     .grid-filter {
@@ -147,6 +174,12 @@ form .errors > li:last-of-type {
         .submit-row {
             background: @table-bg-accent;
             text-align: right;
+        }
+
+        .submit-row label {
+            font-size: @font-size-small;
+            font-weight: normal;
+            margin-right: @padding-small-horizontal;
         }
     }
 }

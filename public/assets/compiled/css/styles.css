@@ -6272,6 +6272,27 @@ form .errors > li:last-of-type {
   text-align: right;
   margin-bottom: 5px;
 }
+.general-log .grid .command-type.type-connect {
+  color: #f0ad4e;
+}
+.general-log .grid .command-type.type-query {
+  color: #5bc0de;
+}
+.general-log .grid .command-type.type-quit {
+  color: #777777;
+}
+.general-log .grid .command-type.type-init-db {
+  color: #5cb85c;
+}
+.general-log .grid .command-type.type-field-list {
+  color: #3d8b3d;
+}
+.general-log .grid .argument pre {
+  margin-bottom: 0;
+  max-height: 120px;
+  overflow: hidden;
+  cursor: pointer;
+}
 .general-log .grid-filter .form-control {
   padding-left: 5px;
   padding-right: 5px;
@@ -6283,5 +6304,10 @@ form .errors > li:last-of-type {
 .general-log .grid-filter .submit-row {
   background: #f9f9f9;
   text-align: right;
+}
+.general-log .grid-filter .submit-row label {
+  font-size: 12px;
+  font-weight: normal;
+  margin-right: 10px;
 }
 /*# sourceMappingURL=styles.css.map */

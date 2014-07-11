@@ -19,6 +19,15 @@ return [
 
 		'view' => [
 			'templatesPath' => realpath(PROTECTED_PATH . '/project/views'),
+			'config' => [
+				'helperKit' => [
+					'config' => [
+						'helpers' => [
+							'sqlformatter' => '\helpers\SqlFormatter'
+						]
+					]
+				]
+			]
 		],
 
 		'registry' => [
