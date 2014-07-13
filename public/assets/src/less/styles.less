@@ -1,6 +1,8 @@
 @import "../bootstrap/less/bootstrap.less";
 @import "variables.less";
 
+@import (less) "../datetimepicker/jquery.datetimepicker.css";
+
 body {
     padding-top: 20px;
     padding-bottom: 20px;
@@ -152,11 +154,26 @@ form .errors > li:last-of-type {
             color: darken(@brand-success, 15%);
         }
 
-        .argument pre {
-            margin-bottom: 0;
-            max-height: 120px;
-            overflow: hidden;
-            cursor: pointer;
+        .argument {
+            max-width: 574px;
+
+            pre {
+                margin-bottom: 0;
+                max-height: 120px;
+                overflow-y: hidden;
+                overflow-x: auto;
+            }
+
+            .pointer {
+                cursor: pointer;
+            }
+
+            .actions {
+                padding-bottom: 0;
+                margin-bottom: 0;
+                padding-top: @padding-large-vertical;
+                text-align: right;
+            }
         }
     }
 
@@ -181,5 +198,27 @@ form .errors > li:last-of-type {
             font-weight: normal;
             margin-right: @padding-small-horizontal;
         }
+    }
+}
+
+.modal-explain {
+    table {
+        max-width: (@modal-lg - @modal-inner-padding*2);
+
+        tbody {
+            .possible-keys {
+                word-wrap: break-word;
+                max-width: 250px;
+            }
+        }
+    }
+
+    .query {
+        overflow: hidden;
+        max-width: (@modal-lg - @modal-inner-padding*2);
+    }
+
+    .info {
+        text-align: right;
     }
 }

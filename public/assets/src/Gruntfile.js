@@ -134,6 +134,7 @@ module.exports = function(grunt) {
 
 					//jquery plugins
 					'js/jquery/jquery.form.js',
+					'datetimepicker/jquery.datetimepicker.js',
 
 					//project libs and files:
 					'js/extend.js',

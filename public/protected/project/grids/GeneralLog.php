@@ -6,6 +6,8 @@ use KZ\grid\interfaces;
 
 class GeneralLog extends grid\Grid
 {
+	protected $treadsCount;
+
 	/**
 	 * @var \KZ\model\Filter
 	 */
@@ -42,7 +44,6 @@ class GeneralLog extends grid\Grid
 		return $pager;
 	}
 
-
 	/**
 	 * @throws \RuntimeException
 	 * @return array
@@ -62,7 +63,12 @@ class GeneralLog extends grid\Grid
 
 		$sql = "
 			select
-				t.*
+				t.*,
+				if (
+					command_type = 'Connect',
+					0,
+					if (command_type = 'Quit', 2, 1)
+				) as orderTypeKey
 			from
 				general_log t
 				inner join (
@@ -80,10 +86,36 @@ class GeneralLog extends grid\Grid
 
 		if ($order)
 			$sql .= ' order by ' . $order;
-\fb::log($sql);
+
 		$this->query = $sql;
 
 		return $this->query;
+	}
+
+	public function reset()
+	{
+		$this->treadsCount = null;
+
+		return parent::reset;
+	}
+
+	public function getTreadsCount()
+	{
+		if (isset($this->threadsCount))
+			return $this->threadsCount;
+
+		$stmt = $this->table->makeStmt(
+			$this->buildCountQuery($this->getQuery(), 'count(distinct t.thread_id)'),
+			$this->getParams()
+		);
+		$stmt->execute();
+
+		$row = $stmt->fetch(\PDO::FETCH_NUM);
+		$stmt->closeCursor();
+
+		$this->threadsCount = intval($row[0]);
+
+		return $this->threadsCount;
 	}
 
 	protected function appendFilterCondition(&$where, &$order)
@@ -129,8 +161,16 @@ class GeneralLog extends grid\Grid
 	protected function getOrderSql($sort)
 	{
 		switch ($sort) {
-			case 'default';
-				return 't2.maxTime desc, t.event_time desc';
+			case 'default':
+				return 't2.maxTime desc, t.event_time desc, orderTypeKey asc';
+			case 'event_time_asc':
+				return 't.event_time asc';
+			case 'event_time_desc':
+				return 't.event_time desc';
+			case 'thread_id_asc':
+				return 't.thread_id asc';
+			case 'thread_id_desc':
+				return 't.thread_id desc';
 		}
 	}
 } 

@@ -5,6 +5,8 @@ use KZ\db\table;
 
 class GeneralLog extends table\Mysql
 {
+	protected $logVariables;
+
 	/**
 	 * Return table name.
 	 *
@@ -44,6 +46,8 @@ class GeneralLog extends table\Mysql
 			$stmt->execute();
 		}
 
+		$this->logVariables = null;
+
 		return $this;
 	}
 
@@ -66,6 +70,9 @@ class GeneralLog extends table\Mysql
 	 */
 	public function getLogVariables()
 	{
+		if (isset($this->logVariables))
+			return $this->logVariables;
+
 		$stmt = $this->makeStmt("
 			show variables where Variable_name in ('log_output', 'general_log')
 		");
@@ -77,7 +84,9 @@ class GeneralLog extends table\Mysql
 
 		$stmt->closeCursor();
 
-		return $out;
+		$this->logVariables = $out;
+
+		return $this->logVariables;
 	}
 
 	public function getCommandTypeOptions()
@@ -151,5 +160,36 @@ class GeneralLog extends table\Mysql
 			truncate table general_log
 		");
 		$stmt->execute();
+	}
+
+	/**
+	 * @param string $commandType
+	 * @param $argument
+	 * @return bool
+	 */
+	public function isAllowExplain($commandType, $argument)
+	{
+		if ($commandType != 'Query')
+			return false;
+
+		return preg_match('#^\s*select\s+#i', $argument);
+	}
+
+	public function calcQueriesInThread($threadId)
+	{
+		$stmt = $this->makeStmt("
+			select
+				count(*)
+			from
+				general_log
+			where
+				thread_id = :threadId
+		", [':threadId' => $threadId]);
+		$stmt->execute();
+
+		$row = $stmt->fetch(\PDO::FETCH_NUM);
+		$stmt->closeCursor();
+
+		return $row[0];
 	}
 } 

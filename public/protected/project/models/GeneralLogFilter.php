@@ -65,13 +65,11 @@ class GeneralLogFilter extends \KZ\model\Filter
 	public function getSortByOptions(array $out = [])
 	{
 		return array_merge($out, [
-			'default' => 'Default',
-			'event_time' => 'Event time',
-			'user_host' => 'User host',
-			'thread_id' => 'Thread id',
-			'server_id' => 'Server id',
-			'command_type' => 'Command type',
-			'argument' => 'Argument'
+			'default' => 'By event time desc, grouped by thread',
+			'event_time_asc' => 'Event time ASC',
+			'event_time_desc' => 'Event time DESC',
+			'thread_id_asc' => 'Thread id ASC',
+			'thread_id_desc' => 'Thread id DESC',
 		]);
 	}
 } 

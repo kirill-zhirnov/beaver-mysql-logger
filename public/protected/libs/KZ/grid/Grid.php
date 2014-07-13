@@ -111,7 +111,7 @@ abstract class Grid implements interfaces\Grid
 	public function getQuery()
 	{
 		if (!$this->query)
-			$this->buildQuery();
+			$this->query = $this->buildQuery();
 
 		return $this->query;
 	}
@@ -122,7 +122,7 @@ abstract class Grid implements interfaces\Grid
 	public function getParams()
 	{
 		if (!$this->params)
-			$this->buildQuery();
+			$this->getQuery();
 
 		return $this->params;
 	}
@@ -132,6 +132,9 @@ abstract class Grid implements interfaces\Grid
 	 */
 	public function getPager()
 	{
+		if ($this->pager)
+			return $this->pager;
+
 		$stmt = $this->table->makeStmt(
 			$this->buildCountQuery($this->getQuery()),
 			$this->getParams()
@@ -141,7 +144,9 @@ abstract class Grid implements interfaces\Grid
 		$row = $stmt->fetch(\PDO::FETCH_NUM);
 		$stmt->closeCursor();
 
-		return $this->registry->getKit()->makePager($row[0]);
+		$this->pager = $this->registry->getKit()->makePager($row[0]);
+
+		return $this->pager;
 	}
 
 	abstract protected function buildQuery();

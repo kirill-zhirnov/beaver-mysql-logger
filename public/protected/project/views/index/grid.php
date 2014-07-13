@@ -9,6 +9,7 @@
 <div class="table-responsive general-log">
 	<?=$this->renderPartial('index/grid/filter', ['grid' => $grid])?>
 	<br/>
+	<?=$this->renderPartial('index/grid/paginationInfo', ['grid' => $grid])?>
 	<table class="table table-hover table-bordered grid table-striped">
 		<thead>
 			<tr>
@@ -22,7 +23,7 @@
 		</thead>
 		<tbody>
 			<?php foreach ($grid->getRows() as $row):?>
-				<?php if ($threadId != $row['thread_id']):?>
+				<?php if ($grid->getFilter()->sortBy == 'default' && $threadId != $row['thread_id']):?>
 					<?php if ($threadId):?>
 						<tr>
 							<td colspan="6" class="another-thread">another thread</td>
@@ -48,6 +49,24 @@
 					</td>
 					<td class="argument">
 						<?=$this->helper('sqlFormatter')->format($row['argument'])?>
+						<?php if ($grid->getTable()->isAllowExplain($row['command_type'], $row['argument'])):?>
+							<?php
+								$explain = $link->get('index/explain', [
+									'event_time' => $row['event_time'],
+									'user_host' => $row['user_host'],
+									'thread_id' => $row['thread_id'],
+									'server_id' => $row['server_id'],
+									'command_type' => $row['command_type'],
+									'argument' => $row['argument'],
+								]);
+							?>
+							<p class="actions">
+								<a href="<?=$explain?>" class="btn btn-default btn-xs" data-modal="">
+									<span class="glyphicon glyphicon-search"></span>
+									Explain
+								</a>
+							</p>
+						<?php endif?>
 					</td>
 					<td class="event-time">
 						<?php
@@ -62,6 +81,7 @@
 			<?php endforeach?>
 		</tbody>
 	</table>
+	<?=$this->renderPartial('index/grid/paginationInfo', ['grid' => $grid])?>
 	<?=$this->renderPartial('index/grid/pagination')?>
 </div>
 <script type="text/javascript">
@@ -69,18 +89,32 @@
 		var grid = new kz.grid($('.general-log'), {
 			afterSetup : function() {
 				var maxHeight = null;
-				this.el.find('.argument pre').click(function(e) {
+
+				//set cursor pointer:
+				this.el.find('.argument pre').each(function() {
+					$el = $(this);
+
+					if ($el.innerHeight() > 100)
+						$el.addClass('pointer');
+				});
+
+				this.el.on('click', '.argument pre.pointer', function(e) {
 					e.preventDefault();
 
 					$el = $(this);
-console.log($el.height());
-					return;
+
 					if ($el.css('max-height') != 'none') {
 						maxHeight = $el.css('max-height');
 						$el.css('max-height', 'none');
 					} else {
 						$el.css('max-height', maxHeight);
 					}
+				});
+
+				//date picker:
+				this.el.find('.grid-filter .event-time input').datetimepicker({
+					format : 'Y-m-d H:i:s',
+					validateOnBlur : false
 				});
 			}
 		});
