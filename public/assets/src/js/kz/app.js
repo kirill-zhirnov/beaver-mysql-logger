@@ -94,11 +94,15 @@ if (typeof(kz) == 'undefined' || !kz) {
 			var $el = $(this);
 			if ($el.data('ajax-link-instance') instanceof kz.ajaxLink) {
 				var instance = $el.data('ajax-link-instance');
-				console.log(instance);
 			} else {
-				var instance = new kz.ajaxLink($el, {
+				var config = {
 					bindEvents: false
-				});
+				};
+
+				if ($el.data('ajax-link-config'))
+					config = $.extend(config, $el.data('ajax-link-config'));
+
+				var instance = new kz.ajaxLink($el, config);
 				$el.data('ajax-link-instance', instance);
 			}
 

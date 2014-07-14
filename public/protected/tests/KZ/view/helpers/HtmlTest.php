@@ -36,5 +36,36 @@ class HtmlTest extends \PHPUnit_Framework_TestCase
 		$this->assertEquals('KZ_Model_test_sub_0', $html->id('KZ\Model', 'test[sub][0]'));
 		$this->assertEquals('KZ_Model_test_0', $html->id('KZ\Model', 'test[0]'));
 	}
+
+	/**
+	 * @param array $rules
+	 * @param array $methods
+	 * @param bool $rulesExpects
+	 * @return Model
+	 */
+	protected function makeModelMockup(array $rules = null, array $methods = ['rules'], $rulesExpects = false)
+	{
+		if ($rulesExpects === false)
+			$rulesExpects = $this->any();
+
+		if (is_null($rules))
+			$rules = [
+				'name' => [],
+				'surname' => []
+			];
+
+		$model = $this->getMock('\KZ\Model', $methods);
+
+		$model
+			->expects($rulesExpects)
+			->method('rules')
+			->will($this->returnValue($rules))
+		;
+
+		foreach (array_keys($rules) as $attr)
+			$model->{$attr} = null;
+
+		return $model;
+	}
 }
  

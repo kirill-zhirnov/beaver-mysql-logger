@@ -25,6 +25,11 @@ class Setup
 	protected $registry;
 
 	/**
+	 * @var app\Facade
+	 */
+	protected $facade;
+
+	/**
 	 * @param event\interfaces\Event $event
 	 * @throws \UnexpectedValueException
 	 */
@@ -39,6 +44,63 @@ class Setup
 		$this->registry = $this->controllerFront->getRegistry();
 
 		$this->checkMysql();
+	}
+
+	public function onBeforeInitialize(event\interfaces\Event $event)
+	{
+		$this->event = $event;
+		$this->facade = $event->getSender();
+
+		if (!$this->facade instanceof app\Facade)
+			throw new \UnexpectedValueException('Sender must be instance of app\Facade.');
+
+		$this->registry = $this->facade->getRegistry();
+
+		$this->checkSqlitePermissions();
+	}
+
+	protected function checkSqlitePermissions()
+	{
+		$config = $this->registry->getConfig();
+
+		if (!isset($config['components']['db']['connection']['dsn']))
+			return;
+
+		$dsn = $config['components']['db']['connection']['dsn'];
+		if (preg_match('#^sqlite:(.+)#', $dsn, $matches)) {
+			$path = $matches[1];
+			$dir = dirname($path);
+
+			if (!is_file($path) && !is_writable($dir)) {
+				$view = $this->getViewToShowError();
+				echo $view->render('errors/error', [
+					'error' => 'Directory "' . $dir . '" is not <b>writable</b>! Please make it readable and writable for this script process.'
+				]);
+
+				exit();
+			}
+
+			if (!is_file($path))
+				return;
+
+			if (!is_readable($path)) {
+				$view = $this->getViewToShowError();
+				echo $view->render('errors/error', [
+					'error' => 'File "' . $path . '" is not <b>readable</b>! Please make it readable and writable for this script process.'
+				]);
+
+				exit();
+			}
+
+			if (!is_writable($path)) {
+				$view = $this->getViewToShowError();
+				echo $view->render('errors/error', [
+					'error' => 'File "' . $path . '" is not <b>writable</b>! Please make it readable and writable for this script process.'
+				]);
+
+				exit();
+			}
+		}
 	}
 
 	protected function checkMysql()
@@ -75,5 +137,10 @@ class Setup
 		;
 
 		db\table\Mysql::setDefaultConnection($mysql);
+	}
+
+	protected function getViewToShowError()
+	{
+		return $this->registry->getKit()->makeView(realpath(PROTECTED_PATH . '/project/views'));
 	}
 } 

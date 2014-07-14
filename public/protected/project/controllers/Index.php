@@ -8,7 +8,10 @@ class Index extends \KZ\Controller
 	{
 		parent::init();
 
-		$this->view->getLayout()->curLink = 'log';
+		$this->view->getLayout()->curLink = 'generalLog';
+		$this->view->getLayout()->assignData([
+			'pageTitle' => 'General log'
+		]);
 	}
 
 	public function actionIndex()
@@ -50,6 +53,7 @@ class Index extends \KZ\Controller
 		$model = new \tables\GeneralLog();
 		$model->clearLogs();
 
+		$this->flashMessenger->add('Logs was successfully cleared.');
 		$this->redirect($this->makeLink('index/index'));
 	}
 

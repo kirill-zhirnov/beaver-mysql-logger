@@ -13,7 +13,9 @@ if (typeof(kz) == 'undefined' || !kz) {
 			/**
 			 * Bind initial events
 			 */
-			bindEvents : true
+			bindEvents : true,
+
+			confirm : false
 		}, config);
 	}
 
@@ -26,6 +28,9 @@ if (typeof(kz) == 'undefined' || !kz) {
 	kz.ajaxLink.prototype.onClick = function(e)
 	{
 		e.preventDefault();
+
+		if (this.config.confirm && !confirm(this.config.confirm))
+			return;
 
 		var that = this;
 		$.post(this.el.attr('href'), {}, function(data) {

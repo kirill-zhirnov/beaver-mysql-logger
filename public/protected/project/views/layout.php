@@ -13,6 +13,7 @@
 				app.setup();
 			});
 		</script>
+		<title><?=isset($pageTitle) ? $pageTitle : 'Mysql debug'?></title>
 	</head>
 	<body>
 		<div class="container">
@@ -21,7 +22,7 @@
 			<?=$this->renderPartial('layout/flashMessenger')?>
 			<?=$content?>
 		</div>
-		<div id="loading" class="ajax-loading">Loading</div>
+		<div id="loading" class="ajax-loading"><div>Loading...</div></div>
 		<div id="modal" class="modal fade" tabindex="-1">
 			<div class="modal-dialog"></div>
 		</div>

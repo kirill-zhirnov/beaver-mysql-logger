@@ -11,6 +11,9 @@
 	$filter = $grid->getFilter();
 
 	$attrName = $html->name($filter, 'p');
+
+	$url = $link->get('index/index');
+	$url->appendModelAttrs($filter);
 ?>
 <ul class="pagination pagination-sm">
 	<?php
@@ -19,7 +22,7 @@
 			$classes[] = 'disabled';
 	?>
 	<li <?php if ($classes):?>class="<?=implode(' ', $classes)?>"<?php endif?>>
-		<a href="<?=$link->get('index/index', [$attrName => 1])?>">
+		<a href="<?=$url->setParams([$attrName => 1])?>">
 			<span>&laquo;</span> First
 		</a>
 	</li>
@@ -28,11 +31,9 @@
 			$classes = [];
 			if ($page == $pager->getCurrentPage())
 				$classes[] = 'active';
-
-			$url = $link->get('index/index', [$attrName => $page]);
 		?>
 		<li <?php if ($classes):?>class="<?=implode(' ', $classes)?>"<?php endif?>>
-			<a href="<?=$url?>"><?=$page?></a>
+			<a href="<?=$url->setParams([$attrName => $page])?>"><?=$page?></a>
 		</li>
 	<?php endforeach?>
 	<?php
@@ -42,7 +43,7 @@
 			$classes[] = 'disabled';
 	?>
 	<li <?php if ($classes):?>class="<?=implode(' ', $classes)?>"<?php endif?>>
-		<a href="<?=$link->get('index/index', [$attrName => $last])?>">
+		<a href="<?=$url->setParams([$attrName => $last])?>">
 			Last <span>&raquo;</span>
 		</a>
 	</li>

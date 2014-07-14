@@ -4,8 +4,15 @@
 ?>
 <form action="<?=$this->helper('link')->get('setup/index')?>" method="post" role="form" data-form="">
 	<?=$html->formGroup($model, 'dsn')?>
-		<?=$html->label($model, 'dsn', 'DSN:')?>
-		<?=$html->text($model, 'dsn', ['class' => 'form-control'])?>
+		<?=$html->label($model, 'dsn', 'DSN (PDO):')?>
+		<?=$html->text($model, 'dsn', [
+			'class' => 'form-control',
+			'placeholder' => 'mysql:host=localhost;dbname=mysql'
+		])?>
+		<p class="hint">
+			Database must be "mysql". DSN example: mysql:host=localhost;dbname=mysql.
+			<a href="http://php.net/manual/en/pdo.construct.php" target="_blank">About DSN.</a>
+		</p>
 		<?=$html->errors($model, 'dsn')?>
 	</div>
 	<?=$html->formGroup($model, 'username')?>

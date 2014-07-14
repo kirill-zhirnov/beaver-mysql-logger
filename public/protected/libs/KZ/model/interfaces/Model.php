@@ -103,4 +103,19 @@ interface Model
 	 * @return mixed
 	 */
 	public function getDefaultValue($attribute);
+
+	/**
+	 * Returns prefix for links or forms for current model.
+	 *
+	 * @return string
+	 */
+	public function getLinkPrefix();
+
+	/**
+	 * Returns prefix for links or forms for current model.
+	 *
+	 * @param string$className
+	 * @return string
+	 */
+	public static function getModelPrefix($className);
 }

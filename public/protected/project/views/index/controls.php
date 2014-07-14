@@ -17,7 +17,7 @@
 			href="<?=$link->get('index/clearLogs')?>"
 			class="btn btn-warning btn-xs"
 			data-ajax-link=""
-			onclick="return confirm('Are you sure?');"
+			data-ajax-link-config='{"confirm":"Are you sure?"}'
 		>
 			<span class="glyphicon glyphicon-minus"></span>
 			Clear logs

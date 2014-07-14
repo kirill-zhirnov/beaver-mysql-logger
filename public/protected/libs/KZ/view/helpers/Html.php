@@ -12,7 +12,7 @@ class Html extends view\Helper
 	/**
 	 * Generates <label for="id">text</label>
 	 *
-	 * @param $model
+	 * @param modelInterfaces\Model|string $model
 	 * @param $attribute
 	 * @param $text
 	 * @param array $htmlAttributes
@@ -31,7 +31,7 @@ class Html extends view\Helper
 	/**
 	 * Generates <input type="text" />.
 	 *
-	 * @param object|string $model
+	 * @param modelInterfaces\Model|string $model
 	 * @param string $attribute
 	 * @param array $htmlAttributes
 	 * @return string
@@ -77,7 +77,7 @@ class Html extends view\Helper
 	/**
 	 * Generates <textarea></textarea>.
 	 *
-	 * @param object|string $model
+	 * @param modelInterfaces\Model|string $model
 	 * @param $attribute
 	 * @param array $htmlAttributes
 	 * @return string
@@ -95,7 +95,7 @@ class Html extends view\Helper
 	/**
 	 * Generates list of errors for given attribute.
 	 *
-	 * @param $model
+	 * @param modelInterfaces\Model|string $model
 	 * @param $attribute
 	 * @param array $htmlAttributes
 	 * @return string
@@ -106,10 +106,7 @@ class Html extends view\Helper
 			'class' => 'errors'
 		], $htmlAttributes);
 
-		if (!$model instanceof modelInterfaces\Model
-			|| !$model->hasAttribute($attribute)
-			|| !$errors = $model->getErrors($attribute)
-		)
+		if (!$model->hasAttribute($attribute) || !$errors = $model->getErrors($attribute))
 			return;
 
 		$out = '<ul ' . $this->getTagAttrs($htmlAttributes) . '>';
@@ -138,14 +135,14 @@ class Html extends view\Helper
 	/**
 	 * Get attribute value.
 	 *
-	 * @param $model
+	 * @param modelInterfaces\Model|string $model
 	 * @param $attribute
 	 * @param bool $encode
 	 * @return string
 	 */
 	public function value($model, $attribute, $encode = true)
 	{
-		if ($model instanceof modelInterfaces\Model && $model->hasAttribute($attribute)) {
+		if ($model->hasAttribute($attribute)) {
 			$value = $model->getAttribute($attribute);
 
 			return $encode ? $this->encode($value) : $value;
@@ -157,7 +154,7 @@ class Html extends view\Helper
 	/**
 	 * Generates name by $model and attribute.
 	 *
-	 * @param object|string $model
+	 * @param modelInterfaces\Model|string $model
 	 * @param $attribute
 	 * @return string
 	 */
@@ -175,7 +172,7 @@ class Html extends view\Helper
 	/**
 	 * Generates id by $model and attribute.
 	 *
-	 * @param object|string $model
+	 * @param modelInterfaces\Model|string $model
 	 * @param $attribute
 	 * @return string
 	 */
@@ -194,35 +191,32 @@ class Html extends view\Helper
 	/**
 	 * Returns prefix for model
 	 *
-	 * @param object|string $model
+	 * @param modelInterfaces\Model|string $model
 	 * @return string
 	 */
 	public function getModelPrefix($model)
 	{
-		$model = (is_object($model)) ? get_class($model) : $model;
-		return str_replace('\\', '_', $model);
+		return ($model instanceof modelInterfaces\Model)
+			? $model->getLinkPrefix() : \KZ\Model::getModelPrefix($model);
 	}
 
 	/**
 	 * Generates open tag and add special classes in case of error:
 	 * <div class="form-group">
 	 *
-	 * @param $model
+	 * @param modelInterfaces\Model $model
 	 * @param $attribute
 	 * @param string $classes
 	 * @param array $htmlAttributes
 	 * @return string
 	 */
-	public function formGroup($model, $attribute, $classes = '', array $htmlAttributes = [])
+	public function formGroup(modelInterfaces\Model $model, $attribute, $classes = '', array $htmlAttributes = [])
 	{
 		$htmlAttributes = array_replace([
 			'class' => 'form-group ' . $classes
 		], $htmlAttributes);
 
-		if ($model instanceof modelInterfaces\Model
-			&& $model->hasAttribute($attribute)
-			&& $model->getErrors($attribute)
-		)
+		if ($model->hasAttribute($attribute) && $model->getErrors($attribute))
 			$htmlAttributes['class'] .= ' has-error';
 
 		return '<div ' . $this->getTagAttrs($htmlAttributes) . '>';

@@ -2,7 +2,7 @@
 	/** @var \KZ\view\helpers\Link $link */
 	$link = $this->helper('link');
 	$links = [
-		'log' => ['Log', $link->get('index/index')],
+		'generalLog' => ['General log', $link->get('index/index')],
 		'setup' => ['Setup', $link->get('setup/index')]
 	];
 
@@ -18,7 +18,7 @@
 				<span class="icon-bar"></span>
 			</button>
 			<a class="navbar-brand" href="<?=$link->get('index/index')?>">
-				Mysql debug
+				Mysql debug<sup>beta</sup>
 			</a>
 		</div>
 		<div class="navbar-collapse collapse">

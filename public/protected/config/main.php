@@ -43,7 +43,15 @@ return [
 						$handler = new \eventHandlers\Setup();
 						$handler->onBeforeRunControllerChain($event);
 					}
-				]
+				],
+				[
+					'KZ\app\Facade\Http',
+					'beforeInitialize',
+					function($event) {
+						$handler = new \eventHandlers\Setup();
+						$handler->onBeforeInitialize($event);
+					}
+				],
 			]
 		]
 	]

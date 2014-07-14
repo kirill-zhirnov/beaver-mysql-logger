@@ -162,7 +162,7 @@ class GeneralLog extends grid\Grid
 	{
 		switch ($sort) {
 			case 'default':
-				return 't2.maxTime desc, t.event_time desc, orderTypeKey asc';
+				return 't2.maxTime desc, t.event_time desc, orderTypeKey desc';
 			case 'event_time_asc':
 				return 't.event_time asc';
 			case 'event_time_desc':

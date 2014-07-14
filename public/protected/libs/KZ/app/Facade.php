@@ -68,17 +68,28 @@ abstract class Facade
 	{
 		$this->kit = $this->makeKit();
 
-		//make components
+		//make basic components
 		$this->registry = $this->kit->makeRegistry();
+		$this->registry
+			->setConfig($this->config)
+			->setKit($this->kit)
+			->setObserver($this->kit->makeObserver())
+		;
+
+		//trigger event
+		$event = $this->registry
+			->getObserver()
+			->trigger($this, 'beforeInitialize')
+		;
+
+		if ($event->isDefaultPrevented())
+			return;
 
 		$request = $this->makeRequest();
 
 		//put components in registry
 		$this->registry
-			->setObserver($this->kit->makeObserver())
 			->setConnectionStorage($this->kit->makeConnectionStorage())
-			->setKit($this->kit)
-			->setConfig($this->config)
 			->setRequest($request)
 			->setResponse($this->makeResponse($request))
 			->setFlashMessenger($this->kit->makeFlashMessenger())
@@ -138,8 +149,6 @@ abstract class Facade
 	 */
 	public function getRegistry()
 	{
-		$this->checkIsInitialized();
-
 		return $this->registry;
 	}
 

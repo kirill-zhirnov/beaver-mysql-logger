@@ -141,4 +141,41 @@ class Link implements link\interfaces\Link
 		return $this;
 	}
 
+	/**
+	 * @param \KZ\model\interfaces\Model $model
+	 * @param array $attributes
+	 * @param bool $onlyNotEmpty
+	 * @return $this
+	 */
+	public function appendModelAttrs(\KZ\model\interfaces\Model $model, array $attributes = null, $onlyNotEmpty = true)
+	{
+		$prefix = $this->getModelPrefix($model);
+
+		$params = [];
+		foreach ($model->getAttributes() as $attr => $value) {
+			if (is_array($attributes) && !in_array($attr, $attributes))
+				continue;
+
+			if ($onlyNotEmpty && $value == '')
+				continue;
+
+			$params[$prefix . '[' . $attr . ']'] = $value;
+		}
+
+		$this->setParams($params);
+
+		return $this;
+	}
+
+	/**
+	 *
+	 * Returns prefix for model
+	 *
+	 * @param \KZ\model\interfaces\Model $model
+	 * @return string
+	 */
+	public function getModelPrefix(\KZ\model\interfaces\Model $model)
+	{
+		return $model->getLinkPrefix();
+	}
 } 

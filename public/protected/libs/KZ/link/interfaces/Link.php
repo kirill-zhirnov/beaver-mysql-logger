@@ -77,4 +77,12 @@ interface Link
 	 * @return $this
 	 */
 	public function setRequest(\KZ\controller\interfaces\Request $request);
+
+	/**
+	 * @param \KZ\model\interfaces\Model $model
+	 * @param array $attributes
+	 * @param bool $onlyNotEmpty
+	 * @return $this
+	 */
+	public function appendModelAttrs(\KZ\model\interfaces\Model $model, array $attributes = null, $onlyNotEmpty = true);
 } 

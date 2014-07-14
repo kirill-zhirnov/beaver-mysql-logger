@@ -80,9 +80,11 @@ abstract class Grid implements interfaces\Grid
 
 	public function buildCountQuery($sql, $countExpression = 'count(*)')
 	{
-		return preg_replace_callback('#select\s+(.+)\s+from#i', function() use($countExpression) {
+		$sql = preg_replace_callback('#^\s*select\s+(.+)\s+from#isU', function() use($countExpression) {
 			return 'select ' . $countExpression . ' from';
 		}, $sql);
+
+		return preg_replace('#order by\s+.*$#is', '', $sql);
 	}
 
 	/**

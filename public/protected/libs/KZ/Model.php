@@ -102,8 +102,11 @@ abstract class Model implements model\interfaces\Model
 	 */
 	public function getAttrNames()
 	{
-		if (!$this->attrNames)
-			$this->attrNames = array_keys($this->rules());
+		if (!$this->attrNames) {
+			//for unit tests:
+			$rules = $this->rules();
+			$this->attrNames = is_array($rules) ? array_keys($rules) : [];
+		}
 
 		return $this->attrNames;
 	}
@@ -198,6 +201,27 @@ abstract class Model implements model\interfaces\Model
 		$this->checkAttrName($attribute);
 
 		return $this->defaultValues[$attribute];
+	}
+
+	/**
+	 * Returns prefix for links or forms for current model.
+	 *
+	 * @return string
+	 */
+	public function getLinkPrefix()
+	{
+		return self::getModelPrefix(get_class($this));
+	}
+
+	/**
+	 * Returns prefix for links or forms for current model.
+	 *
+	 * @param string $className
+	 * @return string
+	 */
+	public static function getModelPrefix($className)
+	{
+		return str_replace('\\', '_', $className);
 	}
 
 	/**

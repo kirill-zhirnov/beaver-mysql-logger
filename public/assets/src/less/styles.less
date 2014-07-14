@@ -11,13 +11,24 @@ body {
 .ajax-loading {
     width: 100px;
     height: 100px;
-    background: #ccc;
+    background: lighten(@brand-success, 10%);
     position: fixed;
     top: 50%;
     left: 50%;
     margin: -50px 0 0 -50px;
     display: none;
-    visibility: hidden;
+    z-index: 9999;
+    .border-top-radius(@panel-border-radius);
+    .border-bottom-radius(@panel-border-radius);
+
+    div {
+        display: table-cell;
+        width: 100px;
+        height: 100px;
+        text-align: center;
+        vertical-align: middle;
+        color: @btn-success-color;
+    }
 }
 
 .modal-msg {
@@ -35,20 +46,27 @@ body {
     font-size: 140%;
 }
 
-form .errors {
-    color: #a94442;
-    list-style-type: none;
-    padding: 0;
-    margin: 5px 0 0 0;
-}
+form {
+    .hint {
+        font-size: @font-size-small;
+        padding-top: (@padding-large-vertical/2);
+    }
 
-form .errors > li {
-    margin: 0 0 5px 0;
-    padding: 0;
-}
+    .errors {
+        color: #a94442;
+        list-style-type: none;
+        padding: 0;
+        margin: 5px 0 0 0;
+    }
 
-form .errors > li:last-of-type {
-    margin-bottom: 0;
+    .errors > li {
+        margin: 0 0 5px 0;
+        padding: 0;
+    }
+
+    .errors > li:last-of-type {
+        margin-bottom: 0;
+    }
 }
 
 .bs-callout {

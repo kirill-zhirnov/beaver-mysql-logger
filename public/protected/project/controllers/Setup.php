@@ -11,7 +11,8 @@ class Setup extends \KZ\Controller
 
 		$this->view->getLayout()->assignData([
 			'curLink' => 'setup',
-			'pageHeader' => 'Setup mysql connection'
+			'pageHeader' => 'Setup mysql connection',
+			'pageTitle' => 'Setup mysql connection'
 		]);
 	}
 
