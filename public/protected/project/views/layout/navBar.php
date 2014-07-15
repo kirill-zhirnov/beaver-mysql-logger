@@ -18,7 +18,7 @@
 				<span class="icon-bar"></span>
 			</button>
 			<a class="navbar-brand" href="<?=$link->get('index/index')?>">
-				Mysql debug<sup>beta</sup>
+				Beaver mysql logger<sup>beta</sup>
 			</a>
 		</div>
 		<div class="navbar-collapse collapse">

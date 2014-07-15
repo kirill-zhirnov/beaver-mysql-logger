@@ -13,7 +13,7 @@
 				app.setup();
 			});
 		</script>
-		<title><?=isset($pageTitle) ? $pageTitle : 'Mysql debug'?></title>
+		<title><?=isset($pageTitle) ? $pageTitle : 'Beaver mysql logger'?></title>
 	</head>
 	<body>
 		<div class="container">
