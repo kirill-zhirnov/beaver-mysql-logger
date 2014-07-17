@@ -17,7 +17,7 @@
 	</head>
 	<body>
 		<div class="container">
-			<?=$this->renderPartial('layout/navbar')?>
+			<?=$this->renderPartial('layout/navBar')?>
 			<?=$this->renderPartial('layout/pageHeader')?>
 			<?=$this->renderPartial('layout/flashMessenger')?>
 			<?=$content?>
