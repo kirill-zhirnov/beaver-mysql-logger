@@ -4,8 +4,8 @@
 		<meta charset="utf-8" />
 		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<link rel="stylesheet" href="/public/assets/compiled/css/styles.css" />
-		<script type="text/javascript" src="/public/assets/compiled/js/scripts.js"></script>
+		<link rel="stylesheet" href="assets/compiled/css/styles.css" />
+		<script type="text/javascript" src="assets/compiled/js/scripts.js"></script>
 		<script type="text/javascript">
 			var app = null;
 			$(function() {

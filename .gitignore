@@ -1,3 +1,3 @@
 *.DS_Store
 .idea
-public/protected/db.sq3
+protected/db.sq3
