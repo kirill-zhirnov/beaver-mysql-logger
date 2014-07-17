@@ -110,8 +110,6 @@ class HelperKit implements interfaces\HelperKit
 
 	public function getHelperClass($name)
 	{
-		$name = strtolower($name);
-
 		if (isset($this->config['helpers'][$name]))
 			return $this->config['helpers'][$name];
 

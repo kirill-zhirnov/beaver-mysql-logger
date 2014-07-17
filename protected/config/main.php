@@ -23,7 +23,7 @@ return [
 				'helperKit' => [
 					'config' => [
 						'helpers' => [
-							'sqlformatter' => '\helpers\SqlFormatter'
+							'sqlFormatter' => '\helpers\SqlFormatter'
 						]
 					]
 				]
