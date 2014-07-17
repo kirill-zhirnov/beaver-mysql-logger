@@ -100,6 +100,15 @@ class Setup
 
 				exit();
 			}
+
+			if (!is_writable($dir)) {
+				$view = $this->getViewToShowError();
+				echo $view->render('errors/error', [
+					'error' => 'Directory "' . $dir . '" is not <b>writable</b>! Please make it readable and writable for this script process.'
+				]);
+
+				exit();
+			}
 		}
 	}
 
