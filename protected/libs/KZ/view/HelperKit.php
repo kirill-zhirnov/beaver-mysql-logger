@@ -84,10 +84,10 @@ class HelperKit implements interfaces\HelperKit
 	 */
 	public function getHelper($name)
 	{
-		$name = strtolower($name);
+		$helperKey = strtolower($name);
 
-		if (isset($this->helpers[$name]))
-			return $this->helpers[$name];
+		if (isset($this->helpers[$helperKey]))
+			return $this->helpers[$helperKey];
 
 		$class = $this->getHelperClass($name);
 
@@ -103,7 +103,7 @@ class HelperKit implements interfaces\HelperKit
 		if ($this->registry)
 			$helper->setRegistry($this->registry);
 
-		$this->helpers[$name] = $helper;
+		$this->helpers[$helperKey] = $helper;
 
 		return $helper;
 	}
