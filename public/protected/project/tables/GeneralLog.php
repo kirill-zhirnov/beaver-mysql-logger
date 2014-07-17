@@ -169,6 +169,7 @@ class GeneralLog extends table\Mysql
 	 */
 	public function isAllowExplain($commandType, $argument)
 	{
+		return false;
 		if ($commandType != 'Query')
 			return false;
 
