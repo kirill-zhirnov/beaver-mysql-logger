@@ -227,7 +227,7 @@ class Kit implements interfaces\Kit
 	public function makeResponse(\KZ\Controller\interfaces\Request $request)
 	{
 		return $this->makeInstance(
-			'\KZ\Controller\Response',
+			'\KZ\controller\Response',
 			'response',
 			[$request],
 			'\KZ\controller\interfaces\Response'
