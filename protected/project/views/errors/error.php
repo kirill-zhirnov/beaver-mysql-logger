@@ -9,7 +9,7 @@
 	</head>
 	<body>
 		<div class="container">
-			<?=$this->renderPartial('layout/navbar')?>
+			<?=$this->renderPartial('layout/navBar')?>
 			<p class="alert alert-danger"><?=$error?></p>
 		</div>
 	</body>
