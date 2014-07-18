@@ -152,6 +152,18 @@ a.button span {
   height: 23px;
 }
 
+.button.green {
+	background: #5cb85c;
+	border-color: #5cb85c;
+	color: #fff;
+	text-shadow: none;
+}
+
+.button.green:hover {
+	background: #449d44;
+	border-color: #398439;
+}
+
 #download-zip span {
   background: transparent url(../images/zip-icon.png) 12px 50% no-repeat;
 }
@@ -161,7 +173,9 @@ a.button span {
 #view-on-github span {
   background: transparent url(../images/octocat-icon.png) 12px 50% no-repeat;
 }
-#view-on-github {
+
+#view-on-github,
+#view-demo {
   margin-right: 0;
 }
 
@@ -278,7 +292,19 @@ p {
   font-weight: 300;
   margin-bottom: 20px;
 }
- 
+
+ul {
+	font-weight: 300;
+}
+
+ul > li {
+	margin-bottom: 10px;
+}
+
+ul > li:last-of-type {
+	margin-bottom: 0;
+}
+
 a {
   text-decoration: none;
 }
