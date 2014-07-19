@@ -6630,7 +6630,7 @@ form .errors > li:last-of-type {
 }
 @media (min-width: 992px) {
   .general-log .grid .argument {
-    width: 375px;
+    max-width: 375px;
   }
 }
 .general-log .grid .argument .sql {
