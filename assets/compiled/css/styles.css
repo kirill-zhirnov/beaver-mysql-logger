@@ -6482,6 +6482,9 @@ body {
   padding-top: 20px;
   padding-bottom: 20px;
 }
+.container {
+  min-width: 970px;
+}
 .ajax-loading {
   width: 100px;
   height: 100px;
@@ -6590,10 +6593,14 @@ form .errors > li:last-of-type {
   text-align: center;
   font-size: 12px;
 }
-.general-log .grid .thread-id,
-.general-log .grid .command-type,
-.general-log .grid .server-id {
+.general-log .grid .thread-id {
   text-align: center;
+}
+.general-log .grid .thread-id a {
+  text-decoration: underline;
+}
+.general-log .grid .thread-id a:hover {
+  text-decoration: none;
 }
 .general-log .grid .event-time .date {
   color: #777777;
@@ -6621,20 +6628,49 @@ form .errors > li:last-of-type {
 .general-log .grid .argument {
   max-width: 574px;
 }
-.general-log .grid .argument pre {
-  margin-bottom: 0;
+.general-log .grid .argument .sql {
+  position: relative;
   max-height: 120px;
   overflow-y: hidden;
   overflow-x: auto;
+  border: 1px solid #cccccc;
+  border-radius: 4px;
+}
+.general-log .grid .argument .sql pre {
+  margin-bottom: 0;
+  border: none;
+}
+.general-log .grid .argument .sql .close-top,
+.general-log .grid .argument .sql .close-bottom {
+  position: absolute;
+  right: 11.5px;
+  display: none;
+}
+.general-log .grid .argument .sql .close-top {
+  top: 11.5px;
+}
+.general-log .grid .argument .sql .close-bottom {
+  bottom: 11.5px;
 }
 .general-log .grid .argument .pointer {
   cursor: pointer;
+}
+.general-log .grid .argument div.opened {
+  cursor: default;
+  max-height: none;
+}
+.general-log .grid .argument div.opened .close-top,
+.general-log .grid .argument div.opened .close-bottom {
+  display: block;
 }
 .general-log .grid .argument .actions {
   padding-bottom: 0;
   margin-bottom: 0;
   padding-top: 10px;
   text-align: right;
+}
+.general-log .grid .argument .actions a {
+  text-align: left;
 }
 .general-log .grid-filter .form-control {
   padding-left: 5px;
@@ -6653,12 +6689,21 @@ form .errors > li:last-of-type {
   font-weight: normal;
   margin-right: 10px;
 }
+.modal-explain .explain-wrapper {
+  max-width: 900px;
+  overflow: auto;
+  font-size: 12px;
+}
 .modal-explain table {
   max-width: 870px;
 }
 .modal-explain table tbody .possible-keys {
   word-wrap: break-word;
-  max-width: 250px;
+  max-width: 230px;
+}
+.modal-explain table tbody .ref {
+  word-wrap: break-word;
+  max-width: 200px;
 }
 .modal-explain .query {
   overflow: hidden;

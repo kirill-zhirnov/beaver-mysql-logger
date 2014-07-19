@@ -59,26 +59,23 @@ class Index extends \KZ\Controller
 
 	public function actionExplain()
 	{
-		$model = new \tables\GeneralLog();
+		$sql = $this->request->getParam('sql');
 
-		$argument = $this->request->getParam('argument');
-		$commandType = $this->request->getParam('command_type');
+		$model = new \models\ExplainQuery(
+			$this->registry,
+			$this->request->getParam('db'),
+			$this->request->getParam('commandType'),
+			$sql
+		);
 
-		if (!$model->isAllowExplain($commandType, $argument))
-			throw new \RuntimeException('This query is not allowed to explain!');
-
-		$query = 'explain ' . $argument;
-
-		$stmt = $model->makeStmt($query);
-		$stmt->execute();
-
-		$explain = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-		$stmt->closeCursor();
+		//calc queries amount in thread
+		$this->view->queriesInThread = $model->getGeneralLogModel()
+			->calcQueriesInThread($this->request->getParam('threadId'))
+		;
 
 		$this->render('index/explain', [
-			'explain' => $explain,
-			'query' => $argument,
-			'queriesInThread' => $model->calcQueriesInThread($this->request->getParam('thread_id'))
+			'explain' => $model->getExplain(),
+			'query' => $sql,
 		]);
 	}
 }

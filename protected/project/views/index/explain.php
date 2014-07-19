@@ -5,38 +5,46 @@
 			<h4 class="modal-title">Explain query</h4>
 		</div>
 		<div class="modal-body">
-			<table class="table table-hover table-bordered table-striped">
-				<thead>
-					<tr>
-						<th>ID</th>
-						<th>Select type</th>
-						<th>Table</th>
-						<th>Type</th>
-						<th>Possible keys</th>
-						<th>Key</th>
-						<th>Key len</th>
-						<th>Ref</th>
-						<th>Rows</th>
-						<th>Extra</th>
-					</tr>
-				</thead>
-				<tbody>
-					<?php foreach ($explain as $row):?>
+			<div class="explain-wrapper">
+				<table class="table table-hover table-bordered table-striped">
+					<thead>
 						<tr>
-							<td><?=$row['id']?></td>
-							<td><?=$row['select_type']?></td>
-							<td><?=$row['table']?></td>
-							<td><?=$row['type']?></td>
-							<td class="possible-keys"><?=$row['possible_keys']?></td>
-							<td><?=$row['key']?></td>
-							<td><?=$row['key_len']?></td>
-							<td><?=$row['ref']?></td>
-							<td><?=$row['rows']?></td>
-							<td><?=$row['Extra']?></td>
+							<th>ID</th>
+							<th>Select type</th>
+							<th>Table</th>
+							<th>Type</th>
+							<th>Possible keys</th>
+							<th>Key</th>
+							<th>Key len</th>
+							<th>Ref</th>
+							<th>Rows</th>
+							<th>Extra</th>
 						</tr>
-					<?php endforeach?>
-				</tbody>
-			</table>
+					</thead>
+					<tbody>
+						<?php foreach ($explain as $row):?>
+							<tr>
+								<td><?=$row['id']?></td>
+								<td><?=$row['select_type']?></td>
+								<td><?=$row['table']?></td>
+								<td><?=$row['type']?></td>
+								<td class="possible-keys">
+									<?=implode('<br/>', explode(',', $row['possible_keys']))?>
+								</td>
+								<td><?=$row['key']?></td>
+								<td><?=$row['key_len']?></td>
+								<td class="ref">
+									<?=implode('<br/>', explode(',', $row['ref']))?>
+								</td>
+								<td><?=$row['rows']?></td>
+								<td>
+									<?=implode('<br/>', explode(';', $row['Extra']))?>
+								</td>
+							</tr>
+						<?php endforeach?>
+					</tbody>
+				</table>
+			</div>
 			<div class="query">
 				<?=$this->helper('sqlFormatter')->format($query)?>
 			</div>

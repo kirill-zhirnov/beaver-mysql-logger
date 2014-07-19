@@ -84,7 +84,7 @@ abstract class Grid implements interfaces\Grid
 			return 'select ' . $countExpression . ' from';
 		}, $sql);
 
-		return preg_replace('#order by\s+.*$#is', '', $sql);
+		return preg_replace('#order by[^\(\)]+$#is', '', $sql);
 	}
 
 	/**

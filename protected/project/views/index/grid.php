@@ -2,9 +2,14 @@
 	/** @var \tables\GeneralLog $generalLog */
 	/** @var \grids\GeneralLog $grid */
 	/** @var \KZ\view\helpers\Link $link */
+	/** @var \KZ\view\helpers\Html $html */
 
+	$html = $this->helper('html');
 	$link = $this->helper('link');
+	$filter = $grid->getFilter();
 	$threadId = null;
+
+	$databases = $grid->getTable()->showDatabases();
 ?>
 <div class="table-responsive general-log">
 	<?=$this->renderPartial('index/grid/filter', ['grid' => $grid])?>
@@ -32,7 +37,11 @@
 					<?php $threadId = $row['thread_id']?>
 				<?php endif?>
 				<tr>
-					<td class="thread-id"><?=$row['thread_id']?></td>
+					<td class="thread-id">
+						<a href="#" data-thread-id="<?=$row['thread_id']?>">
+							<?=$row['thread_id']?>
+						</a>
+					</td>
 					<td class="command-type type-<?=strtolower(str_replace(' ', '-', $row['command_type']))?>">
 						<?php if ($row['command_type'] == 'Connect'):?>
 							<span class="glyphicon glyphicon-flash"></span>
@@ -48,25 +57,16 @@
 						<?=$row['command_type']?>
 					</td>
 					<td class="argument">
-						<?=$this->helper('sqlFormatter')->format($row['argument'])?>
-						<?php if ($grid->getTable()->isAllowExplain($row['command_type'], $row['argument'])):?>
-							<?php
-								$explain = $link->get('index/explain', [
-									'event_time' => $row['event_time'],
-									'user_host' => $row['user_host'],
-									'thread_id' => $row['thread_id'],
-									'server_id' => $row['server_id'],
-									'command_type' => $row['command_type'],
-									'argument' => $row['argument'],
-								]);
-							?>
-							<p class="actions">
-								<a href="<?=$explain?>" class="btn btn-default btn-xs" data-modal="">
-									<span class="glyphicon glyphicon-search"></span>
-									Explain
-								</a>
-							</p>
-						<?php endif?>
+						<div class="sql">
+							<?=$this->helper('sqlFormatter')->format($row['argument'])?>
+							<a href="#" class="btn btn-default btn-xs close-top">Roll up</a>
+							<a href="#" class="btn btn-default btn-xs close-bottom">Roll up</a>
+						</div>
+						<?=$this->renderPartial('index/grid/manageSqlButtons', [
+							'grid' => $grid,
+							'row' => $row,
+							'databases' => $databases
+						])?>
 					</td>
 					<td class="event-time">
 						<?php
@@ -86,38 +86,7 @@
 </div>
 <script type="text/javascript">
 	$(function() {
-		var grid = new kz.grid($('.general-log'), {
-			afterSetup : function() {
-				var maxHeight = null;
-
-				//set cursor pointer:
-				this.el.find('.argument pre').each(function() {
-					$el = $(this);
-
-					if ($el.innerHeight() > 100)
-						$el.addClass('pointer');
-				});
-
-				this.el.on('click', '.argument pre.pointer', function(e) {
-					e.preventDefault();
-
-					$el = $(this);
-
-					if ($el.css('max-height') != 'none') {
-						maxHeight = $el.css('max-height');
-						$el.css('max-height', 'none');
-					} else {
-						$el.css('max-height', maxHeight);
-					}
-				});
-
-				//date picker:
-				this.el.find('.grid-filter .event-time input').datetimepicker({
-					format : 'Y-m-d H:i:s',
-					validateOnBlur : false
-				});
-			}
-		});
+		var grid = new project.sqlGrid($('.general-log'));
 		grid.setup();
 	});
 </script>

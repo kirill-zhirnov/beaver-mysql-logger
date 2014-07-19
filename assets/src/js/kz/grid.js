@@ -10,6 +10,8 @@ if (typeof(kz) == 'undefined' || !kz) {
 			filterSelector : '.grid-filter',
 			filterReset : '.grid-filter .grid-reset'
 		}, config));
+
+		this.filter = null;
 	}
 
 	extend(kz.grid, kz.widget);
@@ -18,6 +20,8 @@ if (typeof(kz) == 'undefined' || !kz) {
 	{
 		if (this.config.bindEvents)
 			this.bindEvents();
+
+		this.filter = this.el.find(this.config.filterSelector);
 	}
 
 	kz.grid.prototype.bindEvents = function()
@@ -45,15 +49,14 @@ if (typeof(kz) == 'undefined' || !kz) {
 	{
 		e.preventDefault();
 
-		this.update($(e.target).attr('action'), {});
+		this.update(this.filter.attr('action'), {});
 	}
 
 	kz.grid.prototype.onFilterSubmit = function(e)
 	{
 		e.preventDefault();
 
-		$form = $(e.target);
-		this.update($form.attr('action'), $form.serializeArray());
+		this.update(this.filter.attr('action'), this.filter.serializeArray());
 	}
 
 	kz.grid.prototype.onPaginationClick = function(e)

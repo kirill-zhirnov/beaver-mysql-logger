@@ -8,6 +8,9 @@ body {
     padding-bottom: 20px;
 }
 
+.container {
+    min-width: @container-desktop;
+}
 .ajax-loading {
     width: 100px;
     height: 100px;
@@ -134,10 +137,21 @@ form {
             font-size: @font-size-small;
         }
 
-        .thread-id,
+        .thread-id {
+            text-align: center;
+
+            a {
+                text-decoration: underline;
+            }
+
+            a:hover {
+                text-decoration: none;
+            }
+        }
+
         .command-type,
         .server-id {
-            text-align: center;
+
         }
 
         .event-time {
@@ -175,15 +189,49 @@ form {
         .argument {
             max-width: 574px;
 
-            pre {
-                margin-bottom: 0;
+            .sql {
+                position: relative;
                 max-height: 120px;
                 overflow-y: hidden;
                 overflow-x: auto;
+                border: 1px solid @pre-border-color;
+                border-radius: @border-radius-base;
+
+                pre {
+                    margin-bottom: 0;
+                    border: none;
+                }
+
+                @close-button-position: ((@line-height-computed - 1) / 2 + 2);
+
+                .close-top,
+                .close-bottom {
+                    position: absolute;
+                    right: @close-button-position;
+                    display: none;
+                }
+
+                .close-top {
+                    top: @close-button-position;
+                }
+
+                .close-bottom {
+                    bottom: @close-button-position;
+                }
             }
 
             .pointer {
                 cursor: pointer;
+            }
+
+            div.opened {
+                cursor: default;
+                max-height: none;
+
+                .close-top,
+                .close-bottom {
+                    display: block;
+                }
             }
 
             .actions {
@@ -191,6 +239,10 @@ form {
                 margin-bottom: 0;
                 padding-top: @padding-large-vertical;
                 text-align: right;
+
+                a {
+                    text-align: left;
+                }
             }
         }
     }
@@ -220,13 +272,24 @@ form {
 }
 
 .modal-explain {
+    .explain-wrapper {
+        max-width: @modal-lg;
+        overflow: auto;
+        font-size: @font-size-small;
+    }
+
     table {
         max-width: (@modal-lg - @modal-inner-padding*2);
 
         tbody {
             .possible-keys {
                 word-wrap: break-word;
-                max-width: 250px;
+                max-width: 230px;
+            }
+
+            .ref {
+                word-wrap: break-word;
+                max-width: 200px;
             }
         }
     }

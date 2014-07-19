@@ -10,11 +10,20 @@ class MysqlCredentials extends table\SQLite
 	 */
 	public function getMysqlConnection()
 	{
-		$row = $this->find();
+		$row = $this->findMysqlCredentials();
 
 		if (!$row)
 			return null;
 
+		return $this->createConnectionByRow($row);
+	}
+
+	/**
+	 * @param array $row
+	 * @return bool|\PDO
+	 */
+	public function createConnectionByRow(array $row)
+	{
 		try {
 			$options = ($row['mysql_options']) ? json_decode($row['mysql_options'], true) : [];
 			$pdo = new \PDO($row['mysql_dsn'], $row['mysql_username'], $row['mysql_password'], $options);
@@ -25,6 +34,11 @@ class MysqlCredentials extends table\SQLite
 		}
 
 		return $pdo;
+	}
+
+	public function findMysqlCredentials()
+	{
+		return $this->find();
 	}
 
 	/**

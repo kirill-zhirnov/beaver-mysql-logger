@@ -169,7 +169,6 @@ class GeneralLog extends table\Mysql
 	 */
 	public function isAllowExplain($commandType, $argument)
 	{
-		return false;
 		if ($commandType != 'Query')
 			return false;
 
@@ -192,5 +191,30 @@ class GeneralLog extends table\Mysql
 		$stmt->closeCursor();
 
 		return $row[0];
+	}
+
+	/**
+	 * Detect Db name by:
+	 * currentDb.command_type as db_command_type,
+	 * currentDb.argument as db_argument
+	 *
+	 * @param $commandType
+	 * @param $argument
+	 * @return string|bool
+	 */
+	public function getQueryDb($commandType, $argument)
+	{
+		if (!$commandType || !$argument || !in_array($commandType, ['Connect', 'Init DB']))
+			return false;
+
+		switch ($commandType) {
+			case 'Connect':
+				if (preg_match('#\s+on\s+(.+)$#i', $argument, $matches))
+					return $matches[1];
+			case 'Init DB':
+				return $argument;
+		}
+
+		return false;
 	}
 } 

@@ -65,10 +65,12 @@ class GeneralLog extends grid\Grid
 			select
 				t.*,
 				if (
-					command_type = 'Connect',
+					t.command_type = 'Connect',
 					0,
-					if (command_type = 'Quit', 2, 1)
-				) as orderTypeKey
+					if (t.command_type = 'Quit', 2, 1)
+				) as orderTypeKey,
+				currentDb.command_type as db_command_type,
+				currentDb.argument as db_argument
 			from
 				general_log t
 				inner join (
@@ -79,6 +81,30 @@ class GeneralLog extends grid\Grid
 						general_log
 					group by thread_id
 				) t2 on t.thread_id = t2.thread_id
+				left join (
+					select
+						s1.thread_id,
+						s1.command_type,
+						s1.argument
+					from
+						general_log s1
+						inner join (
+							select
+								thread_id,
+								max(event_time) as event_time
+							from
+								general_log
+							where
+								command_type in ('Connect', 'Init DB')
+							group by
+								thread_id
+						) s2 on s1.thread_id = s2.thread_id and s1.event_time = s2.event_time
+					where
+						s1.command_type in ('Connect', 'Init DB')
+					group by
+						s1.thread_id
+					order by s1.event_time desc
+				) as currentDb on currentDb.thread_id = t.thread_id
 		";
 
 		if ($where)

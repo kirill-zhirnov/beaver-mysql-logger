@@ -136,7 +136,7 @@ module.exports = function(grunt) {
 					'js/jquery/jquery.form.js',
 					'datetimepicker/jquery.datetimepicker.js',
 
-					//project libs and files:
+					//kz libs
 					'js/extend.js',
 					'js/kz/util.js',
 					'js/kz/widget.js',
@@ -147,7 +147,10 @@ module.exports = function(grunt) {
 					'js/kz/modalMsg.js',
 					'js/kz/ajaxLink.js',
 					'js/kz/grid.js',
-					'js/kz/app.js'
+					'js/kz/app.js',
+
+					//project files
+					'js/project/sqlGrid.js'
 				],
 				dest: '<%= jsFile %>'
 			}
