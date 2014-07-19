@@ -68,13 +68,17 @@ class Index extends \KZ\Controller
 			$sql
 		);
 
-		//calc queries amount in thread
-		$this->view->queriesInThread = $model->getGeneralLogModel()
-			->calcQueriesInThread($this->request->getParam('threadId'))
-		;
+		$explain = $model->getExplain();
+		$this->view->assignData([
+			'explain' => $explain,
+			'query' => $sql,
+			'error' => $model->getLastException() ? $model->getLastException()->getMessage() : null,
+			'queriesInThread' => $model->getGeneralLogModel()->calcQueriesInThread($this->request->getParam('threadId'))
+		]);
 
-		$this->render('index/explain', [
-			'explain' => $model->getExplain(),
+		$tpl =  $explain ? 'index/explain' : 'errors/modal';
+		$this->render($tpl, [
+			'explain' => $explain,
 			'query' => $sql,
 		]);
 	}

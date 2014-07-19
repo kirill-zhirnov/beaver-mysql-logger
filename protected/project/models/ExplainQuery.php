@@ -20,6 +20,11 @@ class ExplainQuery extends ExecDbQuery
 	 */
 	protected $generalLogModel;
 
+	/**
+	 * @var \Exception
+	 */
+	protected $lastException;
+
 	public function __construct(appInterfaces\Registry $registry, $dbName, $commandType, $sql)
 	{
 		$this->registry = $registry;
@@ -41,13 +46,16 @@ class ExplainQuery extends ExecDbQuery
 
 		$this->setupConnection();
 
-		$sql = 'explain ' . $this->sql;
+		try {
+			$stmt = $this->connection->prepare('explain ' . $this->sql);
+			$stmt->execute();
 
-		$stmt = $this->connection->prepare($sql);
-		$stmt->execute();
-
-		$explain = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-		$stmt->closeCursor();
+			$explain = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+			$stmt->closeCursor();
+		} catch (\Exception $e) {
+			$explain = false;
+			$this->lastException = $e;
+		}
 
 		return $explain;
 	}
@@ -58,5 +66,13 @@ class ExplainQuery extends ExecDbQuery
 	public function getGeneralLogModel()
 	{
 		return $this->generalLogModel;
+	}
+
+	/**
+	 * @return \Exception
+	 */
+	public function getLastException()
+	{
+		return $this->lastException;
 	}
 } 
