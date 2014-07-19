@@ -194,12 +194,21 @@ form {
             }
 
             .sql {
+                @sql-max-height: 120px;
+
                 position: relative;
-                max-height: 120px;
+                max-height: @sql-max-height;
                 overflow-y: hidden;
                 overflow-x: auto;
                 border: 1px solid @pre-border-color;
                 border-radius: @border-radius-base;
+
+                .expand-arrow {
+                    position: absolute;
+                    right: @close-button-position;
+                    top: (@sql-max-height / 2 - 12);
+                    display: none;
+                }
 
                 pre {
                     margin-bottom: 0;
@@ -226,6 +235,12 @@ form {
 
             .pointer {
                 cursor: pointer;
+            }
+
+            .sql.pointer:hover {
+                .expand-arrow {
+                    display: block;
+                }
             }
 
             div.opened {

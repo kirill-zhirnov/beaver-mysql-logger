@@ -61,6 +61,7 @@
 							<?=$this->helper('sqlFormatter')->format($row['argument'])?>
 							<a href="#" class="btn btn-default btn-xs close-top">Roll up</a>
 							<a href="#" class="btn btn-default btn-xs close-bottom">Roll up</a>
+							<span class="glyphicon glyphicon-arrow-down expand-arrow"></span>
 						</div>
 						<?=$this->renderPartial('index/grid/manageSqlButtons', [
 							'grid' => $grid,
