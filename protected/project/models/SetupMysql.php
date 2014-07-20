@@ -86,6 +86,11 @@ class SetupMysql extends \KZ\Model
 			$pdo = new \PDO($this->dsn, $this->username, $this->password, $options);
 			$pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
 			$pdo->exec('set names utf8');
+
+			if (!$this->checkMySqlDb($pdo)) {
+				$this->addError($attribute, 'Database does not contain table "general_log". You must use database "mysql".');
+				return;
+			}
 		} catch (\Exception $e) {
 			$this->addError($attribute, 'Cannot connect to Mysql, with error: "' . $e->getMessage() . '".');
 		}
@@ -101,5 +106,20 @@ class SetupMysql extends \KZ\Model
 		$result = json_decode($options, true);
 		if (!$result || !is_array($result))
 			$this->addError($attribute, 'It is not valid JSON!');
+	}
+
+	/**
+	 * @param \PDO $pdo
+	 * @return boolean
+	 */
+	protected function checkMySqlDb(\PDO $pdo)
+	{
+		$stmt = $pdo->prepare("show tables like 'general_log'");
+		$stmt->execute();
+
+		$row = $stmt->fetch(\PDO::FETCH_NUM);
+		$stmt->closeCursor();
+
+		return (boolean) $row;
 	}
 }
