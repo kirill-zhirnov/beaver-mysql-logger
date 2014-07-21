@@ -262,6 +262,14 @@ form {
                 a {
                     text-align: left;
                 }
+
+                .exec .btn-group > a {
+                    background: @state-info-bg;
+                }
+
+                .explain .btn-group > a {
+                    background: @state-success-bg;
+                }
             }
         }
     }
@@ -290,8 +298,8 @@ form {
     }
 }
 
-.modal-explain {
-    .explain-wrapper {
+.modal-execute {
+    .result-wrapper {
         max-width: @modal-lg;
         overflow: auto;
         font-size: @font-size-small;
@@ -299,7 +307,15 @@ form {
 
     table {
         max-width: (@modal-lg - @modal-inner-padding*2);
+    }
 
+    .info {
+        text-align: right;
+    }
+}
+
+.execute-explain {
+    table {
         tbody {
             .possible-keys {
                 word-wrap: break-word;
@@ -317,8 +333,11 @@ form {
         overflow: hidden;
         max-width: (@modal-lg - @modal-inner-padding*2);
     }
+}
 
-    .info {
-        text-align: right;
+.execute-sql {
+    .result-wrapper {
+        max-height: 400px;
+        margin-bottom: @padding-base-vertical;
     }
 }

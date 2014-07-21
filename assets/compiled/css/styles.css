@@ -6686,6 +6686,12 @@ form .errors > li:last-of-type {
 .general-log .grid .argument .actions a {
   text-align: left;
 }
+.general-log .grid .argument .actions .exec .btn-group > a {
+  background: #d9edf7;
+}
+.general-log .grid .argument .actions .explain .btn-group > a {
+  background: #dff0d8;
+}
 .general-log .grid-filter .form-control {
   padding-left: 5px;
   padding-right: 5px;
@@ -6703,27 +6709,31 @@ form .errors > li:last-of-type {
   font-weight: normal;
   margin-right: 10px;
 }
-.modal-explain .explain-wrapper {
+.modal-execute .result-wrapper {
   max-width: 900px;
   overflow: auto;
   font-size: 12px;
 }
-.modal-explain table {
+.modal-execute table {
   max-width: 870px;
 }
-.modal-explain table tbody .possible-keys {
+.modal-execute .info {
+  text-align: right;
+}
+.execute-explain table tbody .possible-keys {
   word-wrap: break-word;
   max-width: 230px;
 }
-.modal-explain table tbody .ref {
+.execute-explain table tbody .ref {
   word-wrap: break-word;
   max-width: 200px;
 }
-.modal-explain .query {
+.execute-explain .query {
   overflow: hidden;
   max-width: 870px;
 }
-.modal-explain .info {
-  text-align: right;
+.execute-sql .result-wrapper {
+  max-height: 400px;
+  margin-bottom: 6px;
 }
 /*# sourceMappingURL=styles.css.map */

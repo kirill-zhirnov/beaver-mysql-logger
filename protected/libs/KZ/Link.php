@@ -168,6 +168,24 @@ class Link implements link\interfaces\Link
 	}
 
 	/**
+	 * @param model\interfaces\Model $model
+	 * @param array $attributes
+	 * @return $this
+	 */
+	public function appendCustomModelAttrs(\KZ\model\interfaces\Model $model, array $attributes)
+	{
+		$prefix = $this->getModelPrefix($model);
+
+		$params = [];
+		foreach ($attributes as $attr => $value)
+			$params[$prefix . '[' . $attr . ']'] = $value;
+
+		$this->setParams($params);
+
+		return $this;
+	}
+
+	/**
 	 *
 	 * Returns prefix for model
 	 *

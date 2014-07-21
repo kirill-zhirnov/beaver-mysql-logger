@@ -164,7 +164,7 @@ class GeneralLog extends table\Mysql
 
 	/**
 	 * @param string $commandType
-	 * @param $argument
+	 * @param string $argument
 	 * @return bool
 	 */
 	public function isAllowExplain($commandType, $argument)
@@ -173,6 +173,19 @@ class GeneralLog extends table\Mysql
 			return false;
 
 		return preg_match('#^\s*select\s+#i', $argument);
+	}
+
+	/**
+	 * @param string $commandType
+	 * @param string $argument
+	 * @return bool
+	 */
+	public function isAllowExecute($commandType, $argument)
+	{
+		if ($commandType != 'Query')
+			return false;
+
+		return true;
 	}
 
 	public function calcQueriesInThread($threadId)

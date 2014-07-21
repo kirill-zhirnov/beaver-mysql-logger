@@ -56,30 +56,4 @@ class Index extends \KZ\Controller
 		$this->flashMessenger->add('Logs was successfully cleared.');
 		$this->redirect($this->makeLink('index/index'));
 	}
-
-	public function actionExplain()
-	{
-		$sql = $this->request->getParam('sql');
-
-		$model = new \models\ExplainQuery(
-			$this->registry,
-			$this->request->getParam('db'),
-			$this->request->getParam('commandType'),
-			$sql
-		);
-
-		$explain = $model->getExplain();
-		$this->view->assignData([
-			'explain' => $explain,
-			'query' => $sql,
-			'error' => $model->getLastException() ? $model->getLastException()->getMessage() : null,
-			'queriesInThread' => $model->getGeneralLogModel()->calcQueriesInThread($this->request->getParam('threadId'))
-		]);
-
-		$tpl =  $explain ? 'index/explain' : 'errors/modal';
-		$this->render($tpl, [
-			'explain' => $explain,
-			'query' => $sql,
-		]);
-	}
 }

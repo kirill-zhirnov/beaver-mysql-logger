@@ -48,6 +48,26 @@ class Html extends view\Helper
 		return '<input ' . $this->getTagAttrs($htmlAttributes) . ' />';
 	}
 
+	/**
+	 * Generates <input type="hidden" />.
+	 *
+	 * @param modelInterfaces\Model|string $model
+	 * @param string $attribute
+	 * @param array $htmlAttributes
+	 * @return string
+	 */
+	public function hidden($model, $attribute, array $htmlAttributes = [])
+	{
+		$htmlAttributes = array_replace([
+			'name' => $this->name($model, $attribute),
+			'value' => $this->value($model, $attribute, false),
+			'type' => 'hidden',
+			'id' => $this->id($model, $attribute)
+		], $htmlAttributes);
+
+		return '<input ' . $this->getTagAttrs($htmlAttributes) . ' />';
+	}
+
 	public function dropDownList($model, $attribute, array $list = [], array $htmlAttributes = [])
 	{
 		$htmlAttributes = array_replace([
@@ -89,7 +109,13 @@ class Html extends view\Helper
 			'id' => $this->id($model, $attribute)
 		], $htmlAttributes);
 
-		return '<textarea ' . $this->getTagAttrs($htmlAttributes) . '>' . $this->value($model, $attribute) . '</textarea>';
+		$value = $this->value($model, $attribute);
+		if (isset($htmlAttributes['value'])) {
+			$value = $this->encode($htmlAttributes['value']);
+			unset($htmlAttributes['value']);
+		}
+
+		return '<textarea ' . $this->getTagAttrs($htmlAttributes) . '>' . $value . '</textarea>';
 	}
 
 	/**

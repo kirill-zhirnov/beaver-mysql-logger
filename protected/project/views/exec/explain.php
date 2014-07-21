@@ -1,11 +1,11 @@
-<div class="modal-dialog modal-lg modal-explain">
+<div class="modal-dialog modal-lg modal-execute execute-explain">
 	<div class="modal-content">
 		<div class="modal-header">
 			<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
 			<h4 class="modal-title">Explain query</h4>
 		</div>
 		<div class="modal-body">
-			<div class="explain-wrapper">
+			<div class="result-wrapper ">
 				<table class="table table-hover table-bordered table-striped">
 					<thead>
 						<tr>
@@ -22,7 +22,7 @@
 						</tr>
 					</thead>
 					<tbody>
-						<?php foreach ($explain as $row):?>
+						<?php foreach ($result as $row):?>
 							<tr>
 								<td><?=$row['id']?></td>
 								<td><?=$row['select_type']?></td>

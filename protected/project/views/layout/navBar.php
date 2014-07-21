@@ -29,6 +29,11 @@
 					</li>
 				<?php endforeach?>
 			</ul>
+			<ul class="nav navbar-nav navbar-right">
+				<li>
+					<a href="http://http://beaver-mysql-logger.com" target="_blank">Official site</a>
+				</li>
+			</ul>
 		</div>
 	</div>
 </div>
