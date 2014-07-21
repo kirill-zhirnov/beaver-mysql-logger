@@ -174,7 +174,6 @@ a.button span {
   background: transparent url(../images/octocat-icon.png) 12px 50% no-repeat;
 }
 
-#view-on-github,
 #view-demo {
   margin-right: 0;
 }
@@ -381,9 +380,6 @@ footer a:hover {
   #downloads {
     margin-bottom: 25px;
   }
-  #download-zip, #download-tar-gz {
-    display: none;
-  }
   .inner {
     width: 94%;
     margin: 0 auto;
@@ -395,3 +391,11 @@ footer a:hover {
 
 /* Mobile Portrait Size to Mobile Landscape Size (devices and browsers) */
 @media only screen and (max-width: 479px) {}
+
+.g-none {
+	display: none;
+}
+
+.try-demo {
+	text-align: center;
+}
