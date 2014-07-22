@@ -295,4 +295,4 @@ class Kit implements interfaces\Kit
 
 		return $db;
 	}
-} 
+}

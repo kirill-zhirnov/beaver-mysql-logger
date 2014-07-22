@@ -230,4 +230,4 @@ class GeneralLog extends table\Mysql
 
 		return false;
 	}
-} 
+}
