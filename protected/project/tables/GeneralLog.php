@@ -3,8 +3,6 @@
 namespace tables;
 use KZ\db\table;
 
-//protected/libs/array_column
-
 class GeneralLog extends table\Mysql
 {
 	protected $logVariables;
@@ -232,4 +230,4 @@ class GeneralLog extends table\Mysql
 
 		return false;
 	}
-} 
+}
