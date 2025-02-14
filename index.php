@@ -1,6 +1,5 @@
 <?php
 
-require_once 'protected/bootstrap.php';
+$config = require_once 'protected/bootstrap.php';
 
-$facade = new \KZ\app\Facade\Http($config);
-$facade->run();
+(new \KZ\app\Facade\Http($config))->run();

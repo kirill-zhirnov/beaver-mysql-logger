@@ -6,6 +6,8 @@ use KZ\event,
 	KZ\db,
 	KZ\app
 ;
+use PDO;
+use Exception;
 
 class Setup
 {
@@ -112,7 +114,7 @@ class Setup
 		}
 	}
 
-	protected function checkMysql()
+	protected function checkMysql(): void
 	{
 		foreach ($this->controllerFront->getControllerChain() as $item) {
 			if (
@@ -125,31 +127,71 @@ class Setup
 			break;
 		}
 
-		$mysqlModel = new \tables\MysqlCredentials();
-		$mysql = $mysqlModel->getMysqlConnection();
+        /** @var string|null $setupLink */
+        $setupLink = null;
 
-		$setupLink = $this->controllerFront->makeLink('setup/index');
-
-		if (is_null($mysql))
-			$this->registry->getResponse()->redirect($setupLink);
+        if (self::isMySQLDSNSpecified()) {
+            $mysql = self::makeConnectionByEnv();
+        } else {
+            $mysql = (new \tables\MysqlCredentials())->getMysqlConnection();
+            $setupLink = $this->controllerFront->makeLink('setup/index');
+        }
 
 		if ($mysql === false) {
 			$this->registry->getFlashMessenger()
 				->add('Cannot connect to Mysql!', 'error')
 			;
-
-			$this->registry->getResponse()->redirect($setupLink);
 		}
+
+        if (!$mysql) {
+            if ($setupLink) {
+                $this->registry->getResponse()->redirect($setupLink);
+            } else {
+                $this->exitWithError('Cannot connect to MySQL, check env: MYSQL_DSN, MYSQL_USERNAME, MYSQL_PASS');
+            }
+
+            return;
+        }
 
 		$this->controllerFront->getRegistry()->getConnectionStorage()
 			->add($mysql, db\ConnectionStorage::MYSQL, false)
 		;
-
 		db\table\Mysql::setDefaultConnection($mysql);
 	}
+
+    protected function exitWithError(string $error): void
+    {
+        echo $this->getViewToShowError()
+            ->render('errors/error', ['error' => $error])
+        ;
+
+        exit();
+    }
 
 	protected function getViewToShowError()
 	{
 		return $this->registry->getKit()->makeView(realpath(PROTECTED_PATH . '/project/views'));
 	}
+
+    public static function isMySQLDSNSpecified(): bool
+    {
+        return (bool) getenv('MYSQL_DSN');
+    }
+
+    public static function makeConnectionByEnv(): PDO|false
+    {
+        $mysqlDSN = getenv('MYSQL_DSN') ?: '';
+        $mysqlUser = getenv('MYSQL_USERNAME') ?: '';
+        $mysqlPass = getenv('MYSQL_PASS') ?: '';
+
+        try {
+            $pdo = new PDO($mysqlDSN, $mysqlUser, $mysqlPass);
+            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $pdo->exec('set names utf8');
+        } catch (Exception $e) {
+            return false;
+        }
+
+        return $pdo;
+    }
 } 

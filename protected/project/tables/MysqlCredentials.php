@@ -2,31 +2,41 @@
 
 namespace tables;
 use KZ\db\table;
+use PDO;
 
 class MysqlCredentials extends table\SQLite
 {
-	/**
-	 * @return bool|null|\PDO
-	 */
-	public function getMysqlConnection()
+	public function createTable(): void
+    {
+        $stmt = $this->makeStmt("
+            create table if not exists mysql_credentials (                
+                mysql_id INTEGER PRIMARY KEY,
+                mysql_dsn TEXT NULL default null,
+                mysql_username TEXT NULL default null,
+                mysql_password TEXT NULL default null,
+                mysql_options TEXT NULL default null
+            )
+        ");
+        $stmt->execute();
+    }
+
+	public function getMysqlConnection(): PDO|false|null
 	{
+        $this->createTable();
 		$row = $this->findMysqlCredentials();
 
-		if (!$row)
-			return null;
+		if (!$row) {
+            return null;
+        }
 
-		return $this->createConnectionByRow($row);
+		return self::createConnectionByRow($row);
 	}
 
-	/**
-	 * @param array $row
-	 * @return bool|\PDO
-	 */
-	public function createConnectionByRow(array $row)
+	public static function createConnectionByRow(array $row): PDO|false
 	{
 		try {
 			$options = ($row['mysql_options']) ? json_decode($row['mysql_options'], true) : [];
-			$pdo = new \PDO($row['mysql_dsn'], $row['mysql_username'], $row['mysql_password'], $options);
+			$pdo = new PDO($row['mysql_dsn'], $row['mysql_username'], $row['mysql_password'], $options);
 			$pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
 			$pdo->exec('set names utf8');
 		} catch (\Exception $e) {

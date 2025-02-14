@@ -153,9 +153,9 @@ class Html extends view\Helper
 		return implode(' ', $out);
 	}
 
-	public function encode($value)
+	public function encode($value): string
 	{
-		return htmlspecialchars($value, \ENT_QUOTES);
+		return htmlspecialchars(strval($value), \ENT_QUOTES);
 	}
 
 	/**

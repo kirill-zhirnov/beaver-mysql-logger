@@ -1,0 +1,22 @@
+services:
+  php:
+    build :
+      context: ./
+      dockerfile: ./.docker/php.Dockerfile
+      target: php-server-dev
+    volumes:
+      - ./:/var/www/html
+    ports:
+      - "9090:8080"
+#    environment:
+#      MYSQL_DSN: "mysql:host=host.docker.internal;port=32775;dbname=mysql"
+#      MYSQL_USERNAME: root
+#      MYSQL_PASS: root
+
+#  php-prod:
+#    build :
+#      context: ./
+#      dockerfile: ./.docker/php.Dockerfile
+#      target: php-server-prod
+#    ports:
+#      - "9095:8080"

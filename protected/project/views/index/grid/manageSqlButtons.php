@@ -22,6 +22,9 @@
 		'commandType' => $row['command_type'],
 		'sql' => $row['argument'],
 	]);
+
+    //turn off for now
+    $db = false;
 ?>
 <div class="actions">
 	<?php if ($table->isAllowExecute($row['command_type'], $row['argument'])):?>

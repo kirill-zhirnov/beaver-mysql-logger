@@ -61,10 +61,8 @@ abstract class Facade
 
 	/**
 	 * Initialize application. Make all necessary components and put it in registry.
-	 *
-	 * @return $this
 	 */
-	public function initialize()
+	public function initialize(): self
 	{
 		$this->kit = $this->makeKit();
 
@@ -82,8 +80,9 @@ abstract class Facade
 			->trigger($this, 'beforeInitialize')
 		;
 
-		if ($event->isDefaultPrevented())
-			return;
+		if ($event->isDefaultPrevented()) {
+            return $this;
+        }
 
 		$request = $this->makeRequest();
 
@@ -152,11 +151,7 @@ abstract class Facade
 		return $this->registry;
 	}
 
-	/**
-	 * @return interfaces\Kit
-	 * @throws \RuntimeException
-	 */
-	public function makeKit()
+	public function makeKit(): interfaces\Kit
 	{
 		$className = '\KZ\app\Kit';
 		if (isset($this->config['components']['kit']['class']))
@@ -170,10 +165,7 @@ abstract class Facade
 		return $kit;
 	}
 
-	/**
-	 * @return bool
-	 */
-	public function isInitialized()
+	public function isInitialized(): bool
 	{
 		return $this->initialized;
 	}

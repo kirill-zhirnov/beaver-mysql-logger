@@ -1,7 +1,9 @@
 <?php
 
 namespace models;
+use eventHandlers\Setup;
 use KZ\app\interfaces as appInterfaces;
+use tables\MysqlCredentials;
 
 abstract class ExecDbQuery
 {
@@ -98,17 +100,28 @@ abstract class ExecDbQuery
 			return;
 		}
 
-		$credentials = new \tables\MysqlCredentials();
-		$row = $credentials->findMysqlCredentials();
+        $row = null;
+        if (Setup::isMySQLDSNSpecified()) {
+            $row = [
+                'mysql_dsn' => getenv('MYSQL_DSN'),
+                'mysql_username' => getenv('MYSQL_USERNAME') ?: '',
+                'mysql_password' => getenv('MYSQL_PASS') ?: '',
+                'mysql_options' => null
+            ];
+        } else {
+            $credentials = new MysqlCredentials();
+            $row = $credentials->findMysqlCredentials();
+        }
 
-		if (!$row)
-			throw new \RuntimeException('Credentials is empty');
+		if (!$row) {
+            throw new \RuntimeException('Credentials is empty');
+        }
 
 		$row['mysql_dsn'] = preg_replace('#dbname=([\w]+)(?=$|\W)#i', 'dbname=' . $this->dbName, $row['mysql_dsn']);
+		$this->connection = MysqlCredentials::createConnectionByRow($row);
 
-		$this->connection = $credentials->createConnectionByRow($row);
-
-		if (!$this->connection)
-			throw new \RuntimeException('Cannot create connection!');
+		if (!$this->connection) {
+            throw new \RuntimeException('Cannot create connection!');
+        }
 	}
 }

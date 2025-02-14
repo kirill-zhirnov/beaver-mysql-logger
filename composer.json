@@ -1,0 +1,12 @@
+{
+    "name": "kirill-zhirnov/beaver-mysql-logger",
+    "description": "Trace And Debug MySQL queries",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Kirill Zhirnov",
+            "email": "kirill@boundless-commerce.com"
+        }
+    ],
+    "require": {}
+}

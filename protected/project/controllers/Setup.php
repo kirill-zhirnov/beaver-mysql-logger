@@ -3,6 +3,8 @@
 namespace controllers;
 
 
+use KZ\flashMessenger\interfaces\FlashMessenger;
+
 class Setup extends \KZ\Controller
 {
 	protected function init()
@@ -18,6 +20,13 @@ class Setup extends \KZ\Controller
 
 	public function actionIndex()
 	{
+        $mysqlDSN = getenv('MYSQL_DSN') ?: '';
+        if (!empty($mysqlDSN)) {
+            $this->flashMessenger->add('Setup available only if you dont specify ENV variables.', FlashMessenger::ERROR);
+            $this->redirect($this->makeLink('index/index'));
+            return;
+        }
+
 		$model = new \models\SetupMysql();
 
 		if ($this->posted($model) && $model->validate()) {

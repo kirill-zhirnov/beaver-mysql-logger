@@ -19,12 +19,9 @@ spl_autoload_register(function($className) {
 
 $config = require 'config/main.php';
 
-require_once 'FirePHPCore/FirePHP.class.php';
-require_once 'FirePHPCore/fb.php';
-
-//fix for php 5.4
-require_once PROTECTED_PATH . '/libs/array_column/array_column.php';
-
 //to prevent warning about timezone
-if (ini_get('date.timezone') == '')
-	date_default_timezone_set('UTC');
+if (ini_get('date.timezone') == '') {
+    date_default_timezone_set('UTC');
+}
+
+return $config;

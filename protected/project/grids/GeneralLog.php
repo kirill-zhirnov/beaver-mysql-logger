@@ -6,7 +6,7 @@ use KZ\grid\interfaces;
 
 class GeneralLog extends grid\Grid
 {
-	protected $treadsCount;
+	protected $threadsCount;
 
 	/**
 	 * @var \KZ\model\Filter
@@ -118,11 +118,11 @@ class GeneralLog extends grid\Grid
 		return $this->query;
 	}
 
-	public function reset()
+	public function reset(): self
 	{
 		$this->treadsCount = null;
 
-		return parent::reset;
+		return parent::reset();
 	}
 
 	public function getTreadsCount()

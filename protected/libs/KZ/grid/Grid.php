@@ -65,10 +65,7 @@ abstract class Grid implements interfaces\Grid
 		return $this->table;
 	}
 
-	/**
-	 * @return $this
-	 */
-	public function reset()
+	public function reset(): self
 	{
 		$this->pager = null;
 		$this->rows = null;

@@ -29,16 +29,16 @@
 								<td><?=$row['table']?></td>
 								<td><?=$row['type']?></td>
 								<td class="possible-keys">
-									<?=implode('<br/>', explode(',', $row['possible_keys']))?>
+									<?=implode('<br/>', explode(',', strval($row['possible_keys'])))?>
 								</td>
 								<td><?=$row['key']?></td>
 								<td><?=$row['key_len']?></td>
 								<td class="ref">
-									<?=implode('<br/>', explode(',', $row['ref']))?>
+									<?=implode('<br/>', explode(',', strval($row['ref'])))?>
 								</td>
 								<td><?=$row['rows']?></td>
 								<td>
-									<?=implode('<br/>', explode(';', $row['Extra']))?>
+									<?=implode('<br/>', explode(';', strval($row['Extra'])))?>
 								</td>
 							</tr>
 						<?php endforeach?>

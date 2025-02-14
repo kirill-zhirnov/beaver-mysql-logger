@@ -3,8 +3,11 @@
 	$link = $this->helper('link');
 	$links = [
 		'generalLog' => ['General log', $link->get('index/index')],
-		'setup' => ['Setup', $link->get('setup/index')]
 	];
+
+    if (!\eventHandlers\Setup::isMySQLDSNSpecified()) {
+        $links['setup'] = ['Setup', $link->get('setup/index')];
+    }
 
 	$curLink = isset($curLink) ? $curLink : null;
 ?>
@@ -18,7 +21,7 @@
 				<span class="icon-bar"></span>
 			</button>
 			<a class="navbar-brand" href="<?=$link->get('index/index')?>">
-				Beaver mysql logger<sup>beta</sup>
+				Beaver Mysql Logger
 			</a>
 		</div>
 		<div class="navbar-collapse collapse">
@@ -31,7 +34,7 @@
 			</ul>
 			<ul class="nav navbar-nav navbar-right">
 				<li>
-					<a href="http://http://beaver-mysql-logger.com" target="_blank">Official site</a>
+					<a href="https://github.com/kirill-zhirnov/beaver-mysql-logger" target="_blank">Homepage</a>
 				</li>
 			</ul>
 		</div>

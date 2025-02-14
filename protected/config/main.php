@@ -4,7 +4,7 @@ return [
 	'components' => [
 		'db' => [
 			'connection' => [
-				'dsn' => 'sqlite:' . realpath(__DIR__ . '/../') . '/db.sq3',
+				'dsn' => 'sqlite:' . realpath(__DIR__ . '/../../runtime') . '/db.sq3',
 				'username' => null,
 				'password' => null,
 				'options' => [],
