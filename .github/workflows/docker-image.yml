@@ -33,6 +33,5 @@ jobs:
           file: ./.docker/php.Dockerfile
           target: php-server-prod
           push: true
-          load: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/beaver-mysql-logger:latest
 
