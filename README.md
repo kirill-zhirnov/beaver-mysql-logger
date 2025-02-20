@@ -1,4 +1,4 @@
-# Mysql Query Logger - Log all queries in MySQL 
+# Mysql Query Logger - Log all queries for MySQL/MariaDB 
 
 The ultimate tool for: 
 
